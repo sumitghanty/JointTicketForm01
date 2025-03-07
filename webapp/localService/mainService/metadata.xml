@@ -1,0 +1,1162 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="4.0" xmlns:edmx="http://docs.oasis-open.org/odata/ns/edmx" xmlns="http://docs.oasis-open.org/odata/ns/edm">
+    <edmx:Reference Uri="/sap/opu/odata/IWFND/CATALOGSERVICE;v=2/Vocabularies(TechnicalName='%2FIWBEP%2FVOC_COMMUNICATION',Version='0001',SAP__Origin='LOCAL')/$value">
+        <edmx:Include Namespace="com.sap.vocabularies.Communication.v1" Alias="Communication"/>
+    </edmx:Reference>
+    <edmx:Reference Uri="/sap/opu/odata/IWFND/CATALOGSERVICE;v=2/Vocabularies(TechnicalName='%2FIWBEP%2FVOC_PERSONALDATA',Version='0001',SAP__Origin='LOCAL')/$value">
+        <edmx:Include Namespace="com.sap.vocabularies.PersonalData.v1" Alias="PersonalData"/>
+    </edmx:Reference>
+    <edmx:Reference Uri="/sap/opu/odata/IWFND/CATALOGSERVICE;v=2/Vocabularies(TechnicalName='%2FIWBEP%2FVOC_ANALYTICS',Version='0001',SAP__Origin='LOCAL')/$value">
+        <edmx:Include Namespace="com.sap.vocabularies.Analytics.v1" Alias="Analytics"/>
+    </edmx:Reference>
+    <edmx:Reference Uri="/sap/opu/odata/IWFND/CATALOGSERVICE;v=2/Vocabularies(TechnicalName='%2FIWBEP%2FVOC_COMMON',Version='0001',SAP__Origin='LOCAL')/$value">
+        <edmx:Include Namespace="com.sap.vocabularies.Common.v1" Alias="SAP__common"/>
+    </edmx:Reference>
+    <edmx:Reference Uri="/sap/opu/odata/IWFND/CATALOGSERVICE;v=2/Vocabularies(TechnicalName='%2FIWBEP%2FVOC_MEASURES',Version='0001',SAP__Origin='LOCAL')/$value">
+        <edmx:Include Namespace="Org.OData.Measures.V1" Alias="SAP__measures"/>
+    </edmx:Reference>
+    <edmx:Reference Uri="/sap/opu/odata/IWFND/CATALOGSERVICE;v=2/Vocabularies(TechnicalName='%2FIWBEP%2FVOC_CORE',Version='0001',SAP__Origin='LOCAL')/$value">
+        <edmx:Include Namespace="Org.OData.Core.V1" Alias="SAP__core"/>
+    </edmx:Reference>
+    <edmx:Reference Uri="/sap/opu/odata/IWFND/CATALOGSERVICE;v=2/Vocabularies(TechnicalName='%2FIWBEP%2FVOC_CAPABILITIES',Version='0001',SAP__Origin='LOCAL')/$value">
+        <edmx:Include Namespace="Org.OData.Capabilities.V1" Alias="SAP__capabilities"/>
+    </edmx:Reference>
+    <edmx:Reference Uri="/sap/opu/odata/IWFND/CATALOGSERVICE;v=2/Vocabularies(TechnicalName='%2FIWBEP%2FVOC_AGGREGATION',Version='0001',SAP__Origin='LOCAL')/$value">
+        <edmx:Include Namespace="Org.OData.Aggregation.V1" Alias="SAP__aggregation"/>
+    </edmx:Reference>
+    <edmx:Reference Uri="/sap/opu/odata/IWFND/CATALOGSERVICE;v=2/Vocabularies(TechnicalName='%2FIWBEP%2FVOC_VALIDATION',Version='0001',SAP__Origin='LOCAL')/$value">
+        <edmx:Include Namespace="Org.OData.Validation.V1" Alias="SAP__validation"/>
+    </edmx:Reference>
+    <edmx:Reference Uri="/sap/opu/odata/IWFND/CATALOGSERVICE;v=2/Vocabularies(TechnicalName='%2FIWBEP%2FVOC_CODELIST',Version='0001',SAP__Origin='LOCAL')/$value">
+        <edmx:Include Namespace="com.sap.vocabularies.CodeList.v1" Alias="SAP__CodeList"/>
+    </edmx:Reference>
+    <edmx:Reference Uri="/sap/opu/odata/IWFND/CATALOGSERVICE;v=2/Vocabularies(TechnicalName='%2FIWBEP%2FVOC_UI',Version='0001',SAP__Origin='LOCAL')/$value">
+        <edmx:Include Namespace="com.sap.vocabularies.UI.v1" Alias="SAP__UI"/>
+    </edmx:Reference>
+    <edmx:Reference Uri="/sap/opu/odata/IWFND/CATALOGSERVICE;v=2/Vocabularies(TechnicalName='%2FIWBEP%2FVOC_HTML5',Version='0001',SAP__Origin='LOCAL')/$value">
+        <edmx:Include Namespace="com.sap.vocabularies.HTML5.v1" Alias="SAP__HTML5"/>
+    </edmx:Reference>
+    <edmx:Reference Uri="/sap/opu/odata/IWFND/CATALOGSERVICE;v=2/Vocabularies(TechnicalName='%2FIWBEP%2FVOC_PDF',Version='0001',SAP__Origin='LOCAL')/$value">
+        <edmx:Include Namespace="com.sap.vocabularies.PDF.v1" Alias="SAP__PDF"/>
+    </edmx:Reference>
+    <edmx:Reference Uri="/sap/opu/odata/IWFND/CATALOGSERVICE;v=2/Vocabularies(TechnicalName='%2FIWBEP%2FVOC_SESSION',Version='0001',SAP__Origin='LOCAL')/$value">
+        <edmx:Include Namespace="com.sap.vocabularies.Session.v1" Alias="SAP__session"/>
+    </edmx:Reference>
+    <edmx:Reference Uri="/sap/opu/odata/IWFND/CATALOGSERVICE;v=2/Vocabularies(TechnicalName='%2FIWBEP%2FVOC_ODM',Version='0001',SAP__Origin='LOCAL')/$value">
+        <edmx:Include Namespace="com.sap.vocabularies.ODM.v1" Alias="SAP__ODM"/>
+    </edmx:Reference>
+    <edmx:Reference Uri="/sap/opu/odata/IWFND/CATALOGSERVICE;v=2/Vocabularies(TechnicalName='%2FIWBEP%2FVOC_HIERARCHY',Version='0001',SAP__Origin='LOCAL')/$value">
+        <edmx:Include Namespace="com.sap.vocabularies.Hierarchy.v1" Alias="SAP__hierarchy"/>
+    </edmx:Reference>
+    <edmx:DataServices>
+        <Schema Namespace="com.sap.gateway.srvd.zsd_meter_reading.v0001" Alias="SAP__self">
+            <Annotation Term="SAP__core.SchemaVersion" String="1.0.0"/>
+            <EntityType Name="I_EquipmentType">
+                <Key>
+                    <PropertyRef Name="Equipment"/>
+                </Key>
+                <Property Name="Equipment" Type="Edm.String" Nullable="false" MaxLength="18"/>
+                <Property Name="Equipment_Text" Type="Edm.String" Nullable="false" MaxLength="40"/>
+                <Property Name="EquipmentOID" Type="Edm.String" Nullable="false" MaxLength="128"/>
+                <Property Name="EquipmentCategory" Type="Edm.String" Nullable="false" MaxLength="1"/>
+                <Property Name="TechnicalObjectType" Type="Edm.String" Nullable="false" MaxLength="10"/>
+                <Property Name="Plant" Type="Edm.String" Nullable="false" MaxLength="4"/>
+                <Property Name="Division" Type="Edm.String" Nullable="false" MaxLength="2"/>
+                <Property Name="StorageLocation" Type="Edm.String" Nullable="false" MaxLength="4"/>
+                <Property Name="CreatedByUser" Type="Edm.String" Nullable="false" MaxLength="12"/>
+                <Property Name="LastChangedByUser" Type="Edm.String" Nullable="false" MaxLength="12"/>
+                <Property Name="CreationDate" Type="Edm.Date"/>
+                <Property Name="LastChangeDate" Type="Edm.Date"/>
+                <Property Name="AssetManufacturerName" Type="Edm.String" Nullable="false" MaxLength="30"/>
+                <Property Name="ManufacturerPartTypeName" Type="Edm.String" Nullable="false" MaxLength="20"/>
+                <Property Name="ManufacturerCountry" Type="Edm.String" Nullable="false" MaxLength="3"/>
+                <Property Name="ConstructionYear" Type="Edm.String" Nullable="false" MaxLength="4"/>
+                <Property Name="ConstructionMonth" Type="Edm.String" Nullable="false" MaxLength="2"/>
+                <Property Name="AcquisitionDate" Type="Edm.Date"/>
+                <Property Name="Currency" Type="Edm.String" Nullable="false" MaxLength="5"/>
+                <Property Name="AcquisitionValue" Type="Edm.Decimal" Nullable="false" Precision="13" Scale="variable"/>
+                <Property Name="MaintObjectInternalID" Type="Edm.String" Nullable="false" MaxLength="22"/>
+                <Property Name="SerialNumber" Type="Edm.String" Nullable="false" MaxLength="18"/>
+                <Property Name="EquipUsagePeriodSequenceNumber" Type="Edm.String" Nullable="false" MaxLength="3"/>
+                <Property Name="Material" Type="Edm.String" Nullable="false" MaxLength="18"/>
+                <Property Name="Customer" Type="Edm.String" Nullable="false" MaxLength="10"/>
+                <Property Name="AuthorizationGroup" Type="Edm.String" Nullable="false" MaxLength="4"/>
+                <Property Name="ManufacturerSerialNumber" Type="Edm.String" Nullable="false" MaxLength="30"/>
+                <Property Name="UniqueItemIdentifier" Type="Edm.String" Nullable="false" MaxLength="72"/>
+                <Property Name="UniqueItemIdentifierStrucType" Type="Edm.String" Nullable="false" MaxLength="10"/>
+                <Property Name="UniqueItemIdentifierRespPlant" Type="Edm.String" Nullable="false" MaxLength="4"/>
+                <Property Name="AssetSynchronizationRule" Type="Edm.String" Nullable="false" MaxLength="1"/>
+                <Property Name="InventoryNumber" Type="Edm.String" Nullable="false" MaxLength="25"/>
+                <Property Name="GrossWeight" Type="Edm.Decimal" Nullable="false" Precision="13" Scale="3"/>
+                <Property Name="GrossWeightUnit" Type="Edm.String" Nullable="false" MaxLength="3"/>
+                <Property Name="SizeOrDimensionText" Type="Edm.String" Nullable="false" MaxLength="18"/>
+                <Property Name="Batch" Type="Edm.String" Nullable="false" MaxLength="10"/>
+                <Property Name="OperationStartDate" Type="Edm.Date"/>
+                <Property Name="Supplier" Type="Edm.String" Nullable="false" MaxLength="10"/>
+                <Property Name="HasEquipmentData" Type="Edm.Boolean" Nullable="false"/>
+                <Property Name="EquipmentHasStockInformation" Type="Edm.Boolean" Nullable="false"/>
+                <Property Name="MasterWarranty" Type="Edm.String" Nullable="false" MaxLength="20"/>
+                <Property Name="LastChangeDateTime" Type="Edm.DateTimeOffset"/>
+                <Property Name="EquipmentFirstDeliveryDate" Type="Edm.Date"/>
+                <Property Name="ValidityStartDate" Type="Edm.Date"/>
+                <Property Name="ValidityEndDate" Type="Edm.Date"/>
+                <Property Name="MatlSrlNmbrLastGdsMvtDte" Type="Edm.Date"/>
+                <Property Name="EquipmentEndOfUseDate" Type="Edm.Date"/>
+                <Property Name="MaintenancePlan" Type="Edm.String" Nullable="false" MaxLength="12"/>
+                <Property Name="MeasuringPoint" Type="Edm.String" Nullable="false" MaxLength="12"/>
+            </EntityType>
+            <EntityType Name="ZI_MeterSerialNumber_VHType">
+                <Key>
+                    <PropertyRef Name="MeterSerialNumber"/>
+                </Key>
+                <Property Name="MeterSerialNumber" Type="Edm.String" Nullable="false" MaxLength="20"/>
+            </EntityType>
+            <EntityType Name="ZI_FunctionalLocationStdVHType">
+                <Key>
+                    <PropertyRef Name="FunctionalLocation"/>
+                </Key>
+                <Property Name="FunctionalLocation" Type="Edm.String" Nullable="false" MaxLength="30"/>
+                <Property Name="FunctionalLocationName" Type="Edm.String" Nullable="false" MaxLength="40"/>
+            </EntityType>
+            <EntityType Name="ZC_METER_READING_REPORTParameters">
+                <Key>
+                    <PropertyRef Name="pa_data_from"/>
+                    <PropertyRef Name="pa_data_to"/>
+                </Key>
+                <Property Name="pa_data_from" Type="Edm.Date" Nullable="false"/>
+                <Property Name="pa_data_to" Type="Edm.Date" Nullable="false"/>
+                <NavigationProperty Name="Set" Type="Collection(com.sap.gateway.srvd.zsd_meter_reading.v0001.ZC_METER_READING_REPORTType)" Partner="Parameters" ContainsTarget="true"/>
+            </EntityType>
+            <EntityType Name="I_MeasuringPointCategoryType">
+                <Key>
+                    <PropertyRef Name="MeasuringPointCategory"/>
+                </Key>
+                <Property Name="MeasuringPointCategory" Type="Edm.String" Nullable="false" MaxLength="1"/>
+                <Property Name="MeasuringPointCategory_Text" Type="Edm.String" Nullable="false" MaxLength="30"/>
+                <Property Name="MeasurementPositionNumber" Type="Edm.String" Nullable="false" MaxLength="1"/>
+                <Property Name="MeasuringPointCatalogType" Type="Edm.String" Nullable="false" MaxLength="1"/>
+                <Property Name="OnlineMessageType" Type="Edm.String" Nullable="false" MaxLength="1"/>
+                <Property Name="MsmtDocumentTimeDiffThreshold" Type="Edm.Int32" Nullable="false"/>
+                <Property Name="MsrgPtCategoryIsValid" Type="Edm.Boolean" Nullable="false"/>
+                <Property Name="MsrgPtHasLinearAttributes" Type="Edm.Boolean" Nullable="false"/>
+                <Property Name="MsrgPtCategoryIsBusEvtEnabled" Type="Edm.Boolean" Nullable="false"/>
+            </EntityType>
+            <EntityType Name="ZC_METER_READING_REPORTType">
+                <Key>
+                    <PropertyRef Name="MeasuringPoint"/>
+                </Key>
+                <Property Name="MeasuringPoint" Type="Edm.String" Nullable="false" MaxLength="12"/>
+                <Property Name="FunctionalLocation" Type="Edm.String" Nullable="false" MaxLength="30"/>
+                <Property Name="Equipment" Type="Edm.String" Nullable="false" MaxLength="18"/>
+                <Property Name="MeterSerialNumber" Type="Edm.String" Nullable="false" MaxLength="20"/>
+                <Property Name="MeasuringPointCategory" Type="Edm.String" Nullable="false" MaxLength="1"/>
+                <Property Name="MeasuringPointCategoryDesc" Type="Edm.String" Nullable="false" MaxLength="30"/>
+                <Property Name="FunctionalLocDesc" Type="Edm.String" Nullable="false" MaxLength="40"/>
+                <Property Name="EquipmentName" Type="Edm.String" Nullable="false" MaxLength="40"/>
+                <Property Name="MeasuringPointDescription" Type="Edm.String" Nullable="false" MaxLength="40"/>
+                <Property Name="meter_corr_factor" Type="Edm.Decimal" Nullable="false" Precision="4" Scale="2"/>
+                <Property Name="CharcValueUnit" Type="Edm.String" Nullable="false" MaxLength="3"/>
+                <Property Name="OpenDateRead" Type="Edm.Decimal" Nullable="false" Precision="15" Scale="2"/>
+                <Property Name="ClosedateRead" Type="Edm.Decimal" Nullable="false" Precision="15" Scale="2"/>
+                <Property Name="Difference" Type="Edm.Decimal" Nullable="false" Precision="15" Scale="2"/>
+                <Property Name="ActualBillQty" Type="Edm.Decimal" Nullable="false" Precision="19" Scale="4"/>
+                <Property Name="ProfitCenter" Type="Edm.Double" Nullable="false"/>
+                <NavigationProperty Name="Parameters" Type="com.sap.gateway.srvd.zsd_meter_reading.v0001.ZC_METER_READING_REPORTParameters" Nullable="false"/>
+            </EntityType>
+            <EntityType Name="ZI_MeasuringPointDesc_VHType">
+                <Key>
+                    <PropertyRef Name="MeasuringPoint"/>
+                </Key>
+                <Property Name="MeasuringPoint" Type="Edm.String" Nullable="false" MaxLength="12"/>
+                <Property Name="MeasuringPointDescription" Type="Edm.String" Nullable="false" MaxLength="40"/>
+            </EntityType>
+            <EntityContainer Name="Container">
+                <EntitySet Name="I_Equipment" EntityType="com.sap.gateway.srvd.zsd_meter_reading.v0001.I_EquipmentType"/>
+                <EntitySet Name="I_MeasuringPointCategory" EntityType="com.sap.gateway.srvd.zsd_meter_reading.v0001.I_MeasuringPointCategoryType"/>
+                <EntitySet Name="ZC_METER_READING_REPORT" EntityType="com.sap.gateway.srvd.zsd_meter_reading.v0001.ZC_METER_READING_REPORTParameters">
+                    <NavigationPropertyBinding Path="Set/Parameters" Target="ZC_METER_READING_REPORT"/>
+                </EntitySet>
+                <EntitySet Name="ZI_FunctionalLocationStdVH" EntityType="com.sap.gateway.srvd.zsd_meter_reading.v0001.ZI_FunctionalLocationStdVHType"/>
+                <EntitySet Name="ZI_MeasuringPointDesc_VH" EntityType="com.sap.gateway.srvd.zsd_meter_reading.v0001.ZI_MeasuringPointDesc_VHType"/>
+                <EntitySet Name="ZI_MeterSerialNumber_VH" EntityType="com.sap.gateway.srvd.zsd_meter_reading.v0001.ZI_MeterSerialNumber_VHType"/>
+            </EntityContainer>
+            <Annotations Target="SAP__self.I_EquipmentType/Equipment">
+                <Annotation Term="SAP__common.Text" Path="Equipment_Text"/>
+                <Annotation Term="SAP__common.IsUpperCase"/>
+                <Annotation Term="SAP__common.Label" String="Equipment"/>
+                <Annotation Term="SAP__common.QuickInfo" String="Equipment Number"/>
+                <Annotation Term="SAP__common.DocumentationRef" String="urn:sap-com:documentation:key?=type=DE&amp;id=EQUNR"/>
+            </Annotations>
+            <Annotations Target="SAP__self.I_EquipmentType/Equipment_Text">
+                <Annotation Term="SAP__common.Label" String="Description"/>
+                <Annotation Term="SAP__core.Computed"/>
+                <Annotation Term="SAP__common.Heading" String="Description of technical object"/>
+                <Annotation Term="SAP__common.QuickInfo" String="Description of technical object"/>
+                <Annotation Term="SAP__common.DocumentationRef" String="urn:sap-com:documentation:key?=type=DE&amp;id=KTX01"/>
+            </Annotations>
+            <Annotations Target="SAP__self.I_EquipmentType/EquipmentCategory">
+                <Annotation Term="SAP__common.IsUpperCase"/>
+                <Annotation Term="SAP__common.ValueListReferences">
+                    <Collection>
+                        <String>../../../../srvd_f4/sap/i_equipmentcategorystdvh/0001;ps='srvd-zsd_meter_reading-0001';va='com.sap.gateway.srvd.zsd_meter_reading.v0001.et-i_equipment.equipmentcategory'/$metadata</String>
+                    </Collection>
+                </Annotation>
+                <Annotation Term="SAP__common.Label" String="Equipment category"/>
+                <Annotation Term="SAP__common.Heading" String="C"/>
+                <Annotation Term="SAP__common.DocumentationRef" String="urn:sap-com:documentation:key?=type=DE&amp;id=EQTYP"/>
+            </Annotations>
+            <Annotations Target="SAP__self.I_EquipmentType/TechnicalObjectType">
+                <Annotation Term="SAP__common.IsUpperCase"/>
+                <Annotation Term="SAP__common.ValueListReferences">
+                    <Collection>
+                        <String>../../../../srvd_f4/sap/i_technicalobjecttypestdvh/0001;ps='srvd-zsd_meter_reading-0001';va='com.sap.gateway.srvd.zsd_meter_reading.v0001.et-i_equipment.technicalobjecttype'/$metadata</String>
+                    </Collection>
+                </Annotation>
+                <Annotation Term="SAP__common.Label" String="Object Type"/>
+                <Annotation Term="SAP__common.Heading" String="ObjectType"/>
+                <Annotation Term="SAP__common.QuickInfo" String="Type of Technical Object"/>
+                <Annotation Term="SAP__common.DocumentationRef" String="urn:sap-com:documentation:key?=type=DE&amp;id=EQART"/>
+            </Annotations>
+            <Annotations Target="SAP__self.I_EquipmentType/Plant">
+                <Annotation Term="SAP__common.IsUpperCase"/>
+                <Annotation Term="SAP__common.Label" String="Plant"/>
+                <Annotation Term="SAP__common.Heading" String="Plnt"/>
+                <Annotation Term="SAP__common.DocumentationRef" String="urn:sap-com:documentation:key?=type=DE&amp;id=WERKS_D"/>
+            </Annotations>
+            <Annotations Target="SAP__self.I_EquipmentType/Division">
+                <Annotation Term="SAP__common.IsUpperCase"/>
+                <Annotation Term="SAP__common.Label" String="Division"/>
+                <Annotation Term="SAP__common.Heading" String="Dv"/>
+                <Annotation Term="SAP__common.DocumentationRef" String="urn:sap-com:documentation:key?=type=DE&amp;id=SPARTE"/>
+            </Annotations>
+            <Annotations Target="SAP__self.I_EquipmentType/StorageLocation">
+                <Annotation Term="SAP__common.IsUpperCase"/>
+                <Annotation Term="SAP__common.Label" String="Storage Location"/>
+                <Annotation Term="SAP__common.DocumentationRef" String="urn:sap-com:documentation:key?=type=DE&amp;id=LGORT_D"/>
+            </Annotations>
+            <Annotations Target="SAP__self.I_EquipmentType/CreatedByUser">
+                <Annotation Term="SAP__common.IsUpperCase"/>
+                <Annotation Term="SAP__common.Label" String="Created By"/>
+                <Annotation Term="SAP__common.QuickInfo" String="Name of Person Responsible for Creating the Object"/>
+            </Annotations>
+            <Annotations Target="SAP__self.I_EquipmentType">
+                <Annotation Term="SAP__common.CreatedBy" Path="CreatedByUser"/>
+                <Annotation Term="SAP__common.ChangedBy" Path="LastChangedByUser"/>
+                <Annotation Term="SAP__common.Label" String="Equipment"/>
+                <Annotation Term="SAP__common.SemanticKey">
+                    <Collection>
+                        <PropertyPath>Equipment</PropertyPath>
+                    </Collection>
+                </Annotation>
+                <Annotation Term="Communication.Contact">
+                    <Record>
+                        <PropertyValue Property="adr">
+                            <Collection>
+                                <Record>
+                                    <PropertyValue Property="type" EnumMember="Communication.ContactInformationType/preferred"/>
+                                    <PropertyValue Property="country" Path="ManufacturerCountry"/>
+                                </Record>
+                            </Collection>
+                        </PropertyValue>
+                    </Record>
+                </Annotation>
+                <Annotation Term="Communication.Address" Qualifier="pref">
+                    <Record>
+                        <PropertyValue Property="type" EnumMember="Communication.ContactInformationType/preferred"/>
+                        <PropertyValue Property="country" Path="ManufacturerCountry"/>
+                    </Record>
+                </Annotation>
+                <Annotation Term="SAP__aggregation.CustomAggregate" Qualifier="AcquisitionValue" String="Edm.Decimal"/>
+                <Annotation Term="SAP__aggregation.CustomAggregate" Qualifier="GrossWeight" String="Edm.Decimal"/>
+            </Annotations>
+            <Annotations Target="SAP__self.I_EquipmentType/LastChangedByUser">
+                <Annotation Term="SAP__common.IsUpperCase"/>
+                <Annotation Term="SAP__common.Label" String="Changed By"/>
+                <Annotation Term="SAP__common.QuickInfo" String="Name of Person Who Changed Object"/>
+            </Annotations>
+            <Annotations Target="SAP__self.I_EquipmentType/ManufacturerCountry">
+                <Annotation Term="SAP__common.IsUpperCase"/>
+                <Annotation Term="SAP__common.Label" String="Mfr Ctry/Reg"/>
+                <Annotation Term="SAP__common.Heading" String="M C/R"/>
+                <Annotation Term="SAP__common.QuickInfo" String="Country/Region of Manufacture"/>
+            </Annotations>
+            <Annotations Target="SAP__self.I_EquipmentType/ConstructionYear">
+                <Annotation Term="SAP__common.IsUpperCase"/>
+                <Annotation Term="SAP__common.Label" String="Construction year"/>
+                <Annotation Term="SAP__common.Heading" String="ConY"/>
+                <Annotation Term="SAP__common.QuickInfo" String="Year of construction"/>
+                <Annotation Term="SAP__common.DocumentationRef" String="urn:sap-com:documentation:key?=type=DE&amp;id=BAUJJ"/>
+            </Annotations>
+            <Annotations Target="SAP__self.I_EquipmentType/ConstructionMonth">
+                <Annotation Term="SAP__common.IsUpperCase"/>
+                <Annotation Term="SAP__common.Label" String="Construction month"/>
+                <Annotation Term="SAP__common.Heading" String="CM"/>
+                <Annotation Term="SAP__common.QuickInfo" String="Month of construction"/>
+                <Annotation Term="SAP__common.DocumentationRef" String="urn:sap-com:documentation:key?=type=DE&amp;id=BAUMM"/>
+            </Annotations>
+            <Annotations Target="SAP__self.I_EquipmentType/Currency">
+                <Annotation Term="SAP__common.IsCurrency"/>
+                <Annotation Term="SAP__common.IsUpperCase"/>
+                <Annotation Term="SAP__common.Label" String="Currency"/>
+                <Annotation Term="SAP__common.Heading" String="Crcy"/>
+                <Annotation Term="SAP__common.QuickInfo" String="Currency Key"/>
+                <Annotation Term="SAP__common.DocumentationRef" String="urn:sap-com:documentation:key?=type=DE&amp;id=WAERS"/>
+            </Annotations>
+            <Annotations Target="SAP__self.I_EquipmentType/AcquisitionValue">
+                <Annotation Term="SAP__measures.ISOCurrency" Path="Currency"/>
+                <Annotation Term="SAP__common.Label" String="Acquisition Value"/>
+            </Annotations>
+            <Annotations Target="SAP__self.I_EquipmentType/MaintObjectInternalID">
+                <Annotation Term="SAP__common.IsUpperCase"/>
+                <Annotation Term="SAP__common.Label" String="Object Number"/>
+                <Annotation Term="SAP__common.DocumentationRef" String="urn:sap-com:documentation:key?=type=DE&amp;id=J_OBJNR"/>
+            </Annotations>
+            <Annotations Target="SAP__self.I_EquipmentType/SerialNumber">
+                <Annotation Term="SAP__common.IsUpperCase"/>
+                <Annotation Term="SAP__common.Label" String="Serial Number"/>
+                <Annotation Term="SAP__common.DocumentationRef" String="urn:sap-com:documentation:key?=type=DE&amp;id=GERNR"/>
+            </Annotations>
+            <Annotations Target="SAP__self.I_EquipmentType/EquipUsagePeriodSequenceNumber">
+                <Annotation Term="SAP__common.IsDigitSequence"/>
+                <Annotation Term="SAP__common.Label" String="UsgePerConsecNo."/>
+                <Annotation Term="SAP__common.Heading" String="ECN"/>
+                <Annotation Term="SAP__common.QuickInfo" String="Consecutive numbering of EquipUsagePeriods on same day"/>
+                <Annotation Term="SAP__common.DocumentationRef" String="urn:sap-com:documentation:key?=type=DE&amp;id=EQLFN"/>
+            </Annotations>
+            <Annotations Target="SAP__self.I_EquipmentType/Material">
+                <Annotation Term="SAP__common.IsUpperCase"/>
+                <Annotation Term="SAP__common.ValueListReferences">
+                    <Collection>
+                        <String>../../../../srvd_f4/sap/i_productstdvh/0001;ps='srvd-zsd_meter_reading-0001';va='com.sap.gateway.srvd.zsd_meter_reading.v0001.et-i_equipment.material'/$metadata</String>
+                    </Collection>
+                </Annotation>
+                <Annotation Term="SAP__common.Label" String="Material"/>
+                <Annotation Term="SAP__common.QuickInfo" String="Material Number"/>
+                <Annotation Term="SAP__common.DocumentationRef" String="urn:sap-com:documentation:key?=type=DE&amp;id=MATNR"/>
+            </Annotations>
+            <Annotations Target="SAP__self.I_EquipmentType/Customer">
+                <Annotation Term="SAP__common.IsUpperCase"/>
+                <Annotation Term="SAP__common.ValueListReferences">
+                    <Collection>
+                        <String>../../../../srvd_f4/sap/i_customer_vh/0001;ps='srvd-zsd_meter_reading-0001';va='com.sap.gateway.srvd.zsd_meter_reading.v0001.et-i_equipment.customer'/$metadata</String>
+                    </Collection>
+                </Annotation>
+                <Annotation Term="SAP__common.Label" String="Current customer"/>
+                <Annotation Term="SAP__common.Heading" String="CurCustomer"/>
+                <Annotation Term="SAP__common.QuickInfo" String="Customer to Whom Serial Number was Delivered"/>
+                <Annotation Term="SAP__common.DocumentationRef" String="urn:sap-com:documentation:key?=type=DE&amp;id=KUNDSE"/>
+            </Annotations>
+            <Annotations Target="SAP__self.I_EquipmentType/AuthorizationGroup">
+                <Annotation Term="SAP__common.IsUpperCase"/>
+                <Annotation Term="SAP__common.Label" String="AuthorizGroup"/>
+                <Annotation Term="SAP__common.Heading" String="AGrp"/>
+                <Annotation Term="SAP__common.QuickInfo" String="Technical Object Authorization Group"/>
+                <Annotation Term="SAP__common.DocumentationRef" String="urn:sap-com:documentation:key?=type=DE&amp;id=IAUTG"/>
+            </Annotations>
+            <Annotations Target="SAP__self.I_EquipmentType/ManufacturerSerialNumber">
+                <Annotation Term="SAP__common.IsUpperCase"/>
+                <Annotation Term="SAP__common.Label" String="Manuf. Serial Number"/>
+                <Annotation Term="SAP__common.Heading" String="Manufacturer's Serial Number"/>
+                <Annotation Term="SAP__common.QuickInfo" String="Manufacturer's Serial Number"/>
+                <Annotation Term="SAP__common.DocumentationRef" String="urn:sap-com:documentation:key?=type=DE&amp;id=SERGE"/>
+            </Annotations>
+            <Annotations Target="SAP__self.I_EquipmentType/UniqueItemIdentifier">
+                <Annotation Term="SAP__common.IsUpperCase"/>
+                <Annotation Term="SAP__common.Label" String="UII"/>
+                <Annotation Term="SAP__common.Heading" String="Unique Item Identifier"/>
+                <Annotation Term="SAP__common.QuickInfo" String="Unique Item Identifier"/>
+                <Annotation Term="SAP__common.DocumentationRef" String="urn:sap-com:documentation:key?=type=DE&amp;id=UII_CHAR72"/>
+            </Annotations>
+            <Annotations Target="SAP__self.I_EquipmentType/UniqueItemIdentifierStrucType">
+                <Annotation Term="SAP__common.IsUpperCase"/>
+                <Annotation Term="SAP__common.Label" String="IUID Type"/>
+                <Annotation Term="SAP__common.QuickInfo" String="Structure Type of UII"/>
+                <Annotation Term="SAP__common.DocumentationRef" String="urn:sap-com:documentation:key?=type=DE&amp;id=IUID_TYPE"/>
+            </Annotations>
+            <Annotations Target="SAP__self.I_EquipmentType/UniqueItemIdentifierRespPlant">
+                <Annotation Term="SAP__common.IsUpperCase"/>
+                <Annotation Term="SAP__common.Label" String="Resp. Plant UII"/>
+                <Annotation Term="SAP__common.Heading" String="Plant Responsible for UII"/>
+                <Annotation Term="SAP__common.QuickInfo" String="Plant Responsible for UII"/>
+                <Annotation Term="SAP__common.DocumentationRef" String="urn:sap-com:documentation:key?=type=DE&amp;id=UII_PLANT"/>
+            </Annotations>
+            <Annotations Target="SAP__self.I_EquipmentType/AssetSynchronizationRule">
+                <Annotation Term="SAP__common.IsUpperCase"/>
+                <Annotation Term="SAP__common.Label" String="Change equipment"/>
+                <Annotation Term="SAP__common.Heading" String="Change equipment master from asset"/>
+                <Annotation Term="SAP__common.QuickInfo" String="Change Equipment Master when Changing Asset"/>
+                <Annotation Term="SAP__common.DocumentationRef" String="urn:sap-com:documentation:key?=type=DE&amp;id=AAPM_ACT_CHANGE_AA"/>
+            </Annotations>
+            <Annotations Target="SAP__self.I_EquipmentType/InventoryNumber">
+                <Annotation Term="SAP__common.IsUpperCase"/>
+                <Annotation Term="SAP__common.Label" String="Inventory Number"/>
+                <Annotation Term="SAP__common.QuickInfo" String="Inventory number"/>
+                <Annotation Term="SAP__common.DocumentationRef" String="urn:sap-com:documentation:key?=type=DE&amp;id=INVNR"/>
+            </Annotations>
+            <Annotations Target="SAP__self.I_EquipmentType/GrossWeight">
+                <Annotation Term="SAP__measures.Unit" Path="GrossWeightUnit"/>
+                <Annotation Term="SAP__common.Label" String="Weight of object"/>
+                <Annotation Term="SAP__common.Heading" String="Weight"/>
+            </Annotations>
+            <Annotations Target="SAP__self.I_EquipmentType/GrossWeightUnit">
+                <Annotation Term="SAP__common.IsUnit"/>
+                <Annotation Term="SAP__common.Label" String="Unit of weight"/>
+                <Annotation Term="SAP__common.Heading" String="Un."/>
+                <Annotation Term="SAP__common.DocumentationRef" String="urn:sap-com:documentation:key?=type=DE&amp;id=WEIGHT_UNIT"/>
+            </Annotations>
+            <Annotations Target="SAP__self.I_EquipmentType/SizeOrDimensionText">
+                <Annotation Term="SAP__common.IsUpperCase"/>
+                <Annotation Term="SAP__common.Label" String="Size/dimension"/>
+            </Annotations>
+            <Annotations Target="SAP__self.I_EquipmentType/Batch">
+                <Annotation Term="SAP__common.IsUpperCase"/>
+                <Annotation Term="SAP__common.Label" String="Batch"/>
+                <Annotation Term="SAP__common.QuickInfo" String="Batch Number"/>
+                <Annotation Term="SAP__common.DocumentationRef" String="urn:sap-com:documentation:key?=type=DE&amp;id=CHARG_D"/>
+            </Annotations>
+            <Annotations Target="SAP__self.I_EquipmentType/Supplier">
+                <Annotation Term="SAP__common.IsUpperCase"/>
+                <Annotation Term="SAP__common.ValueListReferences">
+                    <Collection>
+                        <String>../../../../srvd_f4/sap/i_supplier_vh/0001;ps='srvd-zsd_meter_reading-0001';va='com.sap.gateway.srvd.zsd_meter_reading.v0001.et-i_equipment.supplier'/$metadata</String>
+                    </Collection>
+                </Annotation>
+                <Annotation Term="SAP__common.Label" String="Vendor"/>
+                <Annotation Term="SAP__common.QuickInfo" String="Vendor number"/>
+                <Annotation Term="SAP__common.DocumentationRef" String="urn:sap-com:documentation:key?=type=DE&amp;id=ELIEF"/>
+            </Annotations>
+            <Annotations Target="SAP__self.I_EquipmentType/MasterWarranty">
+                <Annotation Term="SAP__common.IsUpperCase"/>
+                <Annotation Term="SAP__common.Label" String="Master warranty"/>
+                <Annotation Term="SAP__common.QuickInfo" String="Master warranty number"/>
+                <Annotation Term="SAP__common.DocumentationRef" String="urn:sap-com:documentation:key?=type=DE&amp;id=MGANR"/>
+            </Annotations>
+            <Annotations Target="SAP__self.I_EquipmentType/MaintenancePlan">
+                <Annotation Term="SAP__common.IsUpperCase"/>
+                <Annotation Term="SAP__common.Label" String="Maintenance Plan"/>
+                <Annotation Term="SAP__common.Heading" String="MntPlan"/>
+                <Annotation Term="SAP__common.DocumentationRef" String="urn:sap-com:documentation:key?=type=DE&amp;id=WARPL"/>
+            </Annotations>
+            <Annotations Target="SAP__self.I_EquipmentType/MeasuringPoint">
+                <Annotation Term="SAP__common.IsUpperCase"/>
+                <Annotation Term="SAP__common.Label" String="Measuring point"/>
+                <Annotation Term="SAP__common.Heading" String="MeasPoint"/>
+                <Annotation Term="SAP__common.QuickInfo" String="Measuring Point"/>
+                <Annotation Term="SAP__common.DocumentationRef" String="urn:sap-com:documentation:key?=type=DE&amp;id=IMRC_POINT"/>
+            </Annotations>
+            <Annotations Target="SAP__self.Container/I_Equipment">
+                <Annotation Term="SAP__capabilities.SearchRestrictions">
+                    <Record>
+                        <PropertyValue Property="Searchable" Bool="false"/>
+                    </Record>
+                </Annotation>
+                <Annotation Term="SAP__capabilities.InsertRestrictions">
+                    <Record>
+                        <PropertyValue Property="Insertable" Bool="false"/>
+                    </Record>
+                </Annotation>
+                <Annotation Term="SAP__capabilities.DeleteRestrictions">
+                    <Record>
+                        <PropertyValue Property="Deletable" Bool="false"/>
+                    </Record>
+                </Annotation>
+                <Annotation Term="SAP__capabilities.UpdateRestrictions">
+                    <Record>
+                        <PropertyValue Property="Updatable" Bool="false"/>
+                        <PropertyValue Property="QueryOptions">
+                            <Record>
+                                <PropertyValue Property="SelectSupported" Bool="true"/>
+                            </Record>
+                        </PropertyValue>
+                    </Record>
+                </Annotation>
+                <Annotation Term="SAP__aggregation.ApplySupported">
+                    <Record>
+                        <PropertyValue Property="Transformations">
+                            <Collection>
+                                <String>aggregate</String>
+                            </Collection>
+                        </PropertyValue>
+                    </Record>
+                </Annotation>
+                <Annotation Term="SAP__aggregation.CustomAggregate" Qualifier="AcquisitionValue" String="Edm.Decimal"/>
+                <Annotation Term="SAP__aggregation.CustomAggregate" Qualifier="GrossWeight" String="Edm.Decimal"/>
+                <Annotation Term="SAP__capabilities.FilterRestrictions">
+                    <Record>
+                        <PropertyValue Property="FilterExpressionRestrictions">
+                            <Collection>
+                                <Record>
+                                    <PropertyValue Property="Property" PropertyPath="AcquisitionValue"/>
+                                    <PropertyValue Property="AllowedExpressions" String="MultiValue"/>
+                                </Record>
+                                <Record>
+                                    <PropertyValue Property="Property" PropertyPath="GrossWeight"/>
+                                    <PropertyValue Property="AllowedExpressions" String="MultiValue"/>
+                                </Record>
+                            </Collection>
+                        </PropertyValue>
+                    </Record>
+                </Annotation>
+            </Annotations>
+            <Annotations Target="SAP__self.Container">
+                <Annotation Term="SAP__CodeList.CurrencyCodes">
+                    <Record>
+                        <PropertyValue Property="Url" String="../../../../default/iwbep/common/0001/$metadata"/>
+                        <PropertyValue Property="CollectionPath" String="Currencies"/>
+                    </Record>
+                </Annotation>
+                <Annotation Term="SAP__CodeList.UnitsOfMeasure">
+                    <Record>
+                        <PropertyValue Property="Url" String="../../../../default/iwbep/common/0001/$metadata"/>
+                        <PropertyValue Property="CollectionPath" String="UnitsOfMeasure"/>
+                    </Record>
+                </Annotation>
+                <Annotation Term="SAP__common.ApplyMultiUnitBehaviorForSortingAndFiltering" Bool="true"/>
+                <Annotation Term="SAP__capabilities.FilterFunctions">
+                    <Collection>
+                        <String>eq</String>
+                        <String>ne</String>
+                        <String>gt</String>
+                        <String>ge</String>
+                        <String>lt</String>
+                        <String>le</String>
+                        <String>and</String>
+                        <String>or</String>
+                        <String>contains</String>
+                        <String>startswith</String>
+                        <String>endswith</String>
+                        <String>any</String>
+                        <String>all</String>
+                    </Collection>
+                </Annotation>
+                <Annotation Term="SAP__capabilities.SupportedFormats">
+                    <Collection>
+                        <String>application/json</String>
+                        <String>application/pdf</String>
+                    </Collection>
+                </Annotation>
+                <Annotation Term="SAP__PDF.Features">
+                    <Record>
+                        <PropertyValue Property="DocumentDescriptionReference" String="../../../../default/iwbep/common/0001/$metadata"/>
+                        <PropertyValue Property="DocumentDescriptionCollection" String="MyDocumentDescriptions"/>
+                        <PropertyValue Property="ArchiveFormat" Bool="true"/>
+                        <PropertyValue Property="Border" Bool="true"/>
+                        <PropertyValue Property="CoverPage" Bool="true"/>
+                        <PropertyValue Property="FitToPage" Bool="true"/>
+                        <PropertyValue Property="FontName" Bool="true"/>
+                        <PropertyValue Property="FontSize" Bool="true"/>
+                        <PropertyValue Property="HeaderFooter" Bool="true"/>
+                        <PropertyValue Property="IANATimezoneFormat" Bool="true"/>
+                        <PropertyValue Property="Margin" Bool="true"/>
+                        <PropertyValue Property="Padding" Bool="true"/>
+                        <PropertyValue Property="ResultSizeDefault" Int="20000"/>
+                        <PropertyValue Property="ResultSizeMaximum" Int="20000"/>
+                        <PropertyValue Property="Signature" Bool="true"/>
+                        <PropertyValue Property="TextDirectionLayout" Bool="true"/>
+                        <PropertyValue Property="Treeview" Bool="true"/>
+                        <PropertyValue Property="UploadToFileShare" Bool="true"/>
+                    </Record>
+                </Annotation>
+                <Annotation Term="SAP__capabilities.KeyAsSegmentSupported"/>
+                <Annotation Term="SAP__capabilities.AsynchronousRequestsSupported"/>
+            </Annotations>
+            <Annotations Target="SAP__self.ZI_MeterSerialNumber_VHType/MeterSerialNumber">
+                <Annotation Term="SAP__common.IsUpperCase"/>
+                <Annotation Term="SAP__common.Label" String="Measurement position"/>
+                <Annotation Term="SAP__common.QuickInfo" String="Position Number of the Object Measuring Point (Sort Field)"/>
+                <Annotation Term="SAP__common.DocumentationRef" String="urn:sap-com:documentation:key?=type=DE&amp;id=IMRC_PSORT"/>
+            </Annotations>
+            <Annotations Target="SAP__self.ZI_MeterSerialNumber_VHType">
+                <Annotation Term="SAP__common.Label" String="Meter Serial Number Value Help"/>
+            </Annotations>
+            <Annotations Target="SAP__self.Container/ZI_MeterSerialNumber_VH">
+                <Annotation Term="SAP__capabilities.SearchRestrictions">
+                    <Record>
+                        <PropertyValue Property="Searchable" Bool="false"/>
+                    </Record>
+                </Annotation>
+                <Annotation Term="SAP__capabilities.InsertRestrictions">
+                    <Record>
+                        <PropertyValue Property="Insertable" Bool="false"/>
+                    </Record>
+                </Annotation>
+                <Annotation Term="SAP__capabilities.DeleteRestrictions">
+                    <Record>
+                        <PropertyValue Property="Deletable" Bool="false"/>
+                    </Record>
+                </Annotation>
+                <Annotation Term="SAP__capabilities.UpdateRestrictions">
+                    <Record>
+                        <PropertyValue Property="Updatable" Bool="false"/>
+                        <PropertyValue Property="QueryOptions">
+                            <Record>
+                                <PropertyValue Property="SelectSupported" Bool="true"/>
+                            </Record>
+                        </PropertyValue>
+                    </Record>
+                </Annotation>
+            </Annotations>
+            <Annotations Target="SAP__self.ZI_FunctionalLocationStdVHType/FunctionalLocation">
+                <Annotation Term="SAP__common.IsUpperCase"/>
+                <Annotation Term="SAP__common.Label" String="Functional loc."/>
+                <Annotation Term="SAP__common.Heading" String="Functional Location"/>
+                <Annotation Term="SAP__common.QuickInfo" String="Functional Location"/>
+            </Annotations>
+            <Annotations Target="SAP__self.ZI_FunctionalLocationStdVHType">
+                <Annotation Term="SAP__common.Label" String="Functional Location Value Help"/>
+            </Annotations>
+            <Annotations Target="SAP__self.Container/ZI_FunctionalLocationStdVH">
+                <Annotation Term="SAP__capabilities.SearchRestrictions">
+                    <Record>
+                        <PropertyValue Property="Searchable" Bool="false"/>
+                    </Record>
+                </Annotation>
+                <Annotation Term="SAP__capabilities.InsertRestrictions">
+                    <Record>
+                        <PropertyValue Property="Insertable" Bool="false"/>
+                    </Record>
+                </Annotation>
+                <Annotation Term="SAP__capabilities.DeleteRestrictions">
+                    <Record>
+                        <PropertyValue Property="Deletable" Bool="false"/>
+                    </Record>
+                </Annotation>
+                <Annotation Term="SAP__capabilities.UpdateRestrictions">
+                    <Record>
+                        <PropertyValue Property="Updatable" Bool="false"/>
+                        <PropertyValue Property="QueryOptions">
+                            <Record>
+                                <PropertyValue Property="SelectSupported" Bool="true"/>
+                            </Record>
+                        </PropertyValue>
+                    </Record>
+                </Annotation>
+            </Annotations>
+            <Annotations Target="SAP__self.ZC_METER_READING_REPORTParameters/pa_data_from">
+                <Annotation Term="SAP__common.Label" String="From Date"/>
+                <Annotation Term="SAP__common.QuickInfo" String="Date"/>
+                <Annotation Term="SAP__core.Computed"/>
+                <Annotation Term="SAP__common.Heading" String="Date"/>
+            </Annotations>
+            <Annotations Target="SAP__self.ZC_METER_READING_REPORTParameters/pa_data_to">
+                <Annotation Term="SAP__common.Label" String="To Date"/>
+                <Annotation Term="SAP__common.QuickInfo" String="Date"/>
+                <Annotation Term="SAP__core.Computed"/>
+                <Annotation Term="SAP__common.Heading" String="Date"/>
+            </Annotations>
+            <Annotations Target="SAP__self.Container/ZC_METER_READING_REPORT">
+                <Annotation Term="SAP__capabilities.NavigationRestrictions">
+                    <Record>
+                        <PropertyValue Property="RestrictedProperties">
+                            <Collection>
+                                <Record>
+                                    <PropertyValue Property="NavigationProperty" NavigationPropertyPath="Set"/>
+                                    <PropertyValue Property="InsertRestrictions">
+                                        <Record>
+                                            <PropertyValue Property="Insertable" Bool="false"/>
+                                        </Record>
+                                    </PropertyValue>
+                                    <PropertyValue Property="UpdateRestrictions">
+                                        <Record>
+                                            <PropertyValue Property="Updatable" Bool="false"/>
+                                        </Record>
+                                    </PropertyValue>
+                                    <PropertyValue Property="DeleteRestrictions">
+                                        <Record>
+                                            <PropertyValue Property="Deletable" Bool="false"/>
+                                        </Record>
+                                    </PropertyValue>
+                                </Record>
+                            </Collection>
+                        </PropertyValue>
+                    </Record>
+                </Annotation>
+                <Annotation Term="SAP__capabilities.SearchRestrictions">
+                    <Record>
+                        <PropertyValue Property="Searchable" Bool="false"/>
+                    </Record>
+                </Annotation>
+                <Annotation Term="SAP__capabilities.FilterRestrictions">
+                    <Record>
+                        <PropertyValue Property="NonFilterableProperties">
+                            <Collection>
+                                <PropertyPath>pa_data_from</PropertyPath>
+                                <PropertyPath>pa_data_to</PropertyPath>
+                            </Collection>
+                        </PropertyValue>
+                    </Record>
+                </Annotation>
+                <Annotation Term="SAP__capabilities.SortRestrictions">
+                    <Record>
+                        <PropertyValue Property="NonSortableProperties">
+                            <Collection>
+                                <PropertyPath>pa_data_from</PropertyPath>
+                                <PropertyPath>pa_data_to</PropertyPath>
+                            </Collection>
+                        </PropertyValue>
+                    </Record>
+                </Annotation>
+                <Annotation Term="SAP__capabilities.ReadRestrictions">
+                    <Record>
+                        <PropertyValue Property="Readable" Bool="false"/>
+                    </Record>
+                </Annotation>
+                <Annotation Term="SAP__capabilities.InsertRestrictions">
+                    <Record>
+                        <PropertyValue Property="Insertable" Bool="false"/>
+                    </Record>
+                </Annotation>
+                <Annotation Term="SAP__capabilities.DeleteRestrictions">
+                    <Record>
+                        <PropertyValue Property="Deletable" Bool="false"/>
+                    </Record>
+                </Annotation>
+                <Annotation Term="SAP__capabilities.UpdateRestrictions">
+                    <Record>
+                        <PropertyValue Property="Updatable" Bool="false"/>
+                        <PropertyValue Property="NonUpdatableNavigationProperties">
+                            <Collection>
+                                <PropertyPath>Set</PropertyPath>
+                            </Collection>
+                        </PropertyValue>
+                        <PropertyValue Property="QueryOptions">
+                            <Record>
+                                <PropertyValue Property="SelectSupported" Bool="true"/>
+                            </Record>
+                        </PropertyValue>
+                    </Record>
+                </Annotation>
+            </Annotations>
+            <Annotations Target="SAP__self.ZC_METER_READING_REPORTParameters">
+                <Annotation Term="SAP__common.ResultContext"/>
+            </Annotations>
+            <Annotations Target="SAP__self.I_MeasuringPointCategoryType/MeasuringPointCategory">
+                <Annotation Term="SAP__common.Text" Path="MeasuringPointCategory_Text"/>
+                <Annotation Term="SAP__common.IsUpperCase"/>
+                <Annotation Term="SAP__common.Label" String="MeasPointCategory"/>
+                <Annotation Term="SAP__common.Heading" String="Cat"/>
+                <Annotation Term="SAP__common.QuickInfo" String="Measuring Point Category"/>
+                <Annotation Term="SAP__common.DocumentationRef" String="urn:sap-com:documentation:key?=type=DE&amp;id=IMRC_MPTYP"/>
+            </Annotations>
+            <Annotations Target="SAP__self.I_MeasuringPointCategoryType/MeasuringPointCategory_Text">
+                <Annotation Term="SAP__core.Computed"/>
+                <Annotation Term="SAP__common.Label" String="Description"/>
+                <Annotation Term="SAP__common.QuickInfo" String="Measuring Point Category Description"/>
+                <Annotation Term="SAP__common.DocumentationRef" String="urn:sap-com:documentation:key?=type=DE&amp;id=IMRC_MPTTX"/>
+            </Annotations>
+            <Annotations Target="SAP__self.I_MeasuringPointCategoryType/MeasurementPositionNumber">
+                <Annotation Term="SAP__common.IsUpperCase"/>
+                <Annotation Term="SAP__common.Label" String="MeasPosUniqueness"/>
+                <Annotation Term="SAP__common.Heading" String="U"/>
+                <Annotation Term="SAP__common.QuickInfo" String="Uniqueness of Measuring Point Position Number"/>
+                <Annotation Term="SAP__common.DocumentationRef" String="urn:sap-com:documentation:key?=type=DE&amp;id=IMRC_SUNIQ"/>
+            </Annotations>
+            <Annotations Target="SAP__self.I_MeasuringPointCategoryType/MeasuringPointCatalogType">
+                <Annotation Term="SAP__common.IsUpperCase"/>
+                <Annotation Term="SAP__common.Label" String="Catalog type"/>
+                <Annotation Term="SAP__common.Heading" String="C"/>
+                <Annotation Term="SAP__common.QuickInfo" String="Catalog Type - Measurement Reading Valuation Code"/>
+                <Annotation Term="SAP__common.DocumentationRef" String="urn:sap-com:documentation:key?=type=DE&amp;id=IMRC_CODCT"/>
+            </Annotations>
+            <Annotations Target="SAP__self.I_MeasuringPointCategoryType/OnlineMessageType">
+                <Annotation Term="SAP__common.IsUpperCase"/>
+                <Annotation Term="SAP__common.Label" String="MeasRange message"/>
+                <Annotation Term="SAP__common.Heading" String="M"/>
+                <Annotation Term="SAP__common.QuickInfo" String="Online Message Category when Measurement Range Exceeded"/>
+                <Annotation Term="SAP__common.DocumentationRef" String="urn:sap-com:documentation:key?=type=DE&amp;id=IMRC_MRMES"/>
+            </Annotations>
+            <Annotations Target="SAP__self.I_MeasuringPointCategoryType">
+                <Annotation Term="SAP__common.Label" String="Measuring Point Category"/>
+                <Annotation Term="SAP__common.SAPObjectNodeType">
+                    <Record>
+                        <PropertyValue Property="Name" String="MeasuringPointCategory"/>
+                    </Record>
+                </Annotation>
+            </Annotations>
+            <Annotations Target="SAP__self.Container/I_MeasuringPointCategory">
+                <Annotation Term="SAP__capabilities.SearchRestrictions">
+                    <Record>
+                        <PropertyValue Property="Searchable" Bool="false"/>
+                    </Record>
+                </Annotation>
+                <Annotation Term="SAP__capabilities.InsertRestrictions">
+                    <Record>
+                        <PropertyValue Property="Insertable" Bool="false"/>
+                    </Record>
+                </Annotation>
+                <Annotation Term="SAP__capabilities.DeleteRestrictions">
+                    <Record>
+                        <PropertyValue Property="Deletable" Bool="false"/>
+                    </Record>
+                </Annotation>
+                <Annotation Term="SAP__capabilities.UpdateRestrictions">
+                    <Record>
+                        <PropertyValue Property="Updatable" Bool="false"/>
+                        <PropertyValue Property="QueryOptions">
+                            <Record>
+                                <PropertyValue Property="SelectSupported" Bool="true"/>
+                            </Record>
+                        </PropertyValue>
+                    </Record>
+                </Annotation>
+            </Annotations>
+            <Annotations Target="SAP__self.ZC_METER_READING_REPORTType/MeasuringPoint">
+                <Annotation Term="SAP__common.Label" String="Measuring Point"/>
+                <Annotation Term="SAP__common.IsUpperCase"/>
+                <Annotation Term="SAP__common.ValueListReferences">
+                    <Collection>
+                        <String>../../../../srvd_f4/sap/zi_measuringpointdesc_vh/0001;ps='srvd-zsd_meter_reading-0001';va='com.sap.gateway.srvd.zsd_meter_reading.v0001.et-zc_meter_reading_report.measuringpoint'/$metadata</String>
+                    </Collection>
+                </Annotation>
+                <Annotation Term="SAP__common.Heading" String="MeasPoint"/>
+                <Annotation Term="SAP__common.QuickInfo" String="Measuring Point"/>
+                <Annotation Term="SAP__common.DocumentationRef" String="urn:sap-com:documentation:key?=type=DE&amp;id=IMRC_POINT"/>
+            </Annotations>
+            <Annotations Target="SAP__self.ZC_METER_READING_REPORTType/FunctionalLocation">
+                <Annotation Term="SAP__common.Label" String="Functional Location"/>
+                <Annotation Term="SAP__common.IsUpperCase"/>
+                <Annotation Term="SAP__common.ValueListReferences">
+                    <Collection>
+                        <String>../../../../srvd_f4/sap/zi_functionallocationstdvh/0001;ps='srvd-zsd_meter_reading-0001';va='com.sap.gateway.srvd.zsd_meter_reading.v0001.et-zc_meter_reading_report.functionallocation'/$metadata</String>
+                    </Collection>
+                </Annotation>
+                <Annotation Term="SAP__common.Heading" String="Functional Location"/>
+                <Annotation Term="SAP__common.QuickInfo" String="Functional Location"/>
+            </Annotations>
+            <Annotations Target="SAP__self.ZC_METER_READING_REPORTType/Equipment">
+                <Annotation Term="SAP__common.Label" String="Equipment Number"/>
+                <Annotation Term="SAP__common.IsUpperCase"/>
+                <Annotation Term="SAP__common.ValueListReferences">
+                    <Collection>
+                        <String>../../../../srvd_f4/sap/i_equipment/0001;ps='srvd-zsd_meter_reading-0001';va='com.sap.gateway.srvd.zsd_meter_reading.v0001.et-zc_meter_reading_report.equipment'/$metadata</String>
+                    </Collection>
+                </Annotation>
+                <Annotation Term="SAP__common.Heading" String="Equipment"/>
+                <Annotation Term="SAP__common.QuickInfo" String="Equipment Number"/>
+                <Annotation Term="SAP__common.DocumentationRef" String="urn:sap-com:documentation:key?=type=DE&amp;id=EQUNR"/>
+            </Annotations>
+            <Annotations Target="SAP__self.ZC_METER_READING_REPORTType/MeterSerialNumber">
+                <Annotation Term="SAP__common.Label" String="Meter Serial Number"/>
+                <Annotation Term="SAP__common.IsUpperCase"/>
+                <Annotation Term="SAP__common.ValueListReferences">
+                    <Collection>
+                        <String>../../../../srvd_f4/sap/zi_meterserialnumber_vh/0001;ps='srvd-zsd_meter_reading-0001';va='com.sap.gateway.srvd.zsd_meter_reading.v0001.et-zc_meter_reading_report.meterserialnumber'/$metadata</String>
+                    </Collection>
+                </Annotation>
+                <Annotation Term="SAP__common.Heading" String="Measurement position"/>
+                <Annotation Term="SAP__common.QuickInfo" String="Position Number of the Object Measuring Point (Sort Field)"/>
+                <Annotation Term="SAP__common.DocumentationRef" String="urn:sap-com:documentation:key?=type=DE&amp;id=IMRC_PSORT"/>
+            </Annotations>
+            <Annotations Target="SAP__self.ZC_METER_READING_REPORTType/MeasuringPointCategory">
+                <Annotation Term="SAP__common.Label" String="Measuring Point Category"/>
+                <Annotation Term="SAP__common.IsUpperCase"/>
+                <Annotation Term="SAP__common.ValueListReferences">
+                    <Collection>
+                        <String>../../../../srvd_f4/sap/i_measuringpointcategory/0001;ps='srvd-zsd_meter_reading-0001';va='com.sap.gateway.srvd.zsd_meter_reading.v0001.et-zc_meter_reading_report.measuringpointcategory'/$metadata</String>
+                    </Collection>
+                </Annotation>
+                <Annotation Term="SAP__common.Heading" String="Cat"/>
+                <Annotation Term="SAP__common.QuickInfo" String="Measuring Point Category"/>
+                <Annotation Term="SAP__common.DocumentationRef" String="urn:sap-com:documentation:key?=type=DE&amp;id=IMRC_MPTYP"/>
+            </Annotations>
+            <Annotations Target="SAP__self.ZC_METER_READING_REPORTType/MeasuringPointCategoryDesc">
+                <Annotation Term="SAP__common.Label" String="Measuring Point Category Description"/>
+                <Annotation Term="SAP__common.Heading" String="Description"/>
+                <Annotation Term="SAP__common.QuickInfo" String="Measuring Point Category Description"/>
+                <Annotation Term="SAP__common.DocumentationRef" String="urn:sap-com:documentation:key?=type=DE&amp;id=IMRC_MPTTX"/>
+            </Annotations>
+            <Annotations Target="SAP__self.ZC_METER_READING_REPORTType/FunctionalLocDesc">
+                <Annotation Term="SAP__common.Label" String="Functional Location Description"/>
+                <Annotation Term="SAP__common.Heading" String="Technical Object Description"/>
+                <Annotation Term="SAP__common.QuickInfo" String="Technical Object Description"/>
+                <Annotation Term="SAP__common.DocumentationRef" String="urn:sap-com:documentation:key?=type=DE&amp;id=EAMS_TEC_OBJ_DES"/>
+            </Annotations>
+            <Annotations Target="SAP__self.ZC_METER_READING_REPORTType/EquipmentName">
+                <Annotation Term="SAP__common.Label" String="Equipment Description"/>
+                <Annotation Term="SAP__common.Heading" String="Description of technical object"/>
+                <Annotation Term="SAP__common.QuickInfo" String="Description of technical object"/>
+                <Annotation Term="SAP__common.DocumentationRef" String="urn:sap-com:documentation:key?=type=DE&amp;id=KTX01"/>
+            </Annotations>
+            <Annotations Target="SAP__self.ZC_METER_READING_REPORTType/MeasuringPointDescription">
+                <Annotation Term="SAP__common.Label" String="Customer Code (Desc of Measuring Point)"/>
+                <Annotation Term="SAP__common.Heading" String="Description of measuring point"/>
+                <Annotation Term="SAP__common.QuickInfo" String="Description of Measuring Point"/>
+                <Annotation Term="SAP__common.DocumentationRef" String="urn:sap-com:documentation:key?=type=DE&amp;id=IMRC_PTTXT"/>
+            </Annotations>
+            <Annotations Target="SAP__self.ZC_METER_READING_REPORTType/meter_corr_factor">
+                <Annotation Term="SAP__common.Label" String="Meter Correction Factor"/>
+            </Annotations>
+            <Annotations Target="SAP__self.ZC_METER_READING_REPORTType/CharcValueUnit">
+                <Annotation Term="SAP__common.IsUnit"/>
+                <Annotation Term="SAP__common.Label" String="Characterestic Unit( UOM )"/>
+                <Annotation Term="SAP__common.Heading" String="MU"/>
+                <Annotation Term="SAP__common.QuickInfo" String="Unit of Measurement"/>
+                <Annotation Term="SAP__common.DocumentationRef" String="urn:sap-com:documentation:key?=type=DE&amp;id=MSEHI"/>
+            </Annotations>
+            <Annotations Target="SAP__self.ZC_METER_READING_REPORTType/OpenDateRead">
+                <Annotation Term="SAP__common.Label" String="Opening Date Reading"/>
+            </Annotations>
+            <Annotations Target="SAP__self.ZC_METER_READING_REPORTType/ClosedateRead">
+                <Annotation Term="SAP__common.Label" String="Closing Date Reading"/>
+            </Annotations>
+            <Annotations Target="SAP__self.ZC_METER_READING_REPORTType/Difference">
+                <Annotation Term="SAP__common.Label" String="Difference"/>
+            </Annotations>
+            <Annotations Target="SAP__self.ZC_METER_READING_REPORTType/ActualBillQty">
+                <Annotation Term="SAP__common.Label" String="Actual Billable Qty"/>
+            </Annotations>
+            <Annotations Target="SAP__self.ZC_METER_READING_REPORTType/ProfitCenter">
+                <Annotation Term="SAP__common.Label" String="Profit Center ( Annual Estimate )"/>
+                <Annotation Term="SAP__common.Heading" String="Annual estimate"/>
+                <Annotation Term="SAP__common.QuickInfo" String="Annual Estimate in SI Unit"/>
+                <Annotation Term="SAP__common.DocumentationRef" String="urn:sap-com:documentation:key?=type=DE&amp;id=IMRC_PYEAR"/>
+            </Annotations>
+            <Annotations Target="SAP__self.ZC_METER_READING_REPORTType">
+                <Annotation Term="SAP__common.Label" String="Meter Reading Report"/>
+                <Annotation Term="SAP__UI.HeaderInfo">
+                    <Record>
+                        <PropertyValue Property="TypeName" String="Meter Reading"/>
+                        <PropertyValue Property="TypeNamePlural" String="Meter Readings"/>
+                        <PropertyValue Property="Title">
+                            <Record Type="SAP__UI.DataField">
+                                <PropertyValue Property="Label" String="Meter Reading Report"/>
+                                <PropertyValue Property="Value" Path="MeasuringPoint"/>
+                            </Record>
+                        </PropertyValue>
+                    </Record>
+                </Annotation>
+                <Annotation Term="SAP__UI.Identification">
+                    <Collection>
+                        <Record Type="SAP__UI.DataField">
+                            <PropertyValue Property="Value" Path="Equipment"/>
+                        </Record>
+                        <Record Type="SAP__UI.DataField">
+                            <PropertyValue Property="Value" Path="FunctionalLocation"/>
+                        </Record>
+                        <Record Type="SAP__UI.DataField">
+                            <PropertyValue Property="Value" Path="MeasuringPoint"/>
+                        </Record>
+                        <Record Type="SAP__UI.DataField">
+                            <PropertyValue Property="Value" Path="MeterSerialNumber"/>
+                        </Record>
+                        <Record Type="SAP__UI.DataField">
+                            <PropertyValue Property="Value" Path="MeasuringPointCategory"/>
+                        </Record>
+                    </Collection>
+                </Annotation>
+                <Annotation Term="SAP__UI.LineItem">
+                    <Collection>
+                        <Record Type="SAP__UI.DataField">
+                            <PropertyValue Property="Value" Path="MeterSerialNumber"/>
+                            <Annotation Term="SAP__UI.Importance" EnumMember="SAP__UI.ImportanceType/High"/>
+                        </Record>
+                        <Record Type="SAP__UI.DataField">
+                            <PropertyValue Property="Value" Path="MeasuringPointCategory"/>
+                            <Annotation Term="SAP__UI.Importance" EnumMember="SAP__UI.ImportanceType/High"/>
+                        </Record>
+                        <Record Type="SAP__UI.DataField">
+                            <PropertyValue Property="Value" Path="MeasuringPointCategoryDesc"/>
+                            <Annotation Term="SAP__UI.Importance" EnumMember="SAP__UI.ImportanceType/High"/>
+                        </Record>
+                        <Record Type="SAP__UI.DataField">
+                            <PropertyValue Property="Value" Path="FunctionalLocDesc"/>
+                            <Annotation Term="SAP__UI.Importance" EnumMember="SAP__UI.ImportanceType/High"/>
+                        </Record>
+                        <Record Type="SAP__UI.DataField">
+                            <PropertyValue Property="Value" Path="EquipmentName"/>
+                            <Annotation Term="SAP__UI.Importance" EnumMember="SAP__UI.ImportanceType/High"/>
+                        </Record>
+                        <Record Type="SAP__UI.DataField">
+                            <PropertyValue Property="Value" Path="MeasuringPointDescription"/>
+                            <Annotation Term="SAP__UI.Importance" EnumMember="SAP__UI.ImportanceType/High"/>
+                        </Record>
+                        <Record Type="SAP__UI.DataField">
+                            <PropertyValue Property="Value" Path="meter_corr_factor"/>
+                            <Annotation Term="SAP__UI.Importance" EnumMember="SAP__UI.ImportanceType/High"/>
+                        </Record>
+                        <Record Type="SAP__UI.DataField">
+                            <PropertyValue Property="Value" Path="CharcValueUnit"/>
+                            <Annotation Term="SAP__UI.Importance" EnumMember="SAP__UI.ImportanceType/High"/>
+                        </Record>
+                        <Record Type="SAP__UI.DataField">
+                            <PropertyValue Property="Value" Path="OpenDateRead"/>
+                            <Annotation Term="SAP__UI.Importance" EnumMember="SAP__UI.ImportanceType/High"/>
+                        </Record>
+                        <Record Type="SAP__UI.DataField">
+                            <PropertyValue Property="Value" Path="ClosedateRead"/>
+                            <Annotation Term="SAP__UI.Importance" EnumMember="SAP__UI.ImportanceType/High"/>
+                        </Record>
+                        <Record Type="SAP__UI.DataField">
+                            <PropertyValue Property="Value" Path="Difference"/>
+                            <Annotation Term="SAP__UI.Importance" EnumMember="SAP__UI.ImportanceType/High"/>
+                        </Record>
+                        <Record Type="SAP__UI.DataField">
+                            <PropertyValue Property="Value" Path="ActualBillQty"/>
+                            <Annotation Term="SAP__UI.Importance" EnumMember="SAP__UI.ImportanceType/High"/>
+                        </Record>
+                        <Record Type="SAP__UI.DataField">
+                            <PropertyValue Property="Value" Path="ProfitCenter"/>
+                            <Annotation Term="SAP__UI.Importance" EnumMember="SAP__UI.ImportanceType/High"/>
+                        </Record>
+                    </Collection>
+                </Annotation>
+                <Annotation Term="SAP__UI.SelectionFields">
+                    <Collection>
+                        <PropertyPath>Equipment</PropertyPath>
+                        <PropertyPath>FunctionalLocation</PropertyPath>
+                        <PropertyPath>MeasuringPoint</PropertyPath>
+                        <PropertyPath>MeterSerialNumber</PropertyPath>
+                        <PropertyPath>MeasuringPointCategory</PropertyPath>
+                    </Collection>
+                </Annotation>
+            </Annotations>
+            <Annotations Target="SAP__self.ZI_MeasuringPointDesc_VHType/MeasuringPoint">
+                <Annotation Term="SAP__common.IsUpperCase"/>
+                <Annotation Term="SAP__common.Label" String="Measuring point"/>
+                <Annotation Term="SAP__common.Heading" String="MeasPoint"/>
+                <Annotation Term="SAP__common.QuickInfo" String="Measuring Point"/>
+                <Annotation Term="SAP__common.DocumentationRef" String="urn:sap-com:documentation:key?=type=DE&amp;id=IMRC_POINT"/>
+            </Annotations>
+            <Annotations Target="SAP__self.ZI_MeasuringPointDesc_VHType">
+                <Annotation Term="SAP__common.Label" String="Measuring Point Description Value Help"/>
+            </Annotations>
+            <Annotations Target="SAP__self.Container/ZI_MeasuringPointDesc_VH">
+                <Annotation Term="SAP__capabilities.SearchRestrictions">
+                    <Record>
+                        <PropertyValue Property="Searchable" Bool="false"/>
+                    </Record>
+                </Annotation>
+                <Annotation Term="SAP__capabilities.InsertRestrictions">
+                    <Record>
+                        <PropertyValue Property="Insertable" Bool="false"/>
+                    </Record>
+                </Annotation>
+                <Annotation Term="SAP__capabilities.DeleteRestrictions">
+                    <Record>
+                        <PropertyValue Property="Deletable" Bool="false"/>
+                    </Record>
+                </Annotation>
+                <Annotation Term="SAP__capabilities.UpdateRestrictions">
+                    <Record>
+                        <PropertyValue Property="Updatable" Bool="false"/>
+                        <PropertyValue Property="QueryOptions">
+                            <Record>
+                                <PropertyValue Property="SelectSupported" Bool="true"/>
+                            </Record>
+                        </PropertyValue>
+                    </Record>
+                </Annotation>
+            </Annotations>
+            <Annotations Target="SAP__self.I_EquipmentType/EquipmentOID">
+                <Annotation Term="SAP__common.Label" String="Equip Obj Instce ID"/>
+                <Annotation Term="SAP__common.Heading" String="Equipment Object Instance ID"/>
+                <Annotation Term="SAP__common.QuickInfo" String="Object Instance ID of an Equipment"/>
+            </Annotations>
+            <Annotations Target="SAP__self.I_EquipmentType/CreationDate">
+                <Annotation Term="SAP__common.Label" String="Created On"/>
+                <Annotation Term="SAP__common.QuickInfo" String="Record Creation Date"/>
+            </Annotations>
+            <Annotations Target="SAP__self.I_EquipmentType/LastChangeDate">
+                <Annotation Term="SAP__common.Label" String="Changed On"/>
+                <Annotation Term="SAP__common.Heading" String="Chngd On"/>
+                <Annotation Term="SAP__common.QuickInfo" String="Last Changed On"/>
+            </Annotations>
+            <Annotations Target="SAP__self.I_EquipmentType/AssetManufacturerName">
+                <Annotation Term="SAP__common.Label" String="Manufacturer"/>
+                <Annotation Term="SAP__common.Heading" String="Manufacturer of Asset"/>
+                <Annotation Term="SAP__common.QuickInfo" String="Manufacturer of Asset"/>
+                <Annotation Term="SAP__common.DocumentationRef" String="urn:sap-com:documentation:key?=type=DE&amp;id=HERST"/>
+            </Annotations>
+            <Annotations Target="SAP__self.I_EquipmentType/ManufacturerPartTypeName">
+                <Annotation Term="SAP__common.Label" String="Model number"/>
+                <Annotation Term="SAP__common.QuickInfo" String="Manufacturer model number"/>
+            </Annotations>
+            <Annotations Target="SAP__self.I_EquipmentType/AcquisitionDate">
+                <Annotation Term="SAP__common.Label" String="Acquisition date"/>
+                <Annotation Term="SAP__common.Heading" String="Date"/>
+            </Annotations>
+            <Annotations Target="SAP__self.I_EquipmentType/OperationStartDate">
+                <Annotation Term="SAP__common.Label" String="Start-up date"/>
+                <Annotation Term="SAP__common.Heading" String="Start from"/>
+                <Annotation Term="SAP__common.QuickInfo" String="Start-up Date of the Technical Object"/>
+                <Annotation Term="SAP__common.DocumentationRef" String="urn:sap-com:documentation:key?=type=DE&amp;id=ILOM_DATAB"/>
+            </Annotations>
+            <Annotations Target="SAP__self.I_EquipmentType/HasEquipmentData">
+                <Annotation Term="SAP__common.Label" String="EquipmentData exists"/>
+                <Annotation Term="SAP__common.Heading" String="Equi. Data"/>
+                <Annotation Term="SAP__common.QuickInfo" String="Equipment data exists"/>
+                <Annotation Term="SAP__common.DocumentationRef" String="urn:sap-com:documentation:key?=type=DE&amp;id=EQUIP_KNZ"/>
+            </Annotations>
+            <Annotations Target="SAP__self.I_EquipmentType/EquipmentHasStockInformation">
+                <Annotation Term="SAP__common.Label" String="Has Stock Information"/>
+                <Annotation Term="SAP__common.QuickInfo" String="Indicator: Stock Information Available"/>
+            </Annotations>
+            <Annotations Target="SAP__self.I_EquipmentType/LastChangeDateTime">
+                <Annotation Term="SAP__common.Label" String="Short Time Stamp"/>
+                <Annotation Term="SAP__common.Heading" String="Short Form of Time Stamp"/>
+                <Annotation Term="SAP__common.QuickInfo" String="UTC Time Stamp in Short Form (YYYYMMDDhhmmss)"/>
+                <Annotation Term="SAP__common.DocumentationRef" String="urn:sap-com:documentation:key?=type=DE&amp;id=TZNTSTMPS"/>
+            </Annotations>
+            <Annotations Target="SAP__self.I_EquipmentType/EquipmentFirstDeliveryDate">
+                <Annotation Term="SAP__common.Label" String="Delivery date"/>
+                <Annotation Term="SAP__common.Heading" String="DelDate"/>
+                <Annotation Term="SAP__common.QuickInfo" String="First delivery date of the equipment"/>
+            </Annotations>
+            <Annotations Target="SAP__self.I_EquipmentType/ValidityStartDate">
+                <Annotation Term="SAP__common.Label" String="Valid From"/>
+                <Annotation Term="SAP__common.QuickInfo" String="Valid-From Date"/>
+                <Annotation Term="SAP__common.DocumentationRef" String="urn:sap-com:documentation:key?=type=DE&amp;id=DATAB"/>
+            </Annotations>
+            <Annotations Target="SAP__self.I_EquipmentType/ValidityEndDate">
+                <Annotation Term="SAP__common.Label" String="Valid To"/>
+                <Annotation Term="SAP__common.Heading" String="to"/>
+                <Annotation Term="SAP__common.QuickInfo" String="Valid To Date"/>
+                <Annotation Term="SAP__common.DocumentationRef" String="urn:sap-com:documentation:key?=type=DE&amp;id=DATBI"/>
+            </Annotations>
+            <Annotations Target="SAP__self.I_EquipmentType/MatlSrlNmbrLastGdsMvtDte">
+                <Annotation Term="SAP__common.Label" String="Date L.GoodsMvt"/>
+                <Annotation Term="SAP__common.Heading" String="Date of Last Goods Movemnt"/>
+                <Annotation Term="SAP__common.QuickInfo" String="Date of Last Goods Movement"/>
+                <Annotation Term="SAP__common.DocumentationRef" String="urn:sap-com:documentation:key?=type=DE&amp;id=DATLWB"/>
+            </Annotations>
+            <Annotations Target="SAP__self.I_EquipmentType/EquipmentEndOfUseDate">
+                <Annotation Term="SAP__common.Label" String="End-of-Use Date"/>
+                <Annotation Term="SAP__common.Heading" String="End-of-Use"/>
+                <Annotation Term="SAP__common.QuickInfo" String="End-of-Use Date of the Technical Object"/>
+                <Annotation Term="SAP__common.DocumentationRef" String="urn:sap-com:documentation:key?=type=DE&amp;id=ENDOFUSE_DATE"/>
+            </Annotations>
+            <Annotations Target="SAP__self.ZI_FunctionalLocationStdVHType/FunctionalLocationName">
+                <Annotation Term="SAP__common.Label" String="FunctLocDescrip."/>
+                <Annotation Term="SAP__common.Heading" String="Description of functional location"/>
+                <Annotation Term="SAP__common.QuickInfo" String="Description of functional location"/>
+                <Annotation Term="SAP__common.DocumentationRef" String="urn:sap-com:documentation:key?=type=DE&amp;id=PLTXT"/>
+            </Annotations>
+            <Annotations Target="SAP__self.I_MeasuringPointCategoryType/MsmtDocumentTimeDiffThreshold">
+                <Annotation Term="SAP__common.Label" String="Tolerance per. (sec)"/>
+                <Annotation Term="SAP__common.Heading" String="TolPeriod"/>
+                <Annotation Term="SAP__common.QuickInfo" String="Tolerance Period for a Measurement Time in the Future"/>
+                <Annotation Term="SAP__common.DocumentationRef" String="urn:sap-com:documentation:key?=type=DE&amp;id=IMRC_TOLER"/>
+            </Annotations>
+            <Annotations Target="SAP__self.I_MeasuringPointCategoryType/MsrgPtCategoryIsValid">
+                <Annotation Term="SAP__common.Label" String="Checkbox"/>
+            </Annotations>
+            <Annotations Target="SAP__self.I_MeasuringPointCategoryType/MsrgPtHasLinearAttributes">
+                <Annotation Term="SAP__common.Label" String="Linear Asset"/>
+                <Annotation Term="SAP__common.Heading" String="Linear"/>
+                <Annotation Term="SAP__common.QuickInfo" String="Indicator: Object Belongs to Linear Asset Management"/>
+                <Annotation Term="SAP__common.DocumentationRef" String="urn:sap-com:documentation:key?=type=DE&amp;id=EAML_LFE_IND"/>
+            </Annotations>
+            <Annotations Target="SAP__self.I_MeasuringPointCategoryType/MsrgPtCategoryIsBusEvtEnabled">
+                <Annotation Term="SAP__common.Label" String="Business Event"/>
+                <Annotation Term="SAP__common.QuickInfo" String="Enable Event for Measuring Point and Measurement Document"/>
+                <Annotation Term="SAP__common.DocumentationRef" String="urn:sap-com:documentation:key?=type=DE&amp;id=EAM_EVENT_IND"/>
+            </Annotations>
+            <Annotations Target="SAP__self.ZI_MeasuringPointDesc_VHType/MeasuringPointDescription">
+                <Annotation Term="SAP__common.Label" String="Description"/>
+                <Annotation Term="SAP__common.Heading" String="Description of measuring point"/>
+                <Annotation Term="SAP__common.QuickInfo" String="Description of Measuring Point"/>
+                <Annotation Term="SAP__common.DocumentationRef" String="urn:sap-com:documentation:key?=type=DE&amp;id=IMRC_PTTXT"/>
+            </Annotations>
+        </Schema>
+    </edmx:DataServices>
+</edmx:Edmx>
