@@ -293,7 +293,7 @@ sap.ui.define([
             }
         },
         groupByFunctionalLocation: function (data) {
-            return data.value.reduce((acc, item) => {
+            return data.reduce((acc, item) => {
                 const key = item.FunctionalLocation || "No Functional Location";
                 if (!acc[key]) {
                     acc[key] = [];
