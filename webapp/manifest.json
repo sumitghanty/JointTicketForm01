@@ -77,6 +77,9 @@
           "bundleName": "com.bgl.app.jointticketform.i18n.i18n"
         }
       },
+      "PdfDataModel": {
+        "type": "sap.ui.model.json.JSONModel"
+      },
       "": {
         "dataSource": "mainService",
         "preload": true,

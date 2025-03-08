@@ -1,227 +1,402 @@
-<mvc:View controllerName="com.bgl.app.jointticketform.controller.Jointticket"
-    xmlns:mvc="sap.ui.core.mvc"   
-		xmlns:core="sap.ui.core"
-		xmlns="sap.m"
-		xmlns:f="sap.f"
-		xmlns:fb="sap.ui.comp.filterbar"
-		xmlns:smartTable="sap.ui.comp.smarttable"
-		xmlns:svm="sap.ui.comp.smartvariants">
-    <f:DynamicPage id="pageId" headerExpanded="{/headerExpanded}">
-			<f:title>
-				<f:DynamicPageTitle>
-					<f:heading>
-						<svm:SmartVariantManagement id="svm" showExecuteOnSelection="true" />
-					</f:heading>
-					<f:expandedContent>
-						<Label id="expandedLabel" text="No filters active" />
-					</f:expandedContent>
-					<f:snappedContent>
-						<Label id="snappedLabel" text="No filters active" />
-					</f:snappedContent>
-				</f:DynamicPageTitle>
-			</f:title>
+<mvc:View
+    controllerName="com.bgl.app.jointticketform.controller.Jointticket"
+    xmlns:mvc="sap.ui.core.mvc"
+    xmlns:core="sap.ui.core"
+    xmlns="sap.m"
+    xmlns:f="sap.f"
+    xmlns:fb="sap.ui.comp.filterbar"
+    xmlns:smartTable="sap.ui.comp.smarttable"
+    xmlns:svm="sap.ui.comp.smartvariants"
+>
+    <f:DynamicPage
+        id="pageId"
+        headerExpanded="{/headerExpanded}"
+    >
+        <f:title>
+            <f:DynamicPageTitle>
+                <f:heading>
+                    <svm:SmartVariantManagement
+                        id="svm"
+                        showExecuteOnSelection="true"
+                    />
+                </f:heading>
+                <f:expandedContent>
+                    <Label
+                        id="expandedLabel"
+                        text="No filters active"
+                    />
+                </f:expandedContent>
+                <f:snappedContent>
+                    <Label
+                        id="snappedLabel"
+                        text="No filters active"
+                    />
+                </f:snappedContent>
+            </f:DynamicPageTitle>
+        </f:title>
 
-    <f:header>
-				<f:DynamicPageHeader>
-					<f:content>
-						<fb:FilterBar id="filterbar" persistencyKey="myPersKey" useToolbar="false" search=".onSearch" filterChange=".onFilterChange" afterVariantLoad=".onAfterVariantLoad">
-							<fb:filterGroupItems>
-								<fb:FilterGroupItem name="pa_data_from" label="From Date" groupName="Group1" visibleInFilterBar="true">
-									<fb:control>
-										<DatePicker required="true" id="fromDate"></DatePicker>
-									</fb:control>
-								</fb:FilterGroupItem>
-								<fb:FilterGroupItem name="pa_data_to" label="To Date" groupName="Group1" visibleInFilterBar="true">
-									<fb:control>
-                                    <DatePicker required="true" id="toDate"></DatePicker>										
-									</fb:control>
-								</fb:FilterGroupItem>
-								<fb:FilterGroupItem name="EquipmentNumber" label="Equipment Number" groupName="Group1" visibleInFilterBar="true">
-									<fb:control>
-										<MultiComboBox
-											name="EquipmentNumber"
-											selectionChange=".onSelectionEquipmentNumber"
-											items="{
+        <f:header>
+            <f:DynamicPageHeader>
+                <f:content>
+                    <fb:FilterBar
+                        id="filterbar"
+                        persistencyKey="myPersKey"
+                        useToolbar="false"
+                        search=".onSearch"
+                        filterChange=".onFilterChange"
+                        afterVariantLoad=".onAfterVariantLoad"
+                    >
+                        <fb:filterGroupItems>
+                            <fb:FilterGroupItem
+                                name="pa_data_from"
+                                label="From Date"
+                                groupName="Group1"
+                                visibleInFilterBar="true"
+                            >
+                                <fb:control>
+                                    <DatePicker
+                                        required="true"
+                                        id="fromDate"
+                                    />
+                                </fb:control>
+                            </fb:FilterGroupItem>
+                            <fb:FilterGroupItem
+                                name="pa_data_to"
+                                label="To Date"
+                                groupName="Group1"
+                                visibleInFilterBar="true"
+                            >
+                                <fb:control>
+                                    <DatePicker
+                                        required="true"
+                                        id="toDate"
+                                    />
+                                </fb:control>
+                            </fb:FilterGroupItem>
+                            <fb:FilterGroupItem
+                                name="EquipmentNumber"
+                                label="Equipment Number"
+                                groupName="Group1"
+                                visibleInFilterBar="true"
+                            >
+                                <fb:control>
+                                    <MultiComboBox
+                                        name="EquipmentNumber"
+                                        selectionChange=".onSelectionEquipmentNumber"
+                                        items="{
 												path: '/I_Equipment',
 												templateShareable: true
 											}"
-										>
-											<core:Item key="{Equipment}" text="{Equipment_Text}"/>
-										</MultiComboBox>
-									</fb:control>
-								</fb:FilterGroupItem>
-								<fb:FilterGroupItem name="FunctionalLocation" label="Functional Location" groupName="Group1" visibleInFilterBar="true">
-									<fb:control>
-										<MultiComboBox
-											name="FunctionalLocation"
-											selectionChange=".onSelectionFunctionalLocation"
-											items="{
+                                    >
+                                        <core:Item
+                                            key="{Equipment}"
+                                            text="{Equipment_Text}"
+                                        />
+                                    </MultiComboBox>
+                                </fb:control>
+                            </fb:FilterGroupItem>
+                            <fb:FilterGroupItem
+                                name="FunctionalLocation"
+                                label="Functional Location"
+                                groupName="Group1"
+                                visibleInFilterBar="true"
+                            >
+                                <fb:control>
+                                    <MultiComboBox
+                                        name="FunctionalLocation"
+                                        selectionChange=".onSelectionFunctionalLocation"
+                                        items="{
 												path: '/ZI_FunctionalLocationStdVH',
 												templateShareable: true
 											}"
-										>
-											<core:Item key="{FunctionalLocation}" text="{FunctionalLocationName}"/>
-										</MultiComboBox>
-									</fb:control>
-								</fb:FilterGroupItem>
-								<fb:FilterGroupItem name="MeasuringPoint" label="Measuring Point" groupName="Group1" visibleInFilterBar="true">
-									<fb:control>
-										<MultiComboBox
-											name="MeasuringPoint"
-											selectionChange=".onSelectionMeasuringPoint"
-											items="{
+                                    >
+                                        <core:Item
+                                            key="{FunctionalLocation}"
+                                            text="{FunctionalLocationName}"
+                                        />
+                                    </MultiComboBox>
+                                </fb:control>
+                            </fb:FilterGroupItem>
+                            <fb:FilterGroupItem
+                                name="MeasuringPoint"
+                                label="Measuring Point"
+                                groupName="Group1"
+                                visibleInFilterBar="true"
+                            >
+                                <fb:control>
+                                    <MultiComboBox
+                                        name="MeasuringPoint"
+                                        selectionChange=".onSelectionMeasuringPoint"
+                                        items="{
 												path: '/ZI_MeasuringPointDesc_VH',
 												templateShareable: true
 											}"
-										>
-											<core:Item key="{MeasuringPoint}" text="{MeasuringPointDescription}"/>
-										</MultiComboBox>
-									</fb:control>
-								</fb:FilterGroupItem>
-								<fb:FilterGroupItem name="MeterSerialNo" label="Meter Serial No." groupName="Group1" visibleInFilterBar="true">
-									<fb:control>
-										<MultiComboBox
-											name="MeterSerialNo"
-											selectionChange=".onSelectionMeterSerialNo"
-											items="{
+                                    >
+                                        <core:Item
+                                            key="{MeasuringPoint}"
+                                            text="{MeasuringPointDescription}"
+                                        />
+                                    </MultiComboBox>
+                                </fb:control>
+                            </fb:FilterGroupItem>
+                            <fb:FilterGroupItem
+                                name="MeterSerialNo"
+                                label="Meter Serial No."
+                                groupName="Group1"
+                                visibleInFilterBar="true"
+                            >
+                                <fb:control>
+                                    <MultiComboBox
+                                        name="MeterSerialNo"
+                                        selectionChange=".onSelectionMeterSerialNo"
+                                        items="{
 												path: '/ZI_MeterSerialNumber_VH',
 												templateShareable: true
 											}"
-										>
-											<core:Item key="{MeterSerialNumber}" text="{MeterSerialNumber}"/>
-										</MultiComboBox>
-									</fb:control>
-								</fb:FilterGroupItem>
-								<fb:FilterGroupItem name="MeasuringCategory" label="Measuring Point Category" groupName="Group1" visibleInFilterBar="true">
-									<fb:control>
-										<MultiComboBox
-											name="MeasuringCategory"
-											selectionChange=".onSelectionMeasuringCategory"
-											items="{
+                                    >
+                                        <core:Item
+                                            key="{MeterSerialNumber}"
+                                            text="{MeterSerialNumber}"
+                                        />
+                                    </MultiComboBox>
+                                </fb:control>
+                            </fb:FilterGroupItem>
+                            <fb:FilterGroupItem
+                                name="MeasuringCategory"
+                                label="Measuring Point Category"
+                                groupName="Group1"
+                                visibleInFilterBar="true"
+                            >
+                                <fb:control>
+                                    <MultiComboBox
+                                        name="MeasuringCategory"
+                                        selectionChange=".onSelectionMeasuringCategory"
+                                        items="{
 												path: '/I_MeasuringPointCategory',
 												templateShareable: true
 											}"
-										>
-											<core:Item key="{MeasuringPointCategory}" text="{MeasuringPointCategory_Text}"/>
-										</MultiComboBox>
-									</fb:control>
-								</fb:FilterGroupItem>								
-							</fb:filterGroupItems>
-						</fb:FilterBar>
-					</f:content>
-				</f:DynamicPageHeader>
-			</f:header>
-			<f:content>
-				<Table
-					id="table"
-					inset="false"
-					items="{
+                                    >
+                                        <core:Item
+                                            key="{MeasuringPointCategory}"
+                                            text="{MeasuringPointCategory_Text}"
+                                        />
+                                    </MultiComboBox>
+                                </fb:control>
+                            </fb:FilterGroupItem>
+                        </fb:filterGroupItems>
+                    </fb:FilterBar>
+                </f:content>
+            </f:DynamicPageHeader>
+        </f:header>
+        <f:content>
+            <Table
+                id="table"
+                inset="false"
+                items="{
 						path: 'dataModelTable>/'
 					}"
-					fixedLayout="false"
-				>
-
-<headerToolbar>
-			<OverflowToolbar>
-				<content>
-					<Title text="List of Measuring Points" level="H2"/>
-					<ToolbarSpacer />
-				<Button text="{
+                fixedLayout="true"
+    width="100%"
+            >
+                <headerToolbar>
+                    <OverflowToolbar>
+                        <content>
+                            <Title
+                                text="List of Measuring Points"
+                                level="H2"
+                            />
+                            <ToolbarSpacer />
+                            <Button
+                                text="{
 	                        path: 'UIDataModel>/Visible',
 	                        formatter: 'myFormatter.buttonText'
-                          }" icon="{
+                          }"
+                                icon="{
 	                        path: 'UIDataModel>/Visible',
 	                        formatter: 'myFormatter.buttonIcon'
-                          }" press="onPressText" />
-					<ToolbarSpacer />
-					
-					
-					<Button icon="sap-icon://excel-attachment" press="onExport"/>
-				</content>
-			</OverflowToolbar>
-		</headerToolbar>
+                          }"
+                                press="onPressText"
+                            />
+                            <ToolbarSpacer />
+                            <Button text="PDF" press="onPressPDFButton"></Button>
+                            <Button
+                                icon="sap-icon://excel-attachment"
+                                press="onExport"
+                            />
+                        </content>
+                    </OverflowToolbar>
+                </headerToolbar>
 
+                <columns>
+                    <Column width="auto">
+                        <Text text="Meter Serial Number" />
+                    </Column>
+                    <Column
+                        width="auto"
+                        demandPopin="true"
+                        hAlign="End"
+                        visible="{UIDataModel>/Visible}"
+                    >
+                        <Text text="Measuring Point Category" />
+                    </Column>
+                    <Column
+                        width="auto"
+                        demandPopin="true"
+                        hAlign="End"
+                        visible="{UIDataModel>/Visible}"
+                    >
+                        <Text text="Measuring Point Category Description" />
+                    </Column>
+                    <Column
+                        width="auto"
+                        demandPopin="true"
+                        hAlign="End"
+                        visible="{UIDataModel>/Visible}"
+                    >
+                        <Text text="Functional Location Description" />
+                    </Column>
+                    <Column
+                        width="auto"
+                        minScreenWidth="Tablet"
+                        demandPopin="true"
+                        hAlign="End"
+                        visible="{UIDataModel>/Visible}"
+                    >
+                        <Text text="Equipment Description" />
+                    </Column>
+                    <Column
+                        width="auto"
+                        minScreenWidth="Tablet"
+                        demandPopin="true"
+                        hAlign="End"
+                        visible="{UIDataModel>/Visible}"
+                    >
+                        <Text text="Customer Code (Desc of Measuring Point)" />
+                    </Column>
+                    <Column
+                        width="auto"
+                        minScreenWidth="Tablet"
+                        demandPopin="true"
+                        hAlign="End"
+                        visible="{UIDataModel>/Visible}"
+                    >
+                        <Text text="Meter Correction Factor" />
+                    </Column>
+                    <Column
+                       width="auto"
+                        minScreenWidth="Tablet"
+                        demandPopin="true"
+                        hAlign="End"
+                        visible="{UIDataModel>/Visible}"
+                    >
+                        <Text text="Characterestic Unit (UOM)" />
+                    </Column>
+                    <Column
+                        minScreenWidth="Tablet"
+                        demandPopin="true"
+                        hAlign="End"
+                        visible="{UIDataModel>/Invisible}"
+                    >
+                        <Text text="Opening Date Reading" />
+                    </Column>
+                    <Column
+                        width="auto"
+                        minScreenWidth="Tablet"
+                        demandPopin="true"
+                        hAlign="End"
+                        visible="{UIDataModel>/Invisible}"
+                    >
+                        <Text text="Closing Date Reading" />
+                    </Column>
+                    <Column
+                       width="auto"
+                        minScreenWidth="Tablet"
+                        demandPopin="true"
+                        hAlign="End"
+                        visible="{UIDataModel>/Invisible}"
+                    >
+                        <Text text="Difference" />
+                    </Column>
+                    <Column
+                        width="auto"
+                        minScreenWidth="Tablet"
+                        demandPopin="true"
+                        hAlign="End"
+                        visible="{UIDataModel>/Invisible}"
+                    >
+                        <Text text="Actual Billable Quantity" />
+                    </Column>
+                    <Column
+                        width="auto"
+                        minScreenWidth="Tablet"
+                        demandPopin="true"
+                        hAlign="End"
+                        visible="{UIDataModel>/Invisible}"
+                    >
+                        <Text text="Profit Center (Annual Estimates)" />
+                    </Column>
+                    <Column
+                       width="auto"
+                        minScreenWidth="Tablet"
+                        demandPopin="true"
+                        hAlign="End"
+                        visible="{UIDataModel>/Invisible}"
+                    >
+                        <Text text="Equipment Number" />
+                    </Column>
+                    <Column
+                        width="auto"
+                        minScreenWidth="Tablet"
+                        demandPopin="true"
+                        hAlign="End"
+                        visible="{UIDataModel>/Invisible}"
+                    >
+                        <Text text="Functional Location" />
+                    </Column>
+                    <Column
+                        width="auto"
+                        minScreenWidth="Tablet"
+                        demandPopin="true"
+                        hAlign="End"
+                        visible="{UIDataModel>/Invisible}"
+                    >
+                        <Text text="Measuing Point" />
+                    </Column>
+                </columns>
 
-				
-					<columns>
-						<Column width="12em">
-							<Text text="Meter Serial Number"/>
-						</Column>
-						<Column width="12em" demandPopin="true" hAlign="End" visible="{UIDataModel>/Visible}">
-							<Text text="Measuring Point Category"/>
-						</Column>
-						<Column width="12em" demandPopin="true" hAlign="End" visible="{UIDataModel>/Visible}">
-							<Text text="Measuring Point Category Description"/>
-						</Column>
-						<Column width="12em" demandPopin="true" hAlign="End" visible="{UIDataModel>/Visible}">
-							<Text text="Functional Location Description"/>
-						</Column>
-						<Column width="12em" minScreenWidth="Tablet" demandPopin="true" hAlign="End" visible="{UIDataModel>/Visible}">
-							<Text text="Equipment Description"/>
-						</Column>
-						<Column width="12em" minScreenWidth="Tablet" demandPopin="true" hAlign="End" visible="{UIDataModel>/Visible}">
-							<Text text="Customer Code (Desc of Measuring Point)"/>
-						</Column>
-						<Column width="12em" minScreenWidth="Tablet" demandPopin="true" hAlign="End" visible="{UIDataModel>/Visible}">
-							<Text text="Meter Correction Factor"/>
-						</Column>
-						<Column width="12em" minScreenWidth="Tablet" demandPopin="true" hAlign="End" visible="{UIDataModel>/Visible}">
-							<Text text="Characterestic Unit (UOM)"/>
-						</Column>
-						<Column minScreenWidth="Tablet" demandPopin="true" hAlign="End" visible="{UIDataModel>/Invisible}">
-							<Text text="Opening Date Reading"/>
-						</Column>
-						<Column width="12em" minScreenWidth="Tablet" demandPopin="true" hAlign="End" visible="{UIDataModel>/Invisible}">
-							<Text text="Closing Date Reading"/>
-						</Column>
-						<Column width="12em" minScreenWidth="Tablet" demandPopin="true" hAlign="End" visible="{UIDataModel>/Invisible}">
-							<Text text="Difference"/>
-						</Column>
-						<Column width="12em" minScreenWidth="Tablet" demandPopin="true" hAlign="End" visible="{UIDataModel>/Invisible}">
-							<Text text="Actual Billable Quantity"/>
-						</Column>
-						<Column width="12em" minScreenWidth="Tablet" demandPopin="true" hAlign="End" visible="{UIDataModel>/Invisible}">
-							<Text text="Profit Center (Annual Estimates)"/>
-						</Column>
-						<Column width="12em" minScreenWidth="Tablet" demandPopin="true" hAlign="End" visible="{UIDataModel>/Invisible}">
-							<Text text="Equipment Number"/>
-						</Column>
-						<Column width="12em" minScreenWidth="Tablet" demandPopin="true" hAlign="End" visible="{UIDataModel>/Invisible}">
-							<Text text="Functional Location"/>
-						</Column>
-						<Column width="12em" minScreenWidth="Tablet" demandPopin="true" hAlign="End" visible="{UIDataModel>/Invisible}">
-							<Text text="Measuing Point"/>
-						</Column>
-					</columns>
+                <items>
+                    <ColumnListItem vAlign="Middle">
+                        <cells>
+                            <ObjectIdentifier
+                                title="{dataModelTable>MeterSerialNumber}"
+                            />
+                            <ObjectIdentifier
+                                text="{dataModelTable>MeasuringPointCategory}"
+                            />
 
-					<items>
-						<ColumnListItem vAlign="Middle">
-							<cells>
-							<ObjectIdentifier title="{dataModelTable>MeterSerialNumber}" />
-								<ObjectIdentifier text="{dataModelTable>MeasuringPointCategory}" />
-								
-								<Text text="{dataModelTable>MeasuringPointCategoryDesc}" />
-								<Text text="{dataModelTable>FunctionalLocDesc}" />
-								<Text text="{dataModelTable>EquipmentName}" />
-								<Text text="{dataModelTable>MeasuringPointDescription}" />
-								<Text text="{dataModelTable>meter_corr_factor}" />
-								<Text text="{dataModelTable>CharcValueUnit}" />
-								<Text text="{dataModelTable>OpenDateRead}" />
-								<Text text="{dataModelTable>ClosedateRead}" />
-								<Text text="{dataModelTable>Difference}" />
-								<Text text="{dataModelTable>ActualBillQty}" />
-								<Text text="{dataModelTable>ProfitCenter}" />
-								<Text text="{dataModelTable>Equipment}" />
-								<Text text="{dataModelTable>FunctionalLocation}" />
-								<Text text="{dataModelTable>MeasuringPoint}" />
-							</cells>
-						</ColumnListItem>
-					</items>
-				</Table>
-
-				
-			</f:content>
-		</f:DynamicPage>
+                            <Text
+                                text="{dataModelTable>MeasuringPointCategoryDesc}"
+                            />
+                            <Text text="{dataModelTable>FunctionalLocDesc}" />
+                            <Text text="{dataModelTable>EquipmentName}" />
+                            <Text
+                                text="{dataModelTable>MeasuringPointDescription}"
+                            />
+                            <Text text="{dataModelTable>meter_corr_factor}" />
+                            <Text text="{dataModelTable>CharcValueUnit}" />
+                            <Text text="{dataModelTable>OpenDateRead}" />
+                            <Text text="{dataModelTable>ClosedateRead}" />
+                            <Text text="{dataModelTable>Difference}" />
+                            <Text text="{dataModelTable>ActualBillQty}" />
+                            <Text text="{dataModelTable>ProfitCenter}" />
+                            <Text text="{dataModelTable>Equipment}" />
+                            <Text text="{dataModelTable>FunctionalLocation}" />
+                            <Text text="{dataModelTable>MeasuringPoint}" />
+                        </cells>
+                    </ColumnListItem>
+                </items>
+            </Table>
+        </f:content>
+    </f:DynamicPage>
     <!--</Page>-->
-
 </mvc:View>
