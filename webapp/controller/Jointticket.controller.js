@@ -233,6 +233,11 @@ sap.ui.define([
             var oUrl = "/ZC_METER_READING_REPORT(pa_data_from=" + aTableFilters[0] + ",pa_data_to=" + aTableFilters[1] + ")/Set"
             var oTableJsonModel = this.getDataFromBackend(oUrl);
 
+            // For extract From and To Date
+            this.fromDate = aTableFilters[0];
+            this.toDate = aTableFilters[1];
+            // End
+
             /*this.oTable.bindItems({
                 path: oUrl,
                 template: that.oTable.getBindingInfo("items").template
@@ -269,9 +274,10 @@ sap.ui.define([
                     var oReturnModel = new JSONModel();
                     oReturnModel.setData(oTabelData);
                     that.oTable.setModel(oReturnModel, "dataModelTable");
-                    // For Pdf Button
+                    // Set Data For Pdf Button Function
                     var oPdfDataModel = this.getView().getModel("PdfDataModel");
                     oPdfDataModel.setData(oTabelData);
+                    // End
                     return oReturnModel;
 
                 } else {
@@ -345,10 +351,9 @@ sap.ui.define([
             });
 
         },
-        showSelectionDialog: function (groupedData) {
-            var aFunctionalLocations = Object.keys(groupedData);
+        showSelectionDialog: function (data) {
+            var aFunctionalLocations = Object.keys(data);
             var that = this;
-        
             var oDialog = new sap.m.Dialog({
                 title: "Select Functional Location",
                 content: new sap.m.List({
@@ -357,7 +362,7 @@ sap.ui.define([
                         type: "Active",
                         press: function () {
                             oDialog.close();
-                            that.generatePdf(location, groupedData[location]);
+                            that.generatePdf(location, data[location]);
                         }
                     }))
                 }),
@@ -368,7 +373,7 @@ sap.ui.define([
                     }
                 })
             });
-        
+
             oDialog.open();
         },
         convertImgToBase64: function (url, callback) {
@@ -403,186 +408,190 @@ sap.ui.define([
         },
         generatePdf: function (functionalLocation, data) {
             var oCal = this.calculateData(data);
-            // var oImageUrl = "/test/model/BGL_Logo.png";
-            // this.convertImgToBase64(oImageUrl, function (base64Image) {
-
-            var docDefinition = {
-                pageSize: "A4",
-                pageMargins: [30, 30, 30, 30],
-                content: [
-                    {
-                        table: {
-                            widths: ["*"],
-                            body: [
-                                [
-                                    {
-                                        stack: [
-                                            {
-                                                table: {
-                                                    widths: [100, "*"],  //// border: [left, top, right, bottom]
-                                                    body: [
-                                                        [
-                                                            { text: "Logo", alignment: "center", border: [true, true, false, true], margin: [30, 20, 0, 15] },
-                                                            // {
-                                                            //     // image: base64Image,
-                                                            //     width: 100,
-                                                            //     height: 60,
-                                                            //     alignment: 'center',
-                                                            //     border: [true, true, false, true],
-                                                            //     margin: [30, 20, 0, 15]
-                                                            // },
-                                                            {
-                                                                stack: [
-                                                                    { text: "BHAGYANAGAR GAS LIMITED", fontSize: 14, bold: true, color: "green", alignment: "center" },
-                                                                    { text: "(A joint venture of GAIL & HPCL)", fontSize: 8, bold: true, alignment: "center", margin: [0, 2, 0, 2] },
-                                                                    { text: "Address: - BGL address\nAddress line 2", fontSize: 8, bold: true, alignment: "center", margin: [0, 0, 0, 0] },
-                                                                    { text: `VAT/TIN:         PAN:        GSTIN: `, fontSize: 8, bold: true, alignment: "center", margin: [0, 2, 0, 2] },
-                                                                    { text: "Email Id: invoice@bgsgas.com,    Website: www.bglgas.com", fontSize: 8, bold: true, alignment: "center", margin: [0, 0, 0, 0] }
-                                                                ],
-                                                                border: [false, true, true, true],
-                                                                margin: [0, 10, 0, 10]
-                                                            }
-                                                        ]
-                                                    ]
-                                                }
-                                            },
-                                            {
-                                                table: {
-                                                    widths: ["*"],
-                                                    body: [
-                                                        [{ text: "Joint Meter Reading of CNG Dispenser (JMR)", bold: true, alignment: "center", fontSize: 12, border: [true, false, true, true] }]
-                                                    ]
-                                                },
-                                                margin: [0, 0, 0, 0]
-                                            },
-                                            // { text: "Date: " + new Date().toLocaleDateString(), fontSize: 10, color: "red", alignment: "right", margin: [0, 0, 0, 10] },
-
-                                            {
-                                                table: {
-                                                    widths: ["*", "*", "*", "*"],
-                                                    body: [
-                                                        [{ text: "", border: [true, false, false, false] }, { text: "", border: [false, false, false, false] }, { text: "", border: [false, false, false, false] }, { text: "Date: " + new Date().toLocaleDateString(), fontSize: 8, color: "red", alignment: "right", margin: [0, 0, 0, 10], border: [false, false, true, false] }],
-                                                        [{ text: "Period", fontSize: 8, bold: false, border: [true, false, false, false] }, { text: "", border: [false, false, false, false] }, { text: "From: " + ``, fontSize: 8, bold: false, border: [false, false, false, false] }, { text: "To: " + ``, fontSize: 8, bold: false, border: [false, false, true, false] }],
-                                                        [
-                                                            { text: "Location", fontSize: 8, bold: false, border: [true, false, false, false] },
-                                                            { text: `${oCal.locationDescription}`, fontSize: 8, colSpan: 3, border: [false, false, true, false] }, "", ""
-                                                        ],
-                                                        [
-                                                            { text: "Address", fontSize: 8, bold: false, border: [true, false, false, false] },
-                                                            { text: "(Full Address, Street, House No, Postal Code and City)", fontSize: 8, colSpan: 3, border: [false, false, true, false] }, "", ""
-                                                        ],
-                                                        [{ text: "Dispenser no", fontSize: 8, bold: false, border: [true, false, false, false] }, { text: "", border: [false, false, false, false] }, { text: "", border: [false, false, false, false] }, { text: "", border: [false, false, true, false] }]
-                                                    ]
-                                                }
-                                            },
-
-                                            // { text: " ", margin: [0, 10, 0, 10] },
-
-                                            {
-                                                table: {
-                                                    headerRows: 1,
-                                                    widths: ["20%", "20%", "20%", "20%", "20%"],
-                                                    body: [
-                                                        [
-                                                            { text: "Meter No.", fontSize: 9, alignment: "center", bold: true },
-                                                            { text: "Opening Meter Reading", fontSize: 9, alignment: "center", bold: true },
-                                                            { text: "Closing Meter Reading", fontSize: 9, alignment: "center", bold: true },
-                                                            { text: "Correction Factor", fontSize: 9, alignment: "center", bold: true },
-                                                            { text: "Gas Consumption", fontSize: 9, alignment: "center", bold: true }
-
-                                                        ],
-                                                        ...data.map(item => [
-                                                            { text: item.MeterSerialNumber || "-", alignment: "center", fontSize: 8 },
-                                                            { text: item.OpenDateRead, alignment: "center", fontSize: 8 },
-                                                            { text: item.ClosedateRead, alignment: "center", fontSize: 8 },
-                                                            { text: item.meter_corr_factor, alignment: "center", fontSize: 8 },
-                                                            { text: `${oCal.totalGasConsumption}`, alignment: "center", fontSize: 8 }
-                                                        ])
-                                                    ]
-                                                }
-                                            },
-
-                                            // { text: " ", margin: [0, 10, 0, 10] },
-                                            {
-                                                table: {
-                                                    widths: ["30%", "50%", "20%"],
-                                                    body: [
-                                                        [
-                                                            { text: "", border: [true, false, true, false] },
-                                                            { text: "Quantity used up in testing / calibration", fontSize: 8, bold: false, border: [true, false, true, false] },
-                                                            { text: "-100.00", fontSize: 8, alignment: "right", border: [true, false, true, false] }
-                                                        ],
-                                                        [
-                                                            { text: "", border: [true, false, true, false] },
-                                                            { text: "Dispensed Quantity (Kg)", fontSize: 8, bold: false, border: [true, false, true, false] },
-                                                            { text: `${oCal.dispensedQuantity}`, fontSize: 8, alignment: "right", border: [true, false, true, false] }
-                                                        ],
-                                                        [
-                                                            { text: "", border: [true, false, true, true] },
-                                                            { text: "Quantity Sold (Kg)", fontSize: 8, bold: false, border: [true, false, true, true] },
-                                                            { text: `${oCal.quantitySold}`, fontSize: 8, alignment: "right", border: [true, false, true, true] }
-                                                        ]
-                                                    ]
-                                                }
-                                            },
-
-                                            // { text: " ", margin: [0, 10, 0, 10] },
-                                            {
-                                                table: {
-                                                    widths: ["*"],
-                                                    body: [
-                                                        [{ text: "", alignment: "center", border: [true, false, true, false], margin: [0, 5, 0, 5] }]
-                                                    ]
-                                                }
-                                            },
-                                            {
-                                                table: {
-                                                    widths: ["*"],
-                                                    body: [
-                                                        [{ text: "Remarks / Note:", fontSize: 8, bold: true, border: [true, true, true, false] }],
-                                                        [{ text: "", border: [true, false, true, true], margin: [0, 20, 0, 20] }]
-                                                    ]
-                                                }
-                                            },
-
-                                            // { text: " ", margin: [0, 10, 0, 10] },
-                                            {
-                                                table: {
-                                                    widths: ["*"],
-                                                    body: [
-                                                        [{ text: "For Bhayanagar Gas Limited", fontSize: 8, alignment: "right", border: [true, false, true, false] }],
-                                                        [{ text: "", margin: [0, 10, 0, 10], border: [true, false, true, false] }]
-                                                    ]
-                                                }
-                                            },
-                                            // { text: "For Bhayanagar Gas Limited", fontSize: 8, alignment: "right", margin: [0, 20, 0, 0] },
-                                            {
-                                                table: {
-                                                    widths: ["*"],
-                                                    body: [
-                                                        [{ text: "System generated Invoice. Doesn't require signature.", fontSize: 8, italics: true, bold: true, alignment: "center", margin: [0, 0, 0, 0] }]
-                                                    ]
-                                                }
-                                            },
-                                            // { text: "System generated Invoice. Doesn't require signature.", fontSize: 10, italics: true, bold: true, alignment: "center", margin: [0, 20, 0, 0] }
-                                        ],
-                                        border: [false, false, false, false] // OUTER BORDER
-                                    }
-                                ]
-                            ]
-                        }
-                    }
-                ]
-                // images: {
-                //     logo: 'https://www.bglgas.com/wp-content/uploads/2023/04/Ramadhan-Mubarak-5-e1682514739293.png'  // External URL for the image
-                // }
+            var dateRange = {
+                fromDate: this.fromDate,
+                toDate: this.toDate
             };
+            var oImageUrl = jQuery.sap.getModulePath("com.bgl.app.jointticketform", "/model/BGL_Logo.png");
+            this.convertImgToBase64(oImageUrl, function (base64Image) {
+                var that = this;
+                var docDefinition = {
+                    pageSize: "A4",
+                    pageMargins: [30, 30, 30, 30],
+                    content: [
+                        {
+                            table: {
+                                widths: ["*"],
+                                body: [
+                                    [
+                                        {
+                                            stack: [
+                                                {
+                                                    table: {
+                                                        widths: [100, "*"],  //// border: [left, top, right, bottom]
+                                                        body: [
+                                                            [
+                                                                // { text: "Logo", alignment: "center", border: [true, true, false, true], margin: [30, 20, 0, 15] },
+                                                                {
+                                                                    image: base64Image,
+                                                                    width: 100,
+                                                                    height: 60,
+                                                                    alignment: 'center',
+                                                                    border: [true, true, false, true],
+                                                                    margin: [30, 20, 0, 15]
+                                                                },
+                                                                {
+                                                                    stack: [
+                                                                        { text: "BHAGYANAGAR GAS LIMITED", fontSize: 14, bold: true, color: "green", alignment: "center" },
+                                                                        { text: "(A joint venture of GAIL & HPCL)", fontSize: 8, bold: true, alignment: "center", margin: [0, 2, 0, 2] },
+                                                                        { text: "Address: - BGL address\nAddress line 2", fontSize: 8, bold: true, alignment: "center", margin: [0, 0, 0, 0] },
+                                                                        { text: `VAT/TIN:         PAN:        GSTIN: `, fontSize: 8, bold: true, alignment: "center", margin: [0, 2, 0, 2] },
+                                                                        { text: "Email Id: invoice@bgsgas.com,    Website: www.bglgas.com", fontSize: 8, bold: true, alignment: "center", margin: [0, 0, 0, 0] }
+                                                                    ],
+                                                                    border: [false, true, true, true],
+                                                                    margin: [0, 10, 0, 10]
+                                                                }
+                                                            ]
+                                                        ]
+                                                    }
+                                                },
+                                                {
+                                                    table: {
+                                                        widths: ["*"],
+                                                        body: [
+                                                            [{ text: "Joint Meter Reading of CNG Dispenser (JMR)", bold: true, alignment: "center", fontSize: 12, border: [true, false, true, true] }]
+                                                        ]
+                                                    },
+                                                    margin: [0, 0, 0, 0]
+                                                },
+                                                // { text: "Date: " + new Date().toLocaleDateString(), fontSize: 10, color: "red", alignment: "right", margin: [0, 0, 0, 10] },
 
-            pdfMake.createPdf(docDefinition).download(`${functionalLocation}-BGLReport.pdf`);
+                                                {
+                                                    table: {
+                                                        widths: ["*", "*", "*", "*"],
+                                                        body: [
+                                                            [{ text: "", border: [true, false, false, false] }, { text: "", border: [false, false, false, false] }, { text: "", border: [false, false, false, false] }, { text: "Date: " + new Date().toLocaleDateString(), fontSize: 8, color: "red", alignment: "right", margin: [0, 0, 0, 10], border: [false, false, true, false] }],
+                                                            [{ text: "Period", fontSize: 8, bold: false, border: [true, false, false, false] }, { text: "", border: [false, false, false, false] }, { text: "From: " + dateRange.fromDate, fontSize: 8, bold: false, border: [false, false, false, false] }, { text: "To: " + dateRange.toDate, fontSize: 8, bold: false, border: [false, false, true, false] }],
+                                                            [
+                                                                { text: "Location", fontSize: 8, bold: false, border: [true, false, false, false] },
+                                                                { text: `${oCal.locationDescription}`, fontSize: 8, colSpan: 3, border: [false, false, true, false] }, "", ""
+                                                            ],
+                                                            [
+                                                                { text: "Address", fontSize: 8, bold: false, border: [true, false, false, false] },
+                                                                { text: "(Full Address, Street, House No, Postal Code and City)", fontSize: 8, colSpan: 3, border: [false, false, true, false] }, "", ""
+                                                            ],
+                                                            [{ text: "Dispenser no", fontSize: 8, bold: false, border: [true, false, false, false] }, { text: "", border: [false, false, false, false] }, { text: "", border: [false, false, false, false] }, { text: "", border: [false, false, true, false] }]
+                                                        ]
+                                                    }
+                                                },
 
-            sap.m.MessageToast.show("PDF downloaded successfully!");
+                                                // { text: " ", margin: [0, 10, 0, 10] },
 
-            // })
+                                                {
+                                                    table: {
+                                                        headerRows: 1,
+                                                        widths: ["20%", "20%", "20%", "20%", "20%"],
+                                                        body: [
+                                                            [
+                                                                { text: "Meter No.", fontSize: 9, alignment: "center", bold: true },
+                                                                { text: "Opening Meter Reading", fontSize: 9, alignment: "center", bold: true },
+                                                                { text: "Closing Meter Reading", fontSize: 9, alignment: "center", bold: true },
+                                                                { text: "Correction Factor", fontSize: 9, alignment: "center", bold: true },
+                                                                { text: "Gas Consumption", fontSize: 9, alignment: "center", bold: true }
+
+                                                            ],
+                                                            ...data.map(item => [
+                                                                { text: item.MeterSerialNumber || "-", alignment: "center", fontSize: 8 },
+                                                                { text: item.OpenDateRead, alignment: "center", fontSize: 8 },
+                                                                { text: item.ClosedateRead, alignment: "center", fontSize: 8 },
+                                                                { text: item.meter_corr_factor, alignment: "center", fontSize: 8 },
+                                                                { text: `${oCal.totalGasConsumption}`, alignment: "center", fontSize: 8 }
+                                                            ])
+                                                        ]
+                                                    }
+                                                },
+
+                                                // { text: " ", margin: [0, 10, 0, 10] },
+                                                {
+                                                    table: {
+                                                        widths: ["30%", "50%", "20%"],
+                                                        body: [
+                                                            [
+                                                                { text: "", border: [true, false, true, false] },
+                                                                { text: "Quantity used up in testing / calibration", fontSize: 8, bold: false, border: [true, false, true, false] },
+                                                                { text: "-100.00", fontSize: 8, alignment: "right", border: [true, false, true, false] }
+                                                            ],
+                                                            [
+                                                                { text: "", border: [true, false, true, false] },
+                                                                { text: "Dispensed Quantity (Kg)", fontSize: 8, bold: false, border: [true, false, true, false] },
+                                                                { text: `${oCal.dispensedQuantity}`, fontSize: 8, alignment: "right", border: [true, false, true, false] }
+                                                            ],
+                                                            [
+                                                                { text: "", border: [true, false, true, true] },
+                                                                { text: "Quantity Sold (Kg)", fontSize: 8, bold: false, border: [true, false, true, true] },
+                                                                { text: `${oCal.quantitySold}`, fontSize: 8, alignment: "right", border: [true, false, true, true] }
+                                                            ]
+                                                        ]
+                                                    }
+                                                },
+
+                                                // { text: " ", margin: [0, 10, 0, 10] },
+                                                {
+                                                    table: {
+                                                        widths: ["*"],
+                                                        body: [
+                                                            [{ text: "", alignment: "center", border: [true, false, true, false], margin: [0, 5, 0, 5] }]
+                                                        ]
+                                                    }
+                                                },
+                                                {
+                                                    table: {
+                                                        widths: ["*"],
+                                                        body: [
+                                                            [{ text: "Remarks / Note:", fontSize: 8, bold: true, border: [true, true, true, false] }],
+                                                            [{ text: "", border: [true, false, true, true], margin: [0, 20, 0, 20] }]
+                                                        ]
+                                                    }
+                                                },
+
+                                                // { text: " ", margin: [0, 10, 0, 10] },
+                                                {
+                                                    table: {
+                                                        widths: ["*"],
+                                                        body: [
+                                                            [{ text: "For Bhayanagar Gas Limited", fontSize: 8, alignment: "right", border: [true, false, true, false] }],
+                                                            [{ text: "", margin: [0, 10, 0, 10], border: [true, false, true, false] }]
+                                                        ]
+                                                    }
+                                                },
+                                                // { text: "For Bhayanagar Gas Limited", fontSize: 8, alignment: "right", margin: [0, 20, 0, 0] },
+                                                {
+                                                    table: {
+                                                        widths: ["*"],
+                                                        body: [
+                                                            [{ text: "System generated Invoice. Doesn't require signature.", fontSize: 8, italics: true, bold: true, alignment: "center", margin: [0, 0, 0, 0] }]
+                                                        ]
+                                                    }
+                                                },
+                                                // { text: "System generated Invoice. Doesn't require signature.", fontSize: 10, italics: true, bold: true, alignment: "center", margin: [0, 20, 0, 0] }
+                                            ],
+                                            border: [false, false, false, false] // OUTER BORDER
+                                        }
+                                    ]
+                                ]
+                            }
+                        }
+                    ]
+                    // images: {
+                    //     logo: 'https://www.bglgas.com/wp-content/uploads/2023/04/Ramadhan-Mubarak-5-e1682514739293.png'  // External URL for the image
+                    // }
+                };
+
+                pdfMake.createPdf(docDefinition).download(`${functionalLocation}-BGLReport.pdf`);
+
+                sap.m.MessageToast.show("PDF downloaded successfully!");
+
+            })
 
         },
 
