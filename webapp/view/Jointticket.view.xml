@@ -196,7 +196,7 @@
 						path: 'dataModelTable>/'
 					}"
                 fixedLayout="true"
-    width="100%"
+                width="100%"
             >
                 <headerToolbar>
                     <OverflowToolbar>
@@ -218,7 +218,10 @@
                                 press="onPressText"
                             />
                             <ToolbarSpacer />
-                            <Button text="PDF" press="onPressPDFButton"></Button>
+                            <Button
+                                text="PDF"
+                                press="onPressPDFButton"
+                            />
                             <Button
                                 icon="sap-icon://excel-attachment"
                                 press="onExport"
@@ -234,7 +237,7 @@
                     <Column
                         width="auto"
                         demandPopin="true"
-                        hAlign="End"
+                        hAlign="Begin"
                         visible="{UIDataModel>/Visible}"
                     >
                         <Text text="Measuring Point Category" />
@@ -242,7 +245,7 @@
                     <Column
                         width="auto"
                         demandPopin="true"
-                        hAlign="End"
+                        hAlign="Begin"
                         visible="{UIDataModel>/Visible}"
                     >
                         <Text text="Measuring Point Category Description" />
@@ -250,7 +253,7 @@
                     <Column
                         width="auto"
                         demandPopin="true"
-                        hAlign="End"
+                        hAlign="Begin"
                         visible="{UIDataModel>/Visible}"
                     >
                         <Text text="Functional Location Description" />
@@ -259,7 +262,7 @@
                         width="auto"
                         minScreenWidth="Tablet"
                         demandPopin="true"
-                        hAlign="End"
+                        hAlign="Begin"
                         visible="{UIDataModel>/Visible}"
                     >
                         <Text text="Equipment Description" />
@@ -268,7 +271,7 @@
                         width="auto"
                         minScreenWidth="Tablet"
                         demandPopin="true"
-                        hAlign="End"
+                        hAlign="Begin"
                         visible="{UIDataModel>/Visible}"
                     >
                         <Text text="Customer Code (Desc of Measuring Point)" />
@@ -277,16 +280,16 @@
                         width="auto"
                         minScreenWidth="Tablet"
                         demandPopin="true"
-                        hAlign="End"
+                        hAlign="Begin"
                         visible="{UIDataModel>/Visible}"
                     >
                         <Text text="Meter Correction Factor" />
                     </Column>
                     <Column
-                       width="auto"
+                        width="auto"
                         minScreenWidth="Tablet"
                         demandPopin="true"
-                        hAlign="End"
+                        hAlign="Begin"
                         visible="{UIDataModel>/Visible}"
                     >
                         <Text text="Characterestic Unit (UOM)" />
@@ -294,7 +297,7 @@
                     <Column
                         minScreenWidth="Tablet"
                         demandPopin="true"
-                        hAlign="End"
+                        hAlign="Begin"
                         visible="{UIDataModel>/Invisible}"
                     >
                         <Text text="Opening Date Reading" />
@@ -303,16 +306,16 @@
                         width="auto"
                         minScreenWidth="Tablet"
                         demandPopin="true"
-                        hAlign="End"
+                        hAlign="Begin"
                         visible="{UIDataModel>/Invisible}"
                     >
                         <Text text="Closing Date Reading" />
                     </Column>
                     <Column
-                       width="auto"
+                        width="auto"
                         minScreenWidth="Tablet"
                         demandPopin="true"
-                        hAlign="End"
+                        hAlign="Begin"
                         visible="{UIDataModel>/Invisible}"
                     >
                         <Text text="Difference" />
@@ -321,7 +324,7 @@
                         width="auto"
                         minScreenWidth="Tablet"
                         demandPopin="true"
-                        hAlign="End"
+                        hAlign="Begin"
                         visible="{UIDataModel>/Invisible}"
                     >
                         <Text text="Actual Billable Quantity" />
@@ -330,16 +333,16 @@
                         width="auto"
                         minScreenWidth="Tablet"
                         demandPopin="true"
-                        hAlign="End"
+                        hAlign="Begin"
                         visible="{UIDataModel>/Invisible}"
                     >
                         <Text text="Profit Center (Annual Estimates)" />
                     </Column>
                     <Column
-                       width="auto"
+                        width="auto"
                         minScreenWidth="Tablet"
                         demandPopin="true"
-                        hAlign="End"
+                        hAlign="Begin"
                         visible="{UIDataModel>/Invisible}"
                     >
                         <Text text="Equipment Number" />
@@ -348,7 +351,7 @@
                         width="auto"
                         minScreenWidth="Tablet"
                         demandPopin="true"
-                        hAlign="End"
+                        hAlign="Begin"
                         visible="{UIDataModel>/Invisible}"
                     >
                         <Text text="Functional Location" />
@@ -357,7 +360,7 @@
                         width="auto"
                         minScreenWidth="Tablet"
                         demandPopin="true"
-                        hAlign="End"
+                        hAlign="Begin"
                         visible="{UIDataModel>/Invisible}"
                     >
                         <Text text="Measuing Point" />
