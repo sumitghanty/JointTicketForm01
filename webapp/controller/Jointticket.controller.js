@@ -303,12 +303,26 @@ sap.ui.define([
             var oGlobalModelData = this.getOwnerComponent().getModel("globalModel").getData();
             var oNewModel = this.getOwnerComponent().getModel("ZSB_JOINT_METER_READING");
 
+            // Ensure Functional Locations exist
+            var aFunctionalLocationIDArray = oGlobalModelData.selectedFunctionalLocationsID || [];
+
+            // Convert Array to OData filter format
+            var sFilterQuery = "";
+            if (aFunctionalLocationIDArray.length > 0) {
+                sFilterQuery = aFunctionalLocationIDArray
+                    .map(function (sLoc) {
+                        return "FunctionalLocation eq '" + sLoc + "'";
+                    })
+                    .join(" or "); // Join conditions with 'or'
+            }
+
             var pUrl = "/ZC_JOINT_METER_READING(pa_date_from=datetime'" + oGlobalModelData.fromDate + "T00:00:00',pa_date_to=datetime'" + oGlobalModelData.toDate + "T23:59:59')/Set";
 
             sap.ui.core.BusyIndicator.show();
             oNewModel.read(pUrl, {
                 urlParameters: {
-                    "sap-client": "100"
+                    "sap-client": "100",
+                    "$filter": sFilterQuery
                 },
                 success: function (response) {
                     var oData = response.results;
@@ -717,11 +731,18 @@ sap.ui.define([
             var oList = this.byId("idFunctionalLocationList");
             var aSelectedItems = oList.getSelectedItems();
             var aSelectedValues = [];
+            var aSelectedID = [];
 
             // Extract selected Functional Locations
             aSelectedItems.forEach(function (oItem) {
                 aSelectedValues.push(oItem.getTitle()); // FunctionalLocation
+                aSelectedID.push(oItem.getDescription()); // FunctionalLocation
             });
+
+            var oGlobalModel = this.getOwnerComponent().getModel("globalModel");
+
+            // Store Functional Locations in Global Model
+            oGlobalModel.setProperty("/selectedFunctionalLocationsID", aSelectedID);
 
             // Set selected values in Input field
             var sValue = aSelectedValues.join(", ");
