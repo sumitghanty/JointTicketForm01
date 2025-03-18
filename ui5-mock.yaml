@@ -20,6 +20,9 @@ server:
             path: /sap
             url: https://my416236.s4hana.cloud.sap
             destination: my416236_SAML_ASSERTION
+          - url: https://my416236-api.s4hana.cloud.sap
+            authenticationType: SAMLAssertion
+            path: /sap
     - name: fiori-tools-appreload
       afterMiddleware: compression
       configuration:
@@ -40,4 +43,10 @@ server:
             metadataPath: ./webapp/localService/mainService/metadata.xml
             mockdataPath: ./webapp/localService/mainService/data
             generateMockData: true
-        annotations: []
+          - urlPath: /sap/opu/odata/sap/ZSB_JOINT_METER_READING
+            metadataPath: ./webapp/localService/ZSB_JOINT_METER_READING/metadata.xml
+            mockdataPath: ./webapp/localService/ZSB_JOINT_METER_READING/data
+            generateMockData: true
+        annotations:
+          - localPath: ./webapp/localService/ZSB_JOINT_METER_READING/ZSB_JOINT_METER_READING_VAN.xml
+            urlPath: /sap/opu/odata/IWFND/CATALOGSERVICE;v=2/Annotations(TechnicalName='ZSB_JOINT_METER_READING_VAN',Version='0001')/$value/

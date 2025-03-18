@@ -22,6 +22,7 @@ sap.ui.define([
 
             //this.getView().setModel(this.oModel);
             this.oModel = new JSONModel();
+            var oNewModel = this.getOwnerComponent().getModel("ZSB_JOINT_METER_READING");
 
             sap.ui.getCore().setModel(this.oModel, "UIDataModel");
             sap.ui.getCore().getModel("UIDataModel").setProperty("/Visible", true);
@@ -231,12 +232,21 @@ sap.ui.define([
                 return aResult;
             }, []);
             var oUrl = "/ZC_METER_READING_REPORT(pa_data_from=" + aTableFilters[0] + ",pa_data_to=" + aTableFilters[1] + ")/Set"
-            var oTableJsonModel = this.getDataFromBackend(oUrl);
+            // var oUrl ="/ZC_JOINT_METER_READINGSet(pa_date_from=" + aTableFilters[0] + ",pa_date_to=" + aTableFilters[1] + ")/Set"
+
+            // var oTableJsonModel = this.getDataFromBackend(oUrl);
+
 
             // For extract From and To Date
             this.fromDate = aTableFilters[0];
             this.toDate = aTableFilters[1];
             // End
+            var oGlobalModel = this.getOwnerComponent().getModel("globalModel");
+            oGlobalModel.setProperty("/fromDate", this.fromDate);
+            oGlobalModel.setProperty("/toDate", this.toDate);
+
+            this.getDataFromBackend2();
+
 
             /*this.oTable.bindItems({
                 path: oUrl,
@@ -245,13 +255,51 @@ sap.ui.define([
             //this.oTable.getBinding("items").filter(aTableFilters);
             //this.oTable.setShowOverlay(false);
         },
+        getDataFromBackend2: function () {
+            var that = this;
+            var oGlobalModelData = this.getOwnerComponent().getModel("globalModel").getData();
+            var oNewModel = this.getOwnerComponent().getModel("ZSB_JOINT_METER_READING");
+
+            var pUrl = "/ZC_JOINT_METER_READING(pa_date_from=datetime'" + oGlobalModelData.fromDate + "T00:00:00',pa_date_to=datetime'" + oGlobalModelData.toDate + "T23:59:59')/Set";
+
+            sap.ui.core.BusyIndicator.show();
+            oNewModel.read(pUrl, {
+                urlParameters: {
+                    "sap-client": "100"
+                },
+                success: function (response) {
+                    var oData = response.results;
+                    console.log(oData);
+
+                    // Set Table Data
+                    var oTableDataModel = that.getView().getModel("TableDataModel");
+                    oTableDataModel.setData(oData);
+
+                    // Set Data For Pdf Button Function
+                    var oPdfDataModel = that.getView().getModel("PdfDataModel");
+                    oPdfDataModel.setData(oData);
+
+                    sap.ui.core.BusyIndicator.hide();
+                },
+                error: function (error) {
+                    sap.ui.core.BusyIndicator.hide();
+                    console.log(error);
+
+                    var errorObject = JSON.parse(error.responseText);
+                    sap.m.MessageBox.warning(errorObject.error.message.value);
+
+                }
+            });
+        },
         getDataFromBackend: function (oUrl) {
-            var oModel2 = this.getOwnerComponent().getModel();
+            // var oModel2 = this.getOwnerComponent().getModel();
+            var oNewModel = this.getOwnerComponent().getModel("ZSB_JOINT_METER_READING");  // For EntitySet Name="ZC_JOINT_METER_READINGSet"
             let aFilters = [
                 //new sap.ui.model.Filter("EquipmentName", sap.ui.model.FilterOperator.EQ, "Valve - 4"),
                 //new sap.ui.model.Filter("password", sap.ui.model.FilterOperator.EQ, password)
             ];
-            let oBinding = oModel2.bindList(oUrl);
+            // let oBinding = oModel2.bindList(oUrl);
+            let oBinding = oNewModel.bindList(oUrl);   // For EntitySet Name="ZC_JOINT_METER_READINGSet"
             oBinding.filter(aFilters);
             var that = this;
 
@@ -406,12 +454,31 @@ sap.ui.define([
 
             return { dispensedQuantity, quantitySold, locationDescription, totalGasConsumption };
         },
+        setAllDataProperty: function (aData) {
+            var oGlobalModel = this.getOwnerComponent().getModel("globalModel");
+            oGlobalModel.setProperty("/VAT_TIN", aData.VAT_TIN);
+            oGlobalModel.setProperty("/GSTINNo", aData.GSTINNo);
+            oGlobalModel.setProperty("/Location", aData.Location);
+            oGlobalModel.setProperty("/StreetName", aData.StreetName);
+            oGlobalModel.setProperty("/CityName", aData.CityName);
+            oGlobalModel.setProperty("/PostalCode", aData.PostalCode);
+            oGlobalModel.setProperty("/TelephoneNumber1", aData.TelephoneNumber1);
+            oGlobalModel.setProperty("/Dispenser1", aData.Dispenser1);
+            oGlobalModel.setProperty("/Dispenser2", aData.Dispenser2);
+            oGlobalModel.setProperty("/Dispenser3", aData.Dispenser3);
+            oGlobalModel.setProperty("/Dispenser4", aData.Dispenser4);
+            oGlobalModel.setProperty("/ECCNo", aData.ECCNo);
+            oGlobalModel.setProperty("/ResponsiblePersonName", aData.ResponsiblePersonName);
+        },
         generatePdf: function (functionalLocation, data) {
             var oCal = this.calculateData(data);
             var dateRange = {
                 fromDate: this.fromDate,
                 toDate: this.toDate
             };
+            this.setAllDataProperty(data[0]);
+            var oGlobalModelData = this.getOwnerComponent().getModel("globalModel").getData();
+
             var oImageUrl = jQuery.sap.getModulePath("com.bgl.app.jointticketform", "/model/BGL_Logo.png");
             this.convertImgToBase64(oImageUrl, function (base64Image) {
                 var that = this;
@@ -445,7 +512,7 @@ sap.ui.define([
                                                                         { text: "BHAGYANAGAR GAS LIMITED", fontSize: 14, bold: true, color: "green", alignment: "center" },
                                                                         { text: "(A joint venture of GAIL & HPCL)", fontSize: 8, bold: true, alignment: "center", margin: [0, 2, 0, 2] },
                                                                         { text: "Address: - BGL address\nAddress line 2", fontSize: 8, bold: true, alignment: "center", margin: [0, 0, 0, 0] },
-                                                                        { text: `VAT/TIN:         PAN:        GSTIN: `, fontSize: 8, bold: true, alignment: "center", margin: [0, 2, 0, 2] },
+                                                                        { text: `VAT/TIN:   ${data[0].VAT_TIN}    PAN:              GSTIN:    ${data[0].GSTINNo}`, fontSize: 8, bold: true, alignment: "center", margin: [0, 2, 0, 2] },
                                                                         { text: "Email Id: invoice@bgsgas.com,    Website: www.bglgas.com", fontSize: 8, bold: true, alignment: "center", margin: [0, 0, 0, 0] }
                                                                     ],
                                                                     border: [false, true, true, true],
@@ -471,16 +538,19 @@ sap.ui.define([
                                                         widths: ["*", "*", "*", "*"],
                                                         body: [
                                                             [{ text: "", border: [true, false, false, false] }, { text: "", border: [false, false, false, false] }, { text: "", border: [false, false, false, false] }, { text: "Date: " + new Date().toLocaleDateString(), fontSize: 8, color: "red", alignment: "right", margin: [0, 0, 0, 10], border: [false, false, true, false] }],
-                                                            [{ text: "Period", fontSize: 8, bold: false, border: [true, false, false, false] }, { text: "", border: [false, false, false, false] }, { text: "From: " + dateRange.fromDate, fontSize: 8, bold: false, border: [false, false, false, false] }, { text: "To: " + dateRange.toDate, fontSize: 8, bold: false, border: [false, false, true, false] }],
+                                                            [{ text: "Period:", fontSize: 10, bold: false, border: [true, false, false, false] }, { text: "", border: [false, false, false, false] }, { text: "From: " + dateRange.fromDate, fontSize: 10, bold: false, border: [false, false, false, false] }, { text: "To: " + dateRange.toDate, fontSize: 10, bold: false, border: [false, false, true, false] }],
                                                             [
-                                                                { text: "Location", fontSize: 8, bold: false, border: [true, false, false, false] },
-                                                                { text: `${oCal.locationDescription}`, fontSize: 8, colSpan: 3, border: [false, false, true, false] }, "", ""
+                                                                { text: "Location:", fontSize: 10, bold: false, border: [true, false, false, false] },
+                                                                { text: `${data[0].Location}`, fontSize: 10, colSpan: 3, border: [false, false, true, false] }, "", ""
                                                             ],
                                                             [
-                                                                { text: "Address", fontSize: 8, bold: false, border: [true, false, false, false] },
-                                                                { text: "(Full Address, Street, House No, Postal Code and City)", fontSize: 8, colSpan: 3, border: [false, false, true, false] }, "", ""
+                                                                { text: "Address:", fontSize: 10, bold: false, border: [true, false, false, false] },
+                                                                { text: `${data[0].StreetName}, ${data[0].CityName}, ${data[0].PostalCode}`, fontSize: 10, colSpan: 3, border: [false, false, true, false] }, "", ""
                                                             ],
-                                                            [{ text: "Dispenser no", fontSize: 8, bold: false, border: [true, false, false, false] }, { text: "", border: [false, false, false, false] }, { text: "", border: [false, false, false, false] }, { text: "", border: [false, false, true, false] }]
+                                                            [{ text: "Dispenser no 1:", fontSize: 10, bold: false, border: [true, false, false, false] }, { text: `${data[0].Dispenser1}`, fontSize: 10, colSpan: 3, border: [false, false, true, false] }, { text: "", border: [false, false, false, false] }, { text: "", border: [false, false, true, false] }],
+                                                            [{ text: "Dispenser no 2:", fontSize: 10, bold: false, border: [true, false, false, false] }, { text: `${data[0].Dispenser2}`, fontSize: 10, colSpan: 3, border: [false, false, true, false] }, { text: "", border: [false, false, false, false] }, { text: "", border: [false, false, true, false] }],
+                                                            [{ text: "Dispenser no 3:", fontSize: 10, bold: false, border: [true, false, false, false] }, { text: `${data[0].Dispenser3}`, fontSize: 10, colSpan: 3, border: [false, false, true, false] }, { text: "", border: [false, false, false, false] }, { text: "", border: [false, false, true, false] }],
+                                                            [{ text: "Dispenser no 4:", fontSize: 10, bold: false, border: [true, false, false, false] }, { text: `${data[0].Dispenser4}`, fontSize: 10, colSpan: 3, border: [false, false, true, false] }, { text: "", border: [false, false, false, false] }, { text: "", border: [false, false, true, false] }]
                                                         ]
                                                     }
                                                 },
@@ -501,11 +571,11 @@ sap.ui.define([
 
                                                             ],
                                                             ...data.map(item => [
-                                                                { text: item.MeterSerialNumber || "-", alignment: "center", fontSize: 8 },
-                                                                { text: item.OpenDateRead, alignment: "center", fontSize: 8 },
-                                                                { text: item.ClosedateRead, alignment: "center", fontSize: 8 },
-                                                                { text: item.meter_corr_factor, alignment: "center", fontSize: 8 },
-                                                                { text: `${oCal.totalGasConsumption}`, alignment: "center", fontSize: 8 }
+                                                                { text: item.MeterNo || "-", alignment: "center", fontSize: 10 },
+                                                                { text: item.OpenDateRead, alignment: "center", fontSize: 10 },
+                                                                { text: item.ClosedateRead, alignment: "center", fontSize: 10 },
+                                                                { text: item.meter_corr_factor, alignment: "center", fontSize: 10 },
+                                                                { text: `${oCal.totalGasConsumption}`, alignment: "center", fontSize: 10 }
                                                             ])
                                                         ]
                                                     }
@@ -518,18 +588,18 @@ sap.ui.define([
                                                         body: [
                                                             [
                                                                 { text: "", border: [true, false, true, false] },
-                                                                { text: "Quantity used up in testing / calibration", fontSize: 8, bold: false, border: [true, false, true, false] },
-                                                                { text: "-100.00", fontSize: 8, alignment: "right", border: [true, false, true, false] }
+                                                                { text: "Quantity used up in testing / calibration", fontSize: 10, bold: false, border: [true, false, true, false] },
+                                                                { text: "-100.00", fontSize: 10, alignment: "right", border: [true, false, true, false] }
                                                             ],
                                                             [
                                                                 { text: "", border: [true, false, true, false] },
-                                                                { text: "Dispensed Quantity (Kg)", fontSize: 8, bold: false, border: [true, false, true, false] },
-                                                                { text: `${oCal.dispensedQuantity}`, fontSize: 8, alignment: "right", border: [true, false, true, false] }
+                                                                { text: "Dispensed Quantity (Kg)", fontSize: 10, bold: false, border: [true, false, true, false] },
+                                                                { text: `${oCal.dispensedQuantity}`, fontSize: 10, alignment: "right", border: [true, false, true, false] }
                                                             ],
                                                             [
                                                                 { text: "", border: [true, false, true, true] },
-                                                                { text: "Quantity Sold (Kg)", fontSize: 8, bold: false, border: [true, false, true, true] },
-                                                                { text: `${oCal.quantitySold}`, fontSize: 8, alignment: "right", border: [true, false, true, true] }
+                                                                { text: "Quantity Sold (Kg)", fontSize: 10, bold: false, border: [true, false, true, true] },
+                                                                { text: `${oCal.quantitySold}`, fontSize: 10, alignment: "right", border: [true, false, true, true] }
                                                             ]
                                                         ]
                                                     }
@@ -548,7 +618,7 @@ sap.ui.define([
                                                     table: {
                                                         widths: ["*"],
                                                         body: [
-                                                            [{ text: "Remarks / Note:", fontSize: 8, bold: true, border: [true, true, true, false] }],
+                                                            [{ text: "Remarks / Note:", fontSize: 10, bold: true, border: [true, true, true, false] }],
                                                             [{ text: "", border: [true, false, true, true], margin: [0, 20, 0, 20] }]
                                                         ]
                                                     }
@@ -559,7 +629,7 @@ sap.ui.define([
                                                     table: {
                                                         widths: ["*"],
                                                         body: [
-                                                            [{ text: "For Bhayanagar Gas Limited", fontSize: 8, alignment: "right", border: [true, false, true, false] }],
+                                                            [{ text: "For Bhayanagar Gas Limited", fontSize: 10, alignment: "right", border: [true, false, true, false] }],
                                                             [{ text: "", margin: [0, 10, 0, 10], border: [true, false, true, false] }]
                                                         ]
                                                     }
@@ -569,7 +639,7 @@ sap.ui.define([
                                                     table: {
                                                         widths: ["*"],
                                                         body: [
-                                                            [{ text: "System generated Invoice. Doesn't require signature.", fontSize: 8, italics: true, bold: true, alignment: "center", margin: [0, 0, 0, 0] }]
+                                                            [{ text: "System generated Invoice. Doesn't require signature.", fontSize: 10, italics: true, bold: true, alignment: "center", margin: [0, 0, 0, 0] }]
                                                         ]
                                                     }
                                                 },

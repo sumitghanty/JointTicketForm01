@@ -24,6 +24,24 @@
           "localUri": "localService/mainService/metadata.xml",
           "odataVersion": "4.0"
         }
+      },
+      "ZSB_JOINT_METER_READING_VAN": {
+        "uri": "/sap/opu/odata/IWFND/CATALOGSERVICE;v=2/Annotations(TechnicalName='ZSB_JOINT_METER_READING_VAN',Version='0001')/$value/",
+        "type": "ODataAnnotation",
+        "settings": {
+          "localUri": "localService/ZSB_JOINT_METER_READING/ZSB_JOINT_METER_READING_VAN.xml"
+        }
+      },
+      "ZSB_JOINT_METER_READING": {
+        "uri": "/sap/opu/odata/sap/ZSB_JOINT_METER_READING/",
+        "type": "OData",
+        "settings": {
+          "annotations": [
+            "ZSB_JOINT_METER_READING_VAN"
+          ],
+          "localUri": "localService/ZSB_JOINT_METER_READING/metadata.xml",
+          "odataVersion": "2.0"
+        }
       }
     },
     "crossNavigation": {
@@ -78,7 +96,13 @@
           "bundleName": "com.bgl.app.jointticketform.i18n.i18n"
         }
       },
+      "TableDataModel": {
+        "type": "sap.ui.model.json.JSONModel"
+      },
       "PdfDataModel": {
+        "type": "sap.ui.model.json.JSONModel"
+      },
+      "globalModel": {
         "type": "sap.ui.model.json.JSONModel"
       },
       "": {
@@ -89,6 +113,13 @@
           "autoExpandSelect": true,
           "earlyRequests": true
         }
+      },
+      "ZSB_JOINT_METER_READING": {
+        "dataSource": "ZSB_JOINT_METER_READING",
+        "preload": true,
+        "settings": {
+					"useBatch": false
+				}
       }
     },
     "resources": {

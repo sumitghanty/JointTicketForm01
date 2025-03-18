@@ -193,7 +193,7 @@
                 id="table"
                 inset="false"
                 items="{
-						path: 'dataModelTable>/'
+						path: 'TableDataModel>/'
 					}"
                 fixedLayout="true"
                 width="100%"
@@ -234,7 +234,7 @@
                     <Column width="auto">
                         <Text text="Meter Serial Number" />
                     </Column>
-                    <Column
+                    <!-- <Column
                         width="auto"
                         demandPopin="true"
                         hAlign="Begin"
@@ -249,7 +249,7 @@
                         visible="{UIDataModel>/Visible}"
                     >
                         <Text text="Measuring Point Category Description" />
-                    </Column>
+                    </Column> -->
                     <Column
                         width="auto"
                         demandPopin="true"
@@ -258,7 +258,7 @@
                     >
                         <Text text="Functional Location Description" />
                     </Column>
-                    <Column
+                    <!-- <Column
                         width="auto"
                         minScreenWidth="Tablet"
                         demandPopin="true"
@@ -275,7 +275,7 @@
                         visible="{UIDataModel>/Visible}"
                     >
                         <Text text="Customer Code (Desc of Measuring Point)" />
-                    </Column>
+                    </Column> -->
                     <Column
                         width="auto"
                         minScreenWidth="Tablet"
@@ -285,7 +285,7 @@
                     >
                         <Text text="Meter Correction Factor" />
                     </Column>
-                    <Column
+                    <!-- <Column
                         width="auto"
                         minScreenWidth="Tablet"
                         demandPopin="true"
@@ -293,7 +293,7 @@
                         visible="{UIDataModel>/Visible}"
                     >
                         <Text text="Characterestic Unit (UOM)" />
-                    </Column>
+                    </Column> -->
                     <Column
                         minScreenWidth="Tablet"
                         demandPopin="true"
@@ -329,7 +329,7 @@
                     >
                         <Text text="Actual Billable Quantity" />
                     </Column>
-                    <Column
+                    <!-- <Column
                         width="auto"
                         minScreenWidth="Tablet"
                         demandPopin="true"
@@ -346,7 +346,7 @@
                         visible="{UIDataModel>/Invisible}"
                     >
                         <Text text="Equipment Number" />
-                    </Column>
+                    </Column> -->
                     <Column
                         width="auto"
                         minScreenWidth="Tablet"
@@ -365,36 +365,62 @@
                     >
                         <Text text="Measuing Point" />
                     </Column>
+                    <Column
+                        width="auto"
+                        minScreenWidth="Tablet"
+                        demandPopin="true"
+                        hAlign="Begin"
+                        visible="{UIDataModel>/Invisible}"
+                    >
+                        <Text text="Quantity" />
+                    </Column>
+                    <Column
+                        width="auto"
+                        minScreenWidth="Tablet"
+                        demandPopin="true"
+                        hAlign="Begin"
+                        visible="{UIDataModel>/Invisible}"
+                    >
+                        <Text text="Quantity Sold" />
+                    </Column>
+                    <Column
+                        width="auto"
+                        minScreenWidth="Tablet"
+                        demandPopin="true"
+                        hAlign="Begin"
+                        visible="{UIDataModel>/Invisible}"
+                    >
+                        <Text text="Cost Center" />
+                    </Column>
+                    <Column
+                        width="auto"
+                        minScreenWidth="Tablet"
+                        demandPopin="true"
+                        hAlign="Begin"
+                        visible="{UIDataModel>/Invisible}"
+                    >
+                        <Text text="Maintenance Planning Plant" />
+                    </Column>
                 </columns>
 
                 <items>
                     <ColumnListItem vAlign="Middle">
                         <cells>
                             <ObjectIdentifier
-                                title="{dataModelTable>MeterSerialNumber}"
+                                title="{TableDataModel>MeterNo}"
                             />
-                            <ObjectIdentifier
-                                text="{dataModelTable>MeasuringPointCategory}"
-                            />
-
-                            <Text
-                                text="{dataModelTable>MeasuringPointCategoryDesc}"
-                            />
-                            <Text text="{dataModelTable>FunctionalLocDesc}" />
-                            <Text text="{dataModelTable>EquipmentName}" />
-                            <Text
-                                text="{dataModelTable>MeasuringPointDescription}"
-                            />
-                            <Text text="{dataModelTable>meter_corr_factor}" />
-                            <Text text="{dataModelTable>CharcValueUnit}" />
-                            <Text text="{dataModelTable>OpenDateRead}" />
-                            <Text text="{dataModelTable>ClosedateRead}" />
-                            <Text text="{dataModelTable>Difference}" />
-                            <Text text="{dataModelTable>ActualBillQty}" />
-                            <Text text="{dataModelTable>ProfitCenter}" />
-                            <Text text="{dataModelTable>Equipment}" />
-                            <Text text="{dataModelTable>FunctionalLocation}" />
-                            <Text text="{dataModelTable>MeasuringPoint}" />
+                            <Text text="{TableDataModel>Location}" />
+                            <Text text="{TableDataModel>meter_corr_factor}" />
+                            <Text text="{TableDataModel>OpenDateRead}" />
+                            <Text text="{TableDataModel>ClosedateRead}" />
+                            <Text text="{TableDataModel>Difference}" />
+                            <Text text="{TableDataModel>ActualBillQty}" />
+                            <Text text="{TableDataModel>FunctionalLocation}" />
+                            <Text text="{TableDataModel>MeasuringPoint}" />
+                            <Text text="{TableDataModel>Quantity}" />
+                            <Text text="{TableDataModel>QuantitySold}" />
+                            <Text text="{TableDataModel>CostCenter}" />
+                            <Text text="{TableDataModel>MaintenancePlanningPlant}" />
                         </cells>
                     </ColumnListItem>
                 </items>

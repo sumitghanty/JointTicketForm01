@@ -20,6 +20,9 @@ server:
             path: /sap
             url: https://my416236.s4hana.cloud.sap
             destination: my416236_SAML_ASSERTION
+          - url: https://my416236-api.s4hana.cloud.sap
+            authenticationType: SAMLAssertion
+            path: /sap
     - name: fiori-tools-appreload
       afterMiddleware: compression
       configuration:
