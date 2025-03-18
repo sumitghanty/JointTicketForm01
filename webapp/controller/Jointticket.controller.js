@@ -204,7 +204,8 @@ sap.ui.define([
                             oMessage = "Please Fill in the compulsory From-Date Fields";
                         } else if (found == "toDate") {
                             oMessage = "Please Fill in the compulsory To-Date Fields";
-                        } else {
+                        }
+                        else {
                             oMessage = "Please Fill in the compulsory Fields";
                         }
 
@@ -232,7 +233,6 @@ sap.ui.define([
                 return aResult;
             }, []);
             var oUrl = "/ZC_METER_READING_REPORT(pa_data_from=" + aTableFilters[0] + ",pa_data_to=" + aTableFilters[1] + ")/Set"
-            // var oUrl ="/ZC_JOINT_METER_READINGSet(pa_date_from=" + aTableFilters[0] + ",pa_date_to=" + aTableFilters[1] + ")/Set"
 
             // var oTableJsonModel = this.getDataFromBackend(oUrl);
 
@@ -241,9 +241,23 @@ sap.ui.define([
             this.fromDate = aTableFilters[0];
             this.toDate = aTableFilters[1];
             // End
+
             var oGlobalModel = this.getOwnerComponent().getModel("globalModel");
             oGlobalModel.setProperty("/fromDate", this.fromDate);
             oGlobalModel.setProperty("/toDate", this.toDate);
+
+            /// Get Functional Location Input Value
+            var sFunctionalLocationValues = this.byId("idFunctionalLocationInput").getValue(); // Comma-separated values
+
+            // Check if Functional Location is empty
+            if (!sFunctionalLocationValues) {
+                MessageBox.error("Please select at least one Functional Location.");
+                return;
+            }
+
+            var aFunctionalLocationArray = sFunctionalLocationValues.split(", "); // Convert to array
+            // Store Functional Locations in Global Model
+            oGlobalModel.setProperty("/selectedFunctionalLocations", aFunctionalLocationArray);
 
             this.getDataFromBackend2();
 
@@ -255,7 +269,36 @@ sap.ui.define([
             //this.oTable.getBinding("items").filter(aTableFilters);
             //this.oTable.setShowOverlay(false);
         },
+        _validateInputFields: function () {
+
+            var inputFuncLoct = this.byId("idFunctionalLocationInput");
+            var inputFuncLoctValue = inputFuncLoct.getValue();
+
+            var isValid = true;
+            var message = '';
+
+            if (!inputFuncLoct.getValue()) {
+                inputFuncLoct.setValueState(sap.ui.core.ValueState.Error);
+                isValid = false;
+                message += 'Functional Location , ';
+            } else {
+                inputFuncLoct.setValueState(sap.ui.core.ValueState.None);
+            }
+
+            if (!isValid) {
+                // Remove the last comma and space from the message
+                message = message.slice(0, -2);
+                sap.m.MessageBox.error("Please fill up the following fields: " + message);
+                return false;
+            }
+
+            return true;
+        },
         getDataFromBackend2: function () {
+            // if (!this._validateInputFields()) {
+            //     // Validation failed, return without fetching data
+            //     return;
+            // }
             var that = this;
             var oGlobalModelData = this.getOwnerComponent().getModel("globalModel").getData();
             var oNewModel = this.getOwnerComponent().getModel("ZSB_JOINT_METER_READING");
@@ -664,6 +707,42 @@ sap.ui.define([
             })
 
         },
+        onOpenFunctionalLocationDialog: function () {
+            if (!this._oDialog) {
+                this._oDialog = this.byId("idFunctionalLocationDialog");
+            }
+            this._oDialog.open();
+        },
+        onSelectFunctionalLocation: function () {
+            var oList = this.byId("idFunctionalLocationList");
+            var aSelectedItems = oList.getSelectedItems();
+            var aSelectedValues = [];
+
+            // Extract selected Functional Locations
+            aSelectedItems.forEach(function (oItem) {
+                aSelectedValues.push(oItem.getTitle()); // FunctionalLocation
+            });
+
+            // Set selected values in Input field
+            var sValue = aSelectedValues.join(", ");
+            this.byId("idFunctionalLocationInput").setValue(sValue);
+
+            // Close the dialog
+            this.byId("idFunctionalLocationDialog").close();
+        },
+
+        onCloseDialog: function () {
+            this.byId("idFunctionalLocationDialog").close();
+        },
+        onFunctionalLocationClear: function (oEvent) {
+            var sValue = oEvent.getParameter("value"); // Get the input value
+            var oList = this.byId("idFunctionalLocationList"); // Get the list
+
+            if (!sValue) {    // If input is empty, clear selection
+                oList.removeSelections(true); // Deselect all items
+            }
+        }
+
 
     });
 });

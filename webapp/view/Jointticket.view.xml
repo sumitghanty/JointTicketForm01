@@ -95,7 +95,7 @@
                                     </MultiComboBox>
                                 </fb:control>
                             </fb:FilterGroupItem>
-                            <fb:FilterGroupItem
+                            <!-- <fb:FilterGroupItem
                                 name="FunctionalLocation"
                                 label="Functional Location"
                                 groupName="Group1"
@@ -115,6 +115,24 @@
                                             text="{FunctionalLocationName}"
                                         />
                                     </MultiComboBox>
+                                </fb:control>
+                            </fb:FilterGroupItem> -->
+                            <fb:FilterGroupItem
+                                name="FunctionalLocation"
+                                label="Functional Location"
+                                groupName="Group1"
+                                visibleInFilterBar="true"
+                            >
+                                <fb:control>
+                                    <Input
+                                        id="idFunctionalLocationInput"
+                                        showValueHelp="true"
+                                        valueHelpRequest=".onOpenFunctionalLocationDialog"
+                                        placeholder="Select Functional Location"
+                                        showClearIcon="true"
+                                        required="true"
+                                        liveChange=".onFunctionalLocationClear"
+                                    />
                                 </fb:control>
                             </fb:FilterGroupItem>
                             <fb:FilterGroupItem
@@ -420,7 +438,9 @@
                             <Text text="{TableDataModel>Quantity}" />
                             <Text text="{TableDataModel>QuantitySold}" />
                             <Text text="{TableDataModel>CostCenter}" />
-                            <Text text="{TableDataModel>MaintenancePlanningPlant}" />
+                            <Text
+                                text="{TableDataModel>MaintenancePlanningPlant}"
+                            />
                         </cells>
                     </ColumnListItem>
                 </items>
@@ -428,4 +448,36 @@
         </f:content>
     </f:DynamicPage>
     <!--</Page>-->
+    <Dialog
+        id="idFunctionalLocationDialog"
+        title="Select Functional Locations"
+        draggable="true"
+        resizable="true"
+        afterClose=".onCloseDialog"
+    >
+        <content>
+            <List
+                id="idFunctionalLocationList"
+                mode="MultiSelect"
+                items="{
+                path: '/ZI_FunctionalLocationStdVH'
+            }"
+            >
+                <StandardListItem
+                    title="{FunctionalLocationName}"
+                    description="{FunctionalLocation}"
+                />
+            </List>
+        </content>
+        <buttons>
+            <Button
+                text="OK"
+                press=".onSelectFunctionalLocation"
+            />
+            <Button
+                text="Cancel"
+                press=".onCloseDialog"
+            />
+        </buttons>
+    </Dialog>
 </mvc:View>

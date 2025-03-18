@@ -1,0 +1,26 @@
+<core:FragmentDefinition xmlns="sap.m" xmlns:core="sap.ui.core">
+    <Dialog id="idFunctionalLocationDialog2"
+        title="Select Functional Locations"
+        draggable="true"
+        resizable="true"
+        afterClose=".onCloseDialog">
+    <content>
+        <MultiSelectList
+            id="idFunctionalLocationList2"
+            mode="MultiSelect"
+            items="{
+                path: '/ZI_FunctionalLocationStdVH'
+            }">
+            <StandardListItem
+                title="{FunctionalLocationName}"
+                description="{FunctionalLocation}"
+            />
+        </MultiSelectList>
+    </content>
+    <buttons>
+        <Button text="OK" press=".onSelectFunctionalLocation"/>
+        <Button text="Cancel" press=".onCloseDialog"/>
+    </buttons>
+</Dialog>
+
+</core:FragmentDefinition>
