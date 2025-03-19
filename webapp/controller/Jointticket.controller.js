@@ -434,26 +434,27 @@ sap.ui.define([
 
                     if (typeof pdfMake !== "undefined") {
 
-                        Object.keys(data).forEach(functionalLocation => {
-                            that.generatePdf(functionalLocation, data[functionalLocation]);
-                        });
+                        // Object.keys(data).forEach(functionalLocation => {
+                        //     that.generatePdf(functionalLocation, data[functionalLocation]);
+                        // });
 
                         // Ask user if they want all PDFs or select one
-                        // sap.m.MessageBox.confirm("Do you want to generate PDFs for all Functional Locations?", {
-                        //     actions: ["Yes (Auto)", "No (Select)", sap.m.MessageBox.Action.CANCEL],
-                        //     emphasizedAction: "Yes (Auto)",
-                        //     onClose: function (sAction) {
-                        //         if (sAction === "Yes (Auto)") {
-                        //             // Generate PDFs for all Functional Locations
-                        //             Object.keys(data).forEach(functionalLocation => {
-                        //                 that.generatePdf(functionalLocation, data[functionalLocation]);
-                        //             });
-                        //         } else if (sAction === "No (Select)") {
-                        //             // Show a selection dialog
-                        //             that.showSelectionDialog(data);
-                        //         }
-                        //     }
-                        // });
+                        sap.m.MessageBox.confirm("Do you want to generate PDFs for all Functional Locations?", {
+                            actions: ["Yes", sap.m.MessageBox.Action.CANCEL],
+                            emphasizedAction: "Yes)",
+                            onClose: function (sAction) {
+                                if (sAction === "Yes") {
+                                    // Generate PDFs for all Functional Locations
+                                    Object.keys(data).forEach(functionalLocation => {
+                                        that.generatePdf(functionalLocation, data[functionalLocation]);
+                                    });
+                                } 
+                                // else if (sAction === "No (Select)") {
+                                //     // Show a selection dialog
+                                //     that.showSelectionDialog(data);
+                                // }
+                            }
+                        });
 
                     } else {
                         console.error("pdfMake is not defined even after script loading.");
@@ -753,7 +754,7 @@ sap.ui.define([
                         title: pdfTitle,
                         showDownloadButton: true
                     });
-                    
+
                     that.getView().addDependent(oPdfViewer);
                     oPdfViewer.setTitle(pdfTitle);
                     oPdfViewer.open();
