@@ -77,7 +77,7 @@
                                 name="EquipmentNumber"
                                 label="Equipment Number"
                                 groupName="Group1"
-                                visibleInFilterBar="true"
+                                visibleInFilterBar="false"
                             >
                                 <fb:control>
                                     <MultiComboBox
@@ -139,7 +139,7 @@
                                 name="MeasuringPoint"
                                 label="Measuring Point"
                                 groupName="Group1"
-                                visibleInFilterBar="true"
+                                visibleInFilterBar="false"
                             >
                                 <fb:control>
                                     <MultiComboBox
@@ -161,7 +161,7 @@
                                 name="MeterSerialNo"
                                 label="Meter Serial No."
                                 groupName="Group1"
-                                visibleInFilterBar="true"
+                                visibleInFilterBar="false"
                             >
                                 <fb:control>
                                     <MultiComboBox
@@ -183,7 +183,7 @@
                                 name="MeasuringCategory"
                                 label="Measuring Point Category"
                                 groupName="Group1"
-                                visibleInFilterBar="true"
+                                visibleInFilterBar="false"
                             >
                                 <fb:control>
                                     <MultiComboBox
@@ -237,63 +237,48 @@
                             />
                             <ToolbarSpacer />
                             <Button
-                                text="PDF"
+                                text="Download Joint Ticket Form"
                                 press="onPressPDFButton"
                             />
                             <Button
                                 icon="sap-icon://excel-attachment"
                                 press="onExport"
+                                visible="false"
                             />
                         </content>
                     </OverflowToolbar>
                 </headerToolbar>
 
                 <columns>
-                    <Column width="auto">
-                        <Text text="Meter Serial Number" />
-                    </Column>
-                    <!-- <Column
-                        width="auto"
+                    <Column
+                        width="8rem"
+                        minScreenWidth="Tablet"
                         demandPopin="true"
                         hAlign="Begin"
-                        visible="{UIDataModel>/Visible}"
+                        visible="{UIDataModel>/Invisible}"
                     >
-                        <Text text="Measuring Point Category" />
+                        <Text text="Functional Location" />
                     </Column>
                     <Column
-                        width="auto"
-                        demandPopin="true"
-                        hAlign="Begin"
-                        visible="{UIDataModel>/Visible}"
-                    >
-                        <Text text="Measuring Point Category Description" />
-                    </Column> -->
-                    <Column
-                        width="auto"
+                        width="8rem"
                         demandPopin="true"
                         hAlign="Begin"
                         visible="{UIDataModel>/Visible}"
                     >
                         <Text text="Functional Location Description" />
                     </Column>
-                    <!-- <Column
-                        width="auto"
-                        minScreenWidth="Tablet"
-                        demandPopin="true"
-                        hAlign="Begin"
-                        visible="{UIDataModel>/Visible}"
-                    >
-                        <Text text="Equipment Description" />
-                    </Column>
                     <Column
                         width="auto"
                         minScreenWidth="Tablet"
                         demandPopin="true"
                         hAlign="Begin"
-                        visible="{UIDataModel>/Visible}"
+                        visible="{UIDataModel>/Invisible}"
                     >
-                        <Text text="Customer Code (Desc of Measuring Point)" />
-                    </Column> -->
+                        <Text text="Measuing Point" />
+                    </Column>
+                    <Column width="auto">
+                        <Text text="Meter Serial Number" />
+                    </Column>
                     <Column
                         width="auto"
                         minScreenWidth="Tablet"
@@ -303,15 +288,6 @@
                     >
                         <Text text="Meter Correction Factor" />
                     </Column>
-                    <!-- <Column
-                        width="auto"
-                        minScreenWidth="Tablet"
-                        demandPopin="true"
-                        hAlign="Begin"
-                        visible="{UIDataModel>/Visible}"
-                    >
-                        <Text text="Characterestic Unit (UOM)" />
-                    </Column> -->
                     <Column
                         minScreenWidth="Tablet"
                         demandPopin="true"
@@ -347,42 +323,6 @@
                     >
                         <Text text="Actual Billable Quantity" />
                     </Column>
-                    <!-- <Column
-                        width="auto"
-                        minScreenWidth="Tablet"
-                        demandPopin="true"
-                        hAlign="Begin"
-                        visible="{UIDataModel>/Invisible}"
-                    >
-                        <Text text="Profit Center (Annual Estimates)" />
-                    </Column>
-                    <Column
-                        width="auto"
-                        minScreenWidth="Tablet"
-                        demandPopin="true"
-                        hAlign="Begin"
-                        visible="{UIDataModel>/Invisible}"
-                    >
-                        <Text text="Equipment Number" />
-                    </Column> -->
-                    <Column
-                        width="auto"
-                        minScreenWidth="Tablet"
-                        demandPopin="true"
-                        hAlign="Begin"
-                        visible="{UIDataModel>/Invisible}"
-                    >
-                        <Text text="Functional Location" />
-                    </Column>
-                    <Column
-                        width="auto"
-                        minScreenWidth="Tablet"
-                        demandPopin="true"
-                        hAlign="Begin"
-                        visible="{UIDataModel>/Invisible}"
-                    >
-                        <Text text="Measuing Point" />
-                    </Column>
                     <Column
                         width="auto"
                         minScreenWidth="Tablet"
@@ -401,7 +341,72 @@
                     >
                         <Text text="Quantity Sold" />
                     </Column>
+                    <!-- <Column
+                        width="auto"
+                        demandPopin="true"
+                        hAlign="Begin"
+                        visible="{UIDataModel>/Visible}"
+                    >
+                        <Text text="Measuring Point Category" />
+                    </Column>
                     <Column
+                        width="auto"
+                        demandPopin="true"
+                        hAlign="Begin"
+                        visible="{UIDataModel>/Visible}"
+                    >
+                        <Text text="Measuring Point Category Description" />
+                    </Column> -->
+
+                    <!-- <Column
+                        width="auto"
+                        minScreenWidth="Tablet"
+                        demandPopin="true"
+                        hAlign="Begin"
+                        visible="{UIDataModel>/Visible}"
+                    >
+                        <Text text="Equipment Description" />
+                    </Column>
+                    <Column
+                        width="auto"
+                        minScreenWidth="Tablet"
+                        demandPopin="true"
+                        hAlign="Begin"
+                        visible="{UIDataModel>/Visible}"
+                    >
+                        <Text text="Customer Code (Desc of Measuring Point)" />
+                    </Column> -->
+
+                    <!-- <Column
+                        width="auto"
+                        minScreenWidth="Tablet"
+                        demandPopin="true"
+                        hAlign="Begin"
+                        visible="{UIDataModel>/Visible}"
+                    >
+                        <Text text="Characterestic Unit (UOM)" />
+                    </Column> -->
+
+                    <!-- <Column
+                        width="auto"
+                        minScreenWidth="Tablet"
+                        demandPopin="true"
+                        hAlign="Begin"
+                        visible="{UIDataModel>/Invisible}"
+                    >
+                        <Text text="Profit Center (Annual Estimates)" />
+                    </Column>
+                    <Column
+                        width="auto"
+                        minScreenWidth="Tablet"
+                        demandPopin="true"
+                        hAlign="Begin"
+                        visible="{UIDataModel>/Invisible}"
+                    >
+                        <Text text="Equipment Number" />
+                    </Column> -->
+
+                    <!-- <Column
                         width="auto"
                         minScreenWidth="Tablet"
                         demandPopin="true"
@@ -417,30 +422,31 @@
                         hAlign="Begin"
                         visible="{UIDataModel>/Invisible}"
                     >
-                        <Text text="Maintenance Planning Plant" />
-                    </Column>
+                        <Text text="Maintenance Planning Plant" /> 
+                    </Column>-->
                 </columns>
 
                 <items>
                     <ColumnListItem vAlign="Middle">
                         <cells>
+                            <Text text="{TableDataModel>FunctionalLocation}" />
+                            <Text text="{TableDataModel>Location}" />
+                            <Text text="{TableDataModel>MeasuringPoint}" />
                             <ObjectIdentifier
                                 title="{TableDataModel>MeterNo}"
                             />
-                            <Text text="{TableDataModel>Location}" />
                             <Text text="{TableDataModel>meter_corr_factor}" />
                             <Text text="{TableDataModel>OpenDateRead}" />
                             <Text text="{TableDataModel>ClosedateRead}" />
                             <Text text="{TableDataModel>Difference}" />
                             <Text text="{TableDataModel>ActualBillQty}" />
-                            <Text text="{TableDataModel>FunctionalLocation}" />
-                            <Text text="{TableDataModel>MeasuringPoint}" />
+
                             <Text text="{TableDataModel>Quantity}" />
                             <Text text="{TableDataModel>QuantitySold}" />
-                            <Text text="{TableDataModel>CostCenter}" />
+                            <!-- <Text text="{TableDataModel>CostCenter}" />
                             <Text
                                 text="{TableDataModel>MaintenancePlanningPlant}"
-                            />
+                            /> -->
                         </cells>
                     </ColumnListItem>
                 </items>

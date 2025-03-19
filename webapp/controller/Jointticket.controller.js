@@ -10,11 +10,12 @@ sap.ui.define([
     "sap/ui/export/Spreadsheet",
     "sap/m/MessageToast",
     "com/bgl/app/jointticketform/model/models",
-], (Controller, JSONModel, Label, Filter, FilterOperator, PersonalizableInfo, MessageBox, exportLibrary, Spreadsheet, MessageToast, CustModels) => {
+    "sap/m/PDFViewer"
+], (Controller, JSONModel, Label, Filter, FilterOperator, PersonalizableInfo, MessageBox, exportLibrary, Spreadsheet, MessageToast, CustModels, PDFViewer) => {
     "use strict";
     const EdmType = exportLibrary.EdmType;
     return Controller.extend("com.bgl.app.jointticketform.controller.Jointticket", {
-
+        _pdfViewer: null,  // ✅ Declare globally inside the controller
         onInit() {
             //var sPath = jQuery.sap.getModulePath("com.bgl.app.jointticketform", "../model/model.json");
             //this.oModel.loadData(sap.ui.require.toUrl("model.json"), null, false);
@@ -23,6 +24,10 @@ sap.ui.define([
             //this.getView().setModel(this.oModel);
             this.oModel = new JSONModel();
             var oNewModel = this.getOwnerComponent().getModel("ZSB_JOINT_METER_READING");
+            this._pdfViewer = new sap.m.PDFViewer({
+                showDownloadButton: true
+            });
+            this.getView().addDependent(this._pdfViewer);
 
             sap.ui.getCore().setModel(this.oModel, "UIDataModel");
             sap.ui.getCore().getModel("UIDataModel").setProperty("/Visible", true);
@@ -196,21 +201,22 @@ sap.ui.define([
                         var oDateStr = that.getDateFormatString(aSelectedKeys);
                         aResult.push(oDateStr);
                     } else {
-                        var arrayOfStrings = oControl.getId().split('-');
-                        var oMessage = "";
-                        var str = ["fromDate", "toDate"];
-                        var found = arrayOfStrings.find(v => str.includes(v));
-                        if (found == "fromDate") {
-                            oMessage = "Please Fill in the compulsory From-Date Fields";
-                        } else if (found == "toDate") {
-                            oMessage = "Please Fill in the compulsory To-Date Fields";
-                        }
-                        else {
-                            oMessage = "Please Fill in the compulsory Fields";
-                        }
+                        // var arrayOfStrings = oControl.getId().split('-');
+                        // var oMessage = "";
+                        // var str = ["fromDate", "toDate"];
+                        // var found = arrayOfStrings.find(v => str.includes(v));
+                        // if (found == "fromDate") {
+                        //     oMessage = "Please Fill in the compulsory From-Date Fields";
+                        // } else if (found == "toDate") {
+                        //     oMessage = "Please Fill in the compulsory To-Date Fields";
+                        // }
+                        // else {
+                        //     oMessage = "Please Fill in the compulsory Fields";
+                        // }
 
-                        MessageBox.error(oMessage);
-                        return;
+                        // MessageBox.error(oMessage);
+
+                        // return;
                     }
 
                 }
@@ -246,19 +252,6 @@ sap.ui.define([
             oGlobalModel.setProperty("/fromDate", this.fromDate);
             oGlobalModel.setProperty("/toDate", this.toDate);
 
-            /// Get Functional Location Input Value
-            var sFunctionalLocationValues = this.byId("idFunctionalLocationInput").getValue(); // Comma-separated values
-
-            // Check if Functional Location is empty
-            if (!sFunctionalLocationValues) {
-                MessageBox.error("Please select at least one Functional Location.");
-                return;
-            }
-
-            var aFunctionalLocationArray = sFunctionalLocationValues.split(", "); // Convert to array
-            // Store Functional Locations in Global Model
-            oGlobalModel.setProperty("/selectedFunctionalLocations", aFunctionalLocationArray);
-
             this.getDataFromBackend2();
 
 
@@ -272,6 +265,9 @@ sap.ui.define([
         _validateInputFields: function () {
 
             var inputFuncLoct = this.byId("idFunctionalLocationInput");
+            var inputfromDate = this.byId("fromDate");
+            var inputtoDate = this.byId("toDate");
+
             var inputFuncLoctValue = inputFuncLoct.getValue();
 
             var isValid = true;
@@ -279,26 +275,41 @@ sap.ui.define([
 
             if (!inputFuncLoct.getValue()) {
                 inputFuncLoct.setValueState(sap.ui.core.ValueState.Error);
+                // inputFuncLoct.setValue("Fuctional Location can't be empty");
                 isValid = false;
-                message += 'Functional Location , ';
+                // message += 'Functional Location , ';
             } else {
                 inputFuncLoct.setValueState(sap.ui.core.ValueState.None);
+            }
+            if (!inputfromDate.getValue()) {
+                inputfromDate.setValueState(sap.ui.core.ValueState.Error);
+                // inputfromDate.setValue("From Date can't be empty");
+                isValid = false;
+            } else {
+                inputfromDate.setValueState(sap.ui.core.ValueState.None);
+            }
+            if (!inputtoDate.getValue()) {
+                inputtoDate.setValueState(sap.ui.core.ValueState.Error);
+                // inputtoDate.setValue("To Date can't be empty");
+                isValid = false;
+            } else {
+                inputtoDate.setValueState(sap.ui.core.ValueState.None);
             }
 
             if (!isValid) {
                 // Remove the last comma and space from the message
-                message = message.slice(0, -2);
-                sap.m.MessageBox.error("Please fill up the following fields: " + message);
+                // message = message.slice(0, -2);
+                // sap.m.MessageBox.error("Please fill up the following fields: " + message);
                 return false;
             }
 
             return true;
         },
         getDataFromBackend2: function () {
-            // if (!this._validateInputFields()) {
-            //     // Validation failed, return without fetching data
-            //     return;
-            // }
+            if (!this._validateInputFields()) {
+                // Validation failed, return without fetching data
+                return;
+            }
             var that = this;
             var oGlobalModelData = this.getOwnerComponent().getModel("globalModel").getData();
             var oNewModel = this.getOwnerComponent().getModel("ZSB_JOINT_METER_READING");
@@ -423,26 +434,26 @@ sap.ui.define([
 
                     if (typeof pdfMake !== "undefined") {
 
-                        // Object.keys(data).forEach(functionalLocation => {
-                        //     that.generatePdf(functionalLocation, data[functionalLocation]);
-                        // });
+                        Object.keys(data).forEach(functionalLocation => {
+                            that.generatePdf(functionalLocation, data[functionalLocation]);
+                        });
 
                         // Ask user if they want all PDFs or select one
-                        sap.m.MessageBox.confirm("Do you want to generate PDFs for all Functional Locations?", {
-                            actions: ["Yes (Auto)", "No (Select)", sap.m.MessageBox.Action.CANCEL],
-                            emphasizedAction: "Yes (Auto)",
-                            onClose: function (sAction) {
-                                if (sAction === "Yes (Auto)") {
-                                    // Generate PDFs for all Functional Locations
-                                    Object.keys(data).forEach(functionalLocation => {
-                                        that.generatePdf(functionalLocation, data[functionalLocation]);
-                                    });
-                                } else if (sAction === "No (Select)") {
-                                    // Show a selection dialog
-                                    that.showSelectionDialog(data);
-                                }
-                            }
-                        });
+                        // sap.m.MessageBox.confirm("Do you want to generate PDFs for all Functional Locations?", {
+                        //     actions: ["Yes (Auto)", "No (Select)", sap.m.MessageBox.Action.CANCEL],
+                        //     emphasizedAction: "Yes (Auto)",
+                        //     onClose: function (sAction) {
+                        //         if (sAction === "Yes (Auto)") {
+                        //             // Generate PDFs for all Functional Locations
+                        //             Object.keys(data).forEach(functionalLocation => {
+                        //                 that.generatePdf(functionalLocation, data[functionalLocation]);
+                        //             });
+                        //         } else if (sAction === "No (Select)") {
+                        //             // Show a selection dialog
+                        //             that.showSelectionDialog(data);
+                        //         }
+                        //     }
+                        // });
 
                     } else {
                         console.error("pdfMake is not defined even after script loading.");
@@ -527,18 +538,33 @@ sap.ui.define([
             oGlobalModel.setProperty("/ECCNo", aData.ECCNo);
             oGlobalModel.setProperty("/ResponsiblePersonName", aData.ResponsiblePersonName);
         },
+        formatDate: function (dateStr) {
+            var date = new Date(dateStr);
+            var day = String(date.getDate()).padStart(2, '0');
+            var month = String(date.getMonth() + 1).padStart(2, '0'); // Months are zero-based
+            var year = date.getFullYear();
+            return `${day}/${month}/${year}`;
+        },
         generatePdf: function (functionalLocation, data) {
+            var that = this;
             var oCal = this.calculateData(data);
             var dateRange = {
                 fromDate: this.fromDate,
                 toDate: this.toDate
             };
+            var gstin = data[0].GSTINNo;
+            var panNo = gstin.slice(0, 10);
+
+            // Function to format date as dd/mm/yyyy
+            var formattedFromDate = this.formatDate(this.fromDate);
+            var formattedToDate = this.formatDate(this.toDate);
+            var formattedCurrentDate = this.formatDate(new Date());
+
             this.setAllDataProperty(data[0]);
             var oGlobalModelData = this.getOwnerComponent().getModel("globalModel").getData();
 
             var oImageUrl = jQuery.sap.getModulePath("com.bgl.app.jointticketform", "/model/BGL_Logo.png");
             this.convertImgToBase64(oImageUrl, function (base64Image) {
-                var that = this;
                 var docDefinition = {
                     pageSize: "A4",
                     pageMargins: [30, 30, 30, 30],
@@ -568,8 +594,8 @@ sap.ui.define([
                                                                     stack: [
                                                                         { text: "BHAGYANAGAR GAS LIMITED", fontSize: 14, bold: true, color: "green", alignment: "center" },
                                                                         { text: "(A joint venture of GAIL & HPCL)", fontSize: 8, bold: true, alignment: "center", margin: [0, 2, 0, 2] },
-                                                                        { text: "Address: - BGL address\nAddress line 2", fontSize: 8, bold: true, alignment: "center", margin: [0, 0, 0, 0] },
-                                                                        { text: `VAT/TIN:   ${data[0].VAT_TIN}    PAN:              GSTIN:    ${data[0].GSTINNo}`, fontSize: 8, bold: true, alignment: "center", margin: [0, 2, 0, 2] },
+                                                                        { text: `Address: ${data[0].StreetName}, ${data[0].CityName}, ${data[0].PostalCode}`, fontSize: 8, bold: true, alignment: "center", margin: [0, 0, 0, 0] },
+                                                                        { text: `VAT/TIN:   ${data[0].VAT_TIN}          PAN:  ${panNo}          GSTIN:    ${data[0].GSTINNo}`, fontSize: 8, bold: true, alignment: "center", margin: [0, 2, 0, 2] },
                                                                         { text: "Email Id: invoice@bgsgas.com,    Website: www.bglgas.com", fontSize: 8, bold: true, alignment: "center", margin: [0, 0, 0, 0] }
                                                                     ],
                                                                     border: [false, true, true, true],
@@ -594,8 +620,8 @@ sap.ui.define([
                                                     table: {
                                                         widths: ["*", "*", "*", "*"],
                                                         body: [
-                                                            [{ text: "", border: [true, false, false, false] }, { text: "", border: [false, false, false, false] }, { text: "", border: [false, false, false, false] }, { text: "Date: " + new Date().toLocaleDateString(), fontSize: 8, color: "red", alignment: "right", margin: [0, 0, 0, 10], border: [false, false, true, false] }],
-                                                            [{ text: "Period:", fontSize: 10, bold: false, border: [true, false, false, false] }, { text: "", border: [false, false, false, false] }, { text: "From: " + dateRange.fromDate, fontSize: 10, bold: false, border: [false, false, false, false] }, { text: "To: " + dateRange.toDate, fontSize: 10, bold: false, border: [false, false, true, false] }],
+                                                            [{ text: "", border: [true, false, false, false] }, { text: "", border: [false, false, false, false] }, { text: "", border: [false, false, false, false] }, { text: "Date: " + formattedCurrentDate, fontSize: 8, color: "red", alignment: "right", margin: [0, 0, 0, 10], border: [false, false, true, false] }],
+                                                            [{ text: "Period:", fontSize: 10, bold: false, border: [true, false, false, false] }, { text: "", border: [false, false, false, false] }, { text: "From: " + formattedFromDate, fontSize: 10, bold: false, border: [false, false, false, false] }, { text: "To: " + formattedToDate, fontSize: 10, bold: false, border: [false, false, true, false] }],
                                                             [
                                                                 { text: "Location:", fontSize: 10, bold: false, border: [true, false, false, false] },
                                                                 { text: `${data[0].Location}`, fontSize: 10, colSpan: 3, border: [false, false, true, false] }, "", ""
@@ -714,11 +740,28 @@ sap.ui.define([
                     // }
                 };
 
-                pdfMake.createPdf(docDefinition).download(`${functionalLocation}-BGLReport.pdf`);
+                // pdfMake.createPdf(docDefinition).download(`${functionalLocation}-BGLReport.pdf`);
+                // Generate PDF and show preview in PDFViewer
 
-                sap.m.MessageToast.show("PDF downloaded successfully!");
+                pdfMake.createPdf(docDefinition).getBlob((blob) => {
 
-            })
+                    var pdfUrl = URL.createObjectURL(blob);
+                    var pdfTitle = `${data[0].Location}_${data[0].FunctionalLocation}`;
+
+                    var oPdfViewer = new sap.m.PDFViewer({
+                        source: pdfUrl,
+                        title: pdfTitle,
+                        showDownloadButton: true
+                    });
+                    
+                    that.getView().addDependent(oPdfViewer);
+                    oPdfViewer.setTitle(pdfTitle);
+                    oPdfViewer.open();
+                });
+
+                // sap.m.MessageToast.show("PDF downloaded successfully!");
+
+            });
 
         },
         onOpenFunctionalLocationDialog: function () {
@@ -728,6 +771,7 @@ sap.ui.define([
             this._oDialog.open();
         },
         onSelectFunctionalLocation: function () {
+            var oGlobalModel = this.getOwnerComponent().getModel("globalModel");
             var oList = this.byId("idFunctionalLocationList");
             var aSelectedItems = oList.getSelectedItems();
             var aSelectedValues = [];
@@ -735,18 +779,23 @@ sap.ui.define([
 
             // Extract selected Functional Locations
             aSelectedItems.forEach(function (oItem) {
-                aSelectedValues.push(oItem.getTitle()); // FunctionalLocation
-                aSelectedID.push(oItem.getDescription()); // FunctionalLocation
+                aSelectedValues.push(oItem.getTitle()); // FunctionalLocation Name
+                aSelectedID.push(oItem.getDescription()); // FunctionalLocation ID
             });
 
-            var oGlobalModel = this.getOwnerComponent().getModel("globalModel");
 
-            // Store Functional Locations in Global Model
-            oGlobalModel.setProperty("/selectedFunctionalLocationsID", aSelectedID);
-
-            // Set selected values in Input field
+            // Show selected values in Input field
             var sValue = aSelectedValues.join(", ");
             this.byId("idFunctionalLocationInput").setValue(sValue);
+
+            oGlobalModel.setProperty("/selectedFunctionalLocationsID", aSelectedID);   // Store Array Functional Location Id
+
+            /// Get Functional Location Input Value
+            var sFunctionalLocationValues = this.byId("idFunctionalLocationInput").getValue(); // Comma-separated values
+
+            var aFunctionalLocationArray = sFunctionalLocationValues.split(", "); // Convert to array
+            // Store Functional Locations Name in Global Model
+            oGlobalModel.setProperty("/selectedFunctionalLocations", aFunctionalLocationArray);  // Store Array Functional Location Name
 
             // Close the dialog
             this.byId("idFunctionalLocationDialog").close();
@@ -758,9 +807,12 @@ sap.ui.define([
         onFunctionalLocationClear: function (oEvent) {
             var sValue = oEvent.getParameter("value"); // Get the input value
             var oList = this.byId("idFunctionalLocationList"); // Get the list
+            var oGlobalModel = this.getOwnerComponent().getModel("globalModel");
 
             if (!sValue) {    // If input is empty, clear selection
                 oList.removeSelections(true); // Deselect all items
+                oGlobalModel.setProperty("/selectedFunctionalLocationsID", "");
+                oGlobalModel.setProperty("/selectedFunctionalLocations", "");
             }
         }
 
