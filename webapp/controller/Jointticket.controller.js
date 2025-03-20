@@ -448,7 +448,7 @@ sap.ui.define([
                                     Object.keys(data).forEach(functionalLocation => {
                                         that.generatePdf(functionalLocation, data[functionalLocation]);
                                     });
-                                } 
+                                }
                                 // else if (sAction === "No (Select)") {
                                 //     // Show a selection dialog
                                 //     that.showSelectionDialog(data);
@@ -659,7 +659,7 @@ sap.ui.define([
                                                                 { text: item.OpenDateRead, alignment: "center", fontSize: 10 },
                                                                 { text: item.ClosedateRead, alignment: "center", fontSize: 10 },
                                                                 { text: item.meter_corr_factor, alignment: "center", fontSize: 10 },
-                                                                { text: `${oCal.totalGasConsumption}`, alignment: "center", fontSize: 10 }
+                                                                { text: ((item.ClosedateRead - item.OpenDateRead) * item.meter_corr_factor).toFixed(2), alignment: "center", fontSize: 10 }
                                                             ])
                                                         ]
                                                     }
@@ -749,15 +749,30 @@ sap.ui.define([
                     var pdfUrl = URL.createObjectURL(blob);
                     var pdfTitle = `${data[0].Location}_${data[0].FunctionalLocation}`;
 
-                    var oPdfViewer = new sap.m.PDFViewer({
-                        source: pdfUrl,
-                        title: pdfTitle,
-                        showDownloadButton: true
-                    });
+                    // window.open(pdfUrl, "_blank");
 
-                    that.getView().addDependent(oPdfViewer);
-                    oPdfViewer.setTitle(pdfTitle);
-                    oPdfViewer.open();
+                    var newWindow = window.open("", "_blank");
+                    newWindow.document.write(`
+                            <html>
+                                <head>
+                                    <title>${pdfTitle}</title>
+                                </head>
+                                <body style="margin:0;">
+                                    <iframe src="${pdfUrl}" width="100%" height="100%" style="border:none;"></iframe>
+                                </body>
+                            </html>
+                        `);
+
+                    // var oPdfViewer = new sap.m.PDFViewer({
+                    //     source: pdfUrl,
+                    //     title: pdfTitle,
+                    //     showDownloadButton: true
+                    // });
+
+                    // that.getView().addDependent(oPdfViewer);
+                    // oPdfViewer.setTitle(pdfTitle);
+                    // oPdfViewer.open();
+
                 });
 
                 // sap.m.MessageToast.show("PDF downloaded successfully!");
