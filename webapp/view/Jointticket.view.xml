@@ -276,7 +276,7 @@
                     >
                         <Text text="Measuing Point" />
                     </Column>
-                    <Column width="8rem">
+                    <Column width="6rem">
                         <Text text="Meter Serial Number" />
                     </Column>
                     <Column
