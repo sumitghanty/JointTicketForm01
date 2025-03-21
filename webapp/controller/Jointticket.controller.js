@@ -273,27 +273,26 @@ sap.ui.define([
             var isValid = true;
             var message = '';
 
-            if (!inputFuncLoct.getValue()) {
-                inputFuncLoct.setValueState(sap.ui.core.ValueState.Error);
-                // inputFuncLoct.setValue("Fuctional Location can't be empty");
-                isValid = false;
-                // message += 'Functional Location , ';
-            } else {
-                inputFuncLoct.setValueState(sap.ui.core.ValueState.None);
-            }
             if (!inputfromDate.getValue()) {
                 inputfromDate.setValueState(sap.ui.core.ValueState.Error);
-                // inputfromDate.setValue("From Date can't be empty");
                 isValid = false;
+                message += 'From Date , ';
             } else {
                 inputfromDate.setValueState(sap.ui.core.ValueState.None);
             }
             if (!inputtoDate.getValue()) {
                 inputtoDate.setValueState(sap.ui.core.ValueState.Error);
-                // inputtoDate.setValue("To Date can't be empty");
                 isValid = false;
+                message += 'To Date , ';
             } else {
                 inputtoDate.setValueState(sap.ui.core.ValueState.None);
+            }
+            if (!inputFuncLoct.getValue()) {
+                inputFuncLoct.setValueState(sap.ui.core.ValueState.Error);
+                isValid = false;
+                message += 'Functional Location , ';
+            } else {
+                inputFuncLoct.setValueState(sap.ui.core.ValueState.None);
             }
 
             if (!isValid) {
@@ -304,6 +303,20 @@ sap.ui.define([
             }
 
             return true;
+        },
+        onDateChange: function () {
+            var oFromDate = this.getView().byId("fromDate");
+            var oToDate = this.getView().byId("toDate");
+        
+            var sFromDate = oFromDate.getDateValue(); 
+            var sToDate = oToDate.getDateValue();
+        
+            if (sFromDate && sToDate) {
+                if (sToDate < sFromDate) {
+                    sap.m.MessageBox.error("To Date cannot be earlier than From Date.");
+                    oToDate.setValue("");
+                }
+            }
         },
         getDataFromBackend2: function () {
             if (!this._validateInputFields()) {
@@ -821,8 +834,8 @@ sap.ui.define([
                     var pdfTitle = `${data[0].Location}_${data[0].FunctionalLocation}`;
                     var pdfUrl = URL.createObjectURL(blob);
                     that.generatedPdfUrls.push({
-                        pdfTitle:pdfTitle,
-                        pdfUrl:pdfUrl
+                        pdfTitle: pdfTitle,
+                        pdfUrl: pdfUrl
                     });
 
                     if (callback) callback();

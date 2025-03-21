@@ -57,6 +57,7 @@
                                     <DatePicker
                                         required="true"
                                         id="fromDate"
+                                        change="onDateChange"
                                     />
                                 </fb:control>
                             </fb:FilterGroupItem>
@@ -70,6 +71,7 @@
                                     <DatePicker
                                         required="true"
                                         id="toDate"
+                                        change="onDateChange"
                                     />
                                 </fb:control>
                             </fb:FilterGroupItem>
