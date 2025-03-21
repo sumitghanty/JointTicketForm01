@@ -405,6 +405,10 @@ sap.ui.define([
             });
         },
         onPressPDFButton: function () {
+            // if (!this._validateInputFields()) {
+            //     // Validation failed, return without fetching data
+            //     return;
+            // }
             var oPdfDataModel = this.getView().getModel("PdfDataModel");
             var pdfData = oPdfDataModel.getData();
             var groupedData = this.groupByFunctionalLocation(pdfData);
@@ -426,6 +430,8 @@ sap.ui.define([
             var vfsPath = jQuery.sap.getModulePath("com.bgl.app.jointticketform", "/libs/pdfmake/vfs_fonts.js");
             var that = this;
 
+            this.generatedPdfUrls = [];
+
             jQuery.sap.includeScript(sPath, "pdfMakeScript", function () {
                 console.log("pdfMake loaded successfully.");
 
@@ -445,15 +451,51 @@ sap.ui.define([
                             onClose: function (sAction) {
                                 if (sAction === "Yes") {
                                     // Generate PDFs for all Functional Locations
-                                    Object.keys(data).forEach(functionalLocation => {
-                                        that.generatePdf(functionalLocation, data[functionalLocation]);
+                                    // Object.keys(data).forEach(functionalLocation => {
+                                    //     that.generatePdf(functionalLocation, data[functionalLocation]);
+                                    // });
+
+
+                                    // else if (sAction === "No (Select)") {
+                                    //     // Show a selection dialog
+                                    //     that.showSelectionDialog(data);
+                                    // }
+
+                                    var locations = Object.keys(data);
+                                    var count = 0;
+
+                                    // Generate PDFs for all locations
+                                    locations.forEach((functionalLocation) => {
+                                        that.generatePdf(functionalLocation, data[functionalLocation], function () {
+                                            count++;
+                                            // When all PDFs are generated, open them in tabs
+                                            if (count === locations.length) {
+                                                that.generatedPdfUrls.forEach((url) => {
+
+                                                    // var newWindow = window.open(url, "_blank");
+
+                                                    var newWindow = window.open("", "_blank");
+                                                    newWindow.document.write(`
+                                                        <html>
+                                                            <head>
+                                                                <title>${url.pdfTitle}</title>
+                                                            </head>
+                                                            <body style="margin:0;">
+                                                                <iframe src="${url.pdfUrl}" width="100%" height="100%" style="border:none;"></iframe>
+                                                            </body>
+                                                        </html>
+                                                    `);
+
+                                                    if (!newWindow) {
+                                                        sap.m.MessageToast.show("Popup blocked! Please allow popups.");
+                                                    }
+                                                });
+                                            }
+                                        });
                                     });
                                 }
-                                // else if (sAction === "No (Select)") {
-                                //     // Show a selection dialog
-                                //     that.showSelectionDialog(data);
-                                // }
                             }
+
                         });
 
                     } else {
@@ -546,7 +588,7 @@ sap.ui.define([
             var year = date.getFullYear();
             return `${day}/${month}/${year}`;
         },
-        generatePdf: function (functionalLocation, data) {
+        generatePdf: function (functionalLocation, data, callback) {
             var that = this;
             var oCal = this.calculateData(data);
             var dateRange = {
@@ -594,9 +636,9 @@ sap.ui.define([
                                                                 {
                                                                     stack: [
                                                                         { text: "BHAGYANAGAR GAS LIMITED", fontSize: 14, bold: true, color: "green", alignment: "center" },
-                                                                        { text: "(A joint venture of GAIL & HPCL)", fontSize: 8, bold: true, alignment: "center", margin: [0, 2, 0, 2] },
-                                                                        { text: `Address: ${data[0].StreetName}, ${data[0].CityName}, ${data[0].PostalCode}`, fontSize: 8, bold: true, alignment: "center", margin: [0, 0, 0, 0] },
-                                                                        { text: `VAT/TIN:   ${data[0].VAT_TIN}          PAN:  ${panNo}          GSTIN:    ${data[0].GSTINNo}`, fontSize: 8, bold: true, alignment: "center", margin: [0, 2, 0, 2] },
+                                                                        { text: "(A joint venture of GAIL & HPCL)", fontSize: 8, bold: true, alignment: "center", margin: [0, 4, 0, 4] },
+                                                                        { text: `Address: Parishram Bhavan, 2nd Floor, APIDC Building, Basheerbagh, Hyderabad, Telangana - 500004 `, fontSize: 8, bold: true, alignment: "center", margin: [0, 0, 0, 0] },
+                                                                        { text: `CIN No : U40200TG2003PLC041566     PAN No:  ${panNo}`, fontSize: 8, bold: true, alignment: "center", margin: [0, 4, 0, 4] },
                                                                         { text: "Email Id: invoice@bgsgas.com,    Website: www.bglgas.com", fontSize: 8, bold: true, alignment: "center", margin: [0, 0, 0, 0] }
                                                                     ],
                                                                     border: [false, true, true, true],
@@ -744,42 +786,55 @@ sap.ui.define([
                 // pdfMake.createPdf(docDefinition).download(`${functionalLocation}-BGLReport.pdf`);
                 // Generate PDF and show preview in PDFViewer
 
+                // pdfMake.createPdf(docDefinition).getBlob((blob) => {
+
+                //     var pdfUrl = URL.createObjectURL(blob);
+                //     var pdfTitle = `${data[0].Location}_${data[0].FunctionalLocation}`;
+
+                //     // window.open(pdfUrl, "_blank");
+
+                //     // var newWindow = window.open("", "_blank");
+                //     // newWindow.document.write(`
+                //     //         <html>
+                //     //             <head>
+                //     //                 <title>${pdfTitle}</title>
+                //     //             </head>
+                //     //             <body style="margin:0;">
+                //     //                 <iframe src="${pdfUrl}" width="100%" height="100%" style="border:none;"></iframe>
+                //     //             </body>
+                //     //         </html>
+                //     //     `);
+
+                //     // var oPdfViewer = new sap.m.PDFViewer({
+                //     //     source: pdfUrl,
+                //     //     title: pdfTitle,
+                //     //     showDownloadButton: true
+                //     // });
+
+                //     // that.getView().addDependent(oPdfViewer);
+                //     // oPdfViewer.setTitle(pdfTitle);
+                //     // oPdfViewer.open();
+
+                // });
+
                 pdfMake.createPdf(docDefinition).getBlob((blob) => {
-
-                    var pdfUrl = URL.createObjectURL(blob);
                     var pdfTitle = `${data[0].Location}_${data[0].FunctionalLocation}`;
+                    var pdfUrl = URL.createObjectURL(blob);
+                    that.generatedPdfUrls.push({
+                        pdfTitle:pdfTitle,
+                        pdfUrl:pdfUrl
+                    });
 
-                    // window.open(pdfUrl, "_blank");
-
-                    var newWindow = window.open("", "_blank");
-                    newWindow.document.write(`
-                            <html>
-                                <head>
-                                    <title>${pdfTitle}</title>
-                                </head>
-                                <body style="margin:0;">
-                                    <iframe src="${pdfUrl}" width="100%" height="100%" style="border:none;"></iframe>
-                                </body>
-                            </html>
-                        `);
-
-                    // var oPdfViewer = new sap.m.PDFViewer({
-                    //     source: pdfUrl,
-                    //     title: pdfTitle,
-                    //     showDownloadButton: true
-                    // });
-
-                    // that.getView().addDependent(oPdfViewer);
-                    // oPdfViewer.setTitle(pdfTitle);
-                    // oPdfViewer.open();
-
+                    if (callback) callback();
                 });
+
 
                 // sap.m.MessageToast.show("PDF downloaded successfully!");
 
             });
 
         },
+
         onOpenFunctionalLocationDialog: function () {
             if (!this._oDialog) {
                 this._oDialog = this.byId("idFunctionalLocationDialog");

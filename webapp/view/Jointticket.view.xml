@@ -260,7 +260,7 @@
                         <Text text="Functional Location" />
                     </Column>
                     <Column
-                        width="6rem"
+                        width="8rem"
                         demandPopin="true"
                         hAlign="Begin"
                         visible="{UIDataModel>/Visible}"
@@ -329,7 +329,7 @@
                         minScreenWidth="Tablet"
                         demandPopin="true"
                         hAlign="Begin"
-                        visible="{UIDataModel>/Invisible}"
+                        visible="false"
                     >
                         <Text text="Quantity" />
                     </Column>
@@ -338,7 +338,7 @@
                         minScreenWidth="Tablet"
                         demandPopin="true"
                         hAlign="Begin"
-                        visible="{UIDataModel>/Invisible}"
+                        visible="false"
                     >
                         <Text text="Quantity Sold" />
                     </Column>
