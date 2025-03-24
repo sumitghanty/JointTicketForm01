@@ -307,10 +307,10 @@ sap.ui.define([
         onDateChange: function () {
             var oFromDate = this.getView().byId("fromDate");
             var oToDate = this.getView().byId("toDate");
-        
-            var sFromDate = oFromDate.getDateValue(); 
+
+            var sFromDate = oFromDate.getDateValue();
             var sToDate = oToDate.getDateValue();
-        
+
             if (sFromDate && sToDate) {
                 if (sToDate < sFromDate) {
                     sap.m.MessageBox.error("To Date cannot be earlier than From Date.");
@@ -443,7 +443,8 @@ sap.ui.define([
             var vfsPath = jQuery.sap.getModulePath("com.bgl.app.jointticketform", "/libs/pdfmake/vfs_fonts.js");
             var that = this;
 
-            this.generatedPdfUrls = [];
+            // this.generatedPdfUrls = [];
+            this.generatedPdfDocs = [];
 
             jQuery.sap.includeScript(sPath, "pdfMakeScript", function () {
                 console.log("pdfMake loaded successfully.");
@@ -478,33 +479,40 @@ sap.ui.define([
                                     var count = 0;
 
                                     // Generate PDFs for all locations
-                                    locations.forEach((functionalLocation) => {
-                                        that.generatePdf(functionalLocation, data[functionalLocation], function () {
-                                            count++;
-                                            // When all PDFs are generated, open them in tabs
-                                            if (count === locations.length) {
-                                                that.generatedPdfUrls.forEach((url) => {
+                                    // locations.forEach((functionalLocation) => {
+                                    //     that.generatePdf(functionalLocation, data[functionalLocation], function () {
+                                    //         count++;
+                                    //         // When all PDFs are generated, open them in tabs
+                                    //         if (count === locations.length) {
+                                    //             that.generatedPdfUrls.forEach((url) => {
 
-                                                    // var newWindow = window.open(url, "_blank");
+                                    //                 // var newWindow = window.open(url, "_blank");
 
-                                                    var newWindow = window.open("", "_blank");
-                                                    newWindow.document.write(`
-                                                        <html>
-                                                            <head>
-                                                                <title>${url.pdfTitle}</title>
-                                                            </head>
-                                                            <body style="margin:0;">
-                                                                <iframe src="${url.pdfUrl}" width="100%" height="100%" style="border:none;"></iframe>
-                                                            </body>
-                                                        </html>
-                                                    `);
+                                    //                 var newWindow = window.open("", "_blank");
+                                    //                 newWindow.document.write(`
+                                    //                     <html>
+                                    //                         <head>
+                                    //                             <title>${url.pdfTitle}</title>
+                                    //                         </head>
+                                    //                         <body style="margin:0;">
+                                    //                             <iframe src="${url.pdfUrl}" width="100%" height="100%" style="border:none;"></iframe>
+                                    //                         </body>
+                                    //                     </html>
+                                    //                 `);
 
-                                                    if (!newWindow) {
-                                                        sap.m.MessageToast.show("Popup blocked! Please allow popups.");
-                                                    }
-                                                });
-                                            }
-                                        });
+                                    //                 if (!newWindow) {
+                                    //                     sap.m.MessageToast.show("Popup blocked! Please allow popups.");
+                                    //                 }
+                                    //             });
+                                    //         }
+                                    //     });
+                                    // });
+
+                                    Promise.all(locations.map(functionalLocation =>
+                                        that.generatePdf(functionalLocation, data[functionalLocation])
+                                    )).then((pdfDocs) => {
+                                        that.generatedPdfDocs = pdfDocs;
+                                        that.mergeAndPreviewPdfs();
                                     });
                                 }
                             }
@@ -620,232 +628,273 @@ sap.ui.define([
             var oGlobalModelData = this.getOwnerComponent().getModel("globalModel").getData();
 
             var oImageUrl = jQuery.sap.getModulePath("com.bgl.app.jointticketform", "/model/BGL_Logo.png");
-            this.convertImgToBase64(oImageUrl, function (base64Image) {
-                var docDefinition = {
-                    pageSize: "A4",
-                    pageMargins: [30, 30, 30, 30],
-                    content: [
-                        {
-                            table: {
-                                widths: ["*"],
-                                body: [
-                                    [
-                                        {
-                                            stack: [
-                                                {
-                                                    table: {
-                                                        widths: [100, "*"],  //// border: [left, top, right, bottom]
-                                                        body: [
-                                                            [
-                                                                // { text: "Logo", alignment: "center", border: [true, true, false, true], margin: [30, 20, 0, 15] },
-                                                                {
-                                                                    image: base64Image,
-                                                                    width: 100,
-                                                                    height: 60,
-                                                                    alignment: 'center',
-                                                                    border: [true, true, false, true],
-                                                                    margin: [30, 20, 0, 15]
-                                                                },
-                                                                {
-                                                                    stack: [
-                                                                        { text: "BHAGYANAGAR GAS LIMITED", fontSize: 14, bold: true, color: "green", alignment: "center" },
-                                                                        { text: "(A joint venture of GAIL & HPCL)", fontSize: 8, bold: true, alignment: "center", margin: [0, 4, 0, 4] },
-                                                                        { text: `Address: Parishram Bhavan, 2nd Floor, APIDC Building, Basheerbagh, Hyderabad, Telangana - 500004 `, fontSize: 8, bold: true, alignment: "center", margin: [0, 0, 0, 0] },
-                                                                        { text: `CIN No : U40200TG2003PLC041566     PAN No:  ${panNo}`, fontSize: 8, bold: true, alignment: "center", margin: [0, 4, 0, 4] },
-                                                                        { text: "Email Id: invoice@bgsgas.com,    Website: www.bglgas.com", fontSize: 8, bold: true, alignment: "center", margin: [0, 0, 0, 0] }
-                                                                    ],
-                                                                    border: [false, true, true, true],
-                                                                    margin: [0, 10, 0, 10]
-                                                                }
+            return new Promise((resolve) => {
+                that.convertImgToBase64(oImageUrl, function (base64Image) {
+                    var docDefinition = {
+                        pageSize: "A4",
+                        pageMargins: [30, 30, 30, 30],
+                        content: [
+                            {
+                                table: {
+                                    widths: ["*"],
+                                    body: [
+                                        [
+                                            {
+                                                stack: [
+                                                    {
+                                                        table: {
+                                                            widths: [100, "*"],  //// border: [left, top, right, bottom]
+                                                            body: [
+                                                                [
+                                                                    // { text: "Logo", alignment: "center", border: [true, true, false, true], margin: [30, 20, 0, 15] },
+                                                                    {
+                                                                        image: base64Image,
+                                                                        width: 100,
+                                                                        height: 60,
+                                                                        alignment: 'center',
+                                                                        border: [true, true, false, true],
+                                                                        margin: [30, 20, 0, 15]
+                                                                    },
+                                                                    {
+                                                                        stack: [
+                                                                            { text: "BHAGYANAGAR GAS LIMITED", fontSize: 14, bold: true, color: "green", alignment: "center" },
+                                                                            { text: "(A joint venture of GAIL & HPCL)", fontSize: 8, bold: true, alignment: "center", margin: [0, 4, 0, 4] },
+                                                                            { text: `Address: Parishram Bhavan, 2nd Floor, APIDC Building, Basheerbagh, Hyderabad, Telangana - 500004 `, fontSize: 8, bold: true, alignment: "center", margin: [0, 0, 0, 0] },
+                                                                            { text: `CIN No : U40200TG2003PLC041566     PAN No:  ${panNo}`, fontSize: 8, bold: true, alignment: "center", margin: [0, 4, 0, 4] },
+                                                                            { text: "Email Id: invoice@bgsgas.com,    Website: www.bglgas.com", fontSize: 8, bold: true, alignment: "center", margin: [0, 0, 0, 0] }
+                                                                        ],
+                                                                        border: [false, true, true, true],
+                                                                        margin: [0, 10, 0, 10]
+                                                                    }
+                                                                ]
                                                             ]
-                                                        ]
-                                                    }
-                                                },
-                                                {
-                                                    table: {
-                                                        widths: ["*"],
-                                                        body: [
-                                                            [{ text: "Joint Meter Reading of CNG Dispenser (JMR)", bold: true, alignment: "center", fontSize: 12, border: [true, false, true, true] }]
-                                                        ]
+                                                        }
                                                     },
-                                                    margin: [0, 0, 0, 0]
-                                                },
-                                                // { text: "Date: " + new Date().toLocaleDateString(), fontSize: 10, color: "red", alignment: "right", margin: [0, 0, 0, 10] },
-
-                                                {
-                                                    table: {
-                                                        widths: ["*", "*", "*", "*"],
-                                                        body: [
-                                                            [{ text: "", border: [true, false, false, false] }, { text: "", border: [false, false, false, false] }, { text: "", border: [false, false, false, false] }, { text: "Date: " + formattedCurrentDate, fontSize: 8, color: "red", alignment: "right", margin: [0, 0, 0, 10], border: [false, false, true, false] }],
-                                                            [{ text: "Period:", fontSize: 10, bold: false, border: [true, false, false, false] }, { text: "", border: [false, false, false, false] }, { text: "From: " + formattedFromDate, fontSize: 10, bold: false, border: [false, false, false, false] }, { text: "To: " + formattedToDate, fontSize: 10, bold: false, border: [false, false, true, false] }],
-                                                            [
-                                                                { text: "Location:", fontSize: 10, bold: false, border: [true, false, false, false] },
-                                                                { text: `${data[0].Location}`, fontSize: 10, colSpan: 3, border: [false, false, true, false] }, "", ""
-                                                            ],
-                                                            [
-                                                                { text: "Address:", fontSize: 10, bold: false, border: [true, false, false, false] },
-                                                                { text: `${data[0].StreetName}, ${data[0].CityName}, ${data[0].PostalCode}`, fontSize: 10, colSpan: 3, border: [false, false, true, false] }, "", ""
-                                                            ],
-                                                            [{ text: "Dispenser no 1:", fontSize: 10, bold: false, border: [true, false, false, false] }, { text: `${data[0].Dispenser1}`, fontSize: 10, colSpan: 3, border: [false, false, true, false] }, { text: "", border: [false, false, false, false] }, { text: "", border: [false, false, true, false] }],
-                                                            [{ text: "Dispenser no 2:", fontSize: 10, bold: false, border: [true, false, false, false] }, { text: `${data[0].Dispenser2}`, fontSize: 10, colSpan: 3, border: [false, false, true, false] }, { text: "", border: [false, false, false, false] }, { text: "", border: [false, false, true, false] }],
-                                                            [{ text: "Dispenser no 3:", fontSize: 10, bold: false, border: [true, false, false, false] }, { text: `${data[0].Dispenser3}`, fontSize: 10, colSpan: 3, border: [false, false, true, false] }, { text: "", border: [false, false, false, false] }, { text: "", border: [false, false, true, false] }],
-                                                            [{ text: "Dispenser no 4:", fontSize: 10, bold: false, border: [true, false, false, false] }, { text: `${data[0].Dispenser4}`, fontSize: 10, colSpan: 3, border: [false, false, true, false] }, { text: "", border: [false, false, false, false] }, { text: "", border: [false, false, true, false] }]
-                                                        ]
-                                                    }
-                                                },
-
-                                                // { text: " ", margin: [0, 10, 0, 10] },
-
-                                                {
-                                                    table: {
-                                                        headerRows: 1,
-                                                        widths: ["20%", "20%", "20%", "20%", "20%"],
-                                                        body: [
-                                                            [
-                                                                { text: "Meter No.", fontSize: 9, alignment: "center", bold: true },
-                                                                { text: "Opening Meter Reading", fontSize: 9, alignment: "center", bold: true },
-                                                                { text: "Closing Meter Reading", fontSize: 9, alignment: "center", bold: true },
-                                                                { text: "Correction Factor", fontSize: 9, alignment: "center", bold: true },
-                                                                { text: "Gas Consumption", fontSize: 9, alignment: "center", bold: true }
-
-                                                            ],
-                                                            ...data.map(item => [
-                                                                { text: item.MeterNo || "-", alignment: "center", fontSize: 10 },
-                                                                { text: item.OpenDateRead, alignment: "center", fontSize: 10 },
-                                                                { text: item.ClosedateRead, alignment: "center", fontSize: 10 },
-                                                                { text: item.meter_corr_factor, alignment: "center", fontSize: 10 },
-                                                                { text: ((item.ClosedateRead - item.OpenDateRead) * item.meter_corr_factor).toFixed(2), alignment: "center", fontSize: 10 }
-                                                            ])
-                                                        ]
-                                                    }
-                                                },
-
-                                                // { text: " ", margin: [0, 10, 0, 10] },
-                                                {
-                                                    table: {
-                                                        widths: ["30%", "50%", "20%"],
-                                                        body: [
-                                                            [
-                                                                { text: "", border: [true, false, true, false] },
-                                                                { text: "Quantity used up in testing / calibration", fontSize: 10, bold: false, border: [true, false, true, false] },
-                                                                { text: "-100.00", fontSize: 10, alignment: "right", border: [true, false, true, false] }
-                                                            ],
-                                                            [
-                                                                { text: "", border: [true, false, true, false] },
-                                                                { text: "Dispensed Quantity (Kg)", fontSize: 10, bold: false, border: [true, false, true, false] },
-                                                                { text: `${oCal.dispensedQuantity}`, fontSize: 10, alignment: "right", border: [true, false, true, false] }
-                                                            ],
-                                                            [
-                                                                { text: "", border: [true, false, true, true] },
-                                                                { text: "Quantity Sold (Kg)", fontSize: 10, bold: false, border: [true, false, true, true] },
-                                                                { text: `${oCal.quantitySold}`, fontSize: 10, alignment: "right", border: [true, false, true, true] }
+                                                    {
+                                                        table: {
+                                                            widths: ["*"],
+                                                            body: [
+                                                                [{ text: "Joint Meter Reading of CNG Dispenser (JMR)", bold: true, alignment: "center", fontSize: 12, border: [true, false, true, true] }]
                                                             ]
-                                                        ]
-                                                    }
-                                                },
+                                                        },
+                                                        margin: [0, 0, 0, 0]
+                                                    },
+                                                    // { text: "Date: " + new Date().toLocaleDateString(), fontSize: 10, color: "red", alignment: "right", margin: [0, 0, 0, 10] },
 
-                                                // { text: " ", margin: [0, 10, 0, 10] },
-                                                {
-                                                    table: {
-                                                        widths: ["*"],
-                                                        body: [
-                                                            [{ text: "", alignment: "center", border: [true, false, true, false], margin: [0, 5, 0, 5] }]
-                                                        ]
-                                                    }
-                                                },
-                                                {
-                                                    table: {
-                                                        widths: ["*"],
-                                                        body: [
-                                                            [{ text: "Remarks / Note:", fontSize: 10, bold: true, border: [true, true, true, false] }],
-                                                            [{ text: "", border: [true, false, true, true], margin: [0, 20, 0, 20] }]
-                                                        ]
-                                                    }
-                                                },
+                                                    {
+                                                        table: {
+                                                            widths: ["*", "*", "*", "*"],
+                                                            body: [
+                                                                [{ text: "", border: [true, false, false, false] }, { text: "", border: [false, false, false, false] }, { text: "", border: [false, false, false, false] }, { text: "Date: " + formattedCurrentDate, fontSize: 8, color: "red", alignment: "right", margin: [0, 0, 0, 10], border: [false, false, true, false] }],
+                                                                [{ text: "Period:", fontSize: 10, bold: false, border: [true, false, false, false] }, { text: "", border: [false, false, false, false] }, { text: "From: " + formattedFromDate, fontSize: 10, bold: false, border: [false, false, false, false] }, { text: "To: " + formattedToDate, fontSize: 10, bold: false, border: [false, false, true, false] }],
+                                                                [
+                                                                    { text: "Location:", fontSize: 10, bold: false, border: [true, false, false, false] },
+                                                                    { text: `${data[0].Location}`, fontSize: 10, colSpan: 3, border: [false, false, true, false] }, "", ""
+                                                                ],
+                                                                [
+                                                                    { text: "Address:", fontSize: 10, bold: false, border: [true, false, false, false] },
+                                                                    { text: `${data[0].StreetName}, ${data[0].CityName}, ${data[0].PostalCode}`, fontSize: 10, colSpan: 3, border: [false, false, true, false] }, "", ""
+                                                                ],
+                                                                [{ text: "Dispenser no 1:", fontSize: 10, bold: false, border: [true, false, false, false] }, { text: `${data[0].Dispenser1}`, fontSize: 10, colSpan: 3, border: [false, false, true, false] }, { text: "", border: [false, false, false, false] }, { text: "", border: [false, false, true, false] }],
+                                                                [{ text: "Dispenser no 2:", fontSize: 10, bold: false, border: [true, false, false, false] }, { text: `${data[0].Dispenser2}`, fontSize: 10, colSpan: 3, border: [false, false, true, false] }, { text: "", border: [false, false, false, false] }, { text: "", border: [false, false, true, false] }],
+                                                                [{ text: "Dispenser no 3:", fontSize: 10, bold: false, border: [true, false, false, false] }, { text: `${data[0].Dispenser3}`, fontSize: 10, colSpan: 3, border: [false, false, true, false] }, { text: "", border: [false, false, false, false] }, { text: "", border: [false, false, true, false] }],
+                                                                [{ text: "Dispenser no 4:", fontSize: 10, bold: false, border: [true, false, false, false] }, { text: `${data[0].Dispenser4}`, fontSize: 10, colSpan: 3, border: [false, false, true, false] }, { text: "", border: [false, false, false, false] }, { text: "", border: [false, false, true, false] }]
+                                                            ]
+                                                        }
+                                                    },
 
-                                                // { text: " ", margin: [0, 10, 0, 10] },
-                                                {
-                                                    table: {
-                                                        widths: ["*"],
-                                                        body: [
-                                                            [{ text: "For Bhayanagar Gas Limited", fontSize: 10, alignment: "right", border: [true, false, true, false] }],
-                                                            [{ text: "", margin: [0, 10, 0, 10], border: [true, false, true, false] }]
-                                                        ]
-                                                    }
-                                                },
-                                                // { text: "For Bhayanagar Gas Limited", fontSize: 8, alignment: "right", margin: [0, 20, 0, 0] },
-                                                {
-                                                    table: {
-                                                        widths: ["*"],
-                                                        body: [
-                                                            [{ text: "System generated Invoice. Doesn't require signature.", fontSize: 10, italics: true, bold: true, alignment: "center", margin: [0, 0, 0, 0] }]
-                                                        ]
-                                                    }
-                                                },
-                                                // { text: "System generated Invoice. Doesn't require signature.", fontSize: 10, italics: true, bold: true, alignment: "center", margin: [0, 20, 0, 0] }
-                                            ],
-                                            border: [false, false, false, false] // OUTER BORDER
-                                        }
+                                                    // { text: " ", margin: [0, 10, 0, 10] },
+
+                                                    {
+                                                        table: {
+                                                            headerRows: 1,
+                                                            widths: ["20%", "20%", "20%", "20%", "20%"],
+                                                            body: [
+                                                                [
+                                                                    { text: "Meter No.", fontSize: 9, alignment: "center", bold: true },
+                                                                    { text: "Opening Meter Reading", fontSize: 9, alignment: "center", bold: true },
+                                                                    { text: "Closing Meter Reading", fontSize: 9, alignment: "center", bold: true },
+                                                                    { text: "Correction Factor", fontSize: 9, alignment: "center", bold: true },
+                                                                    { text: "Gas Consumption", fontSize: 9, alignment: "center", bold: true }
+
+                                                                ],
+                                                                ...data.map(item => [
+                                                                    { text: item.MeterNo || "-", alignment: "center", fontSize: 10 },
+                                                                    { text: item.OpenDateRead, alignment: "center", fontSize: 10 },
+                                                                    { text: item.ClosedateRead, alignment: "center", fontSize: 10 },
+                                                                    { text: item.meter_corr_factor, alignment: "center", fontSize: 10 },
+                                                                    { text: ((item.ClosedateRead - item.OpenDateRead) * item.meter_corr_factor).toFixed(2), alignment: "center", fontSize: 10 }
+                                                                ])
+                                                            ]
+                                                        }
+                                                    },
+
+                                                    // { text: " ", margin: [0, 10, 0, 10] },
+                                                    {
+                                                        table: {
+                                                            widths: ["30%", "50%", "20%"],
+                                                            body: [
+                                                                [
+                                                                    { text: "", border: [true, false, true, false] },
+                                                                    { text: "Quantity used up in testing / calibration", fontSize: 10, bold: false, border: [true, false, true, false] },
+                                                                    { text: "-100.00", fontSize: 10, alignment: "right", border: [true, false, true, false] }
+                                                                ],
+                                                                [
+                                                                    { text: "", border: [true, false, true, false] },
+                                                                    { text: "Dispensed Quantity (Kg)", fontSize: 10, bold: false, border: [true, false, true, false] },
+                                                                    { text: `${oCal.dispensedQuantity}`, fontSize: 10, alignment: "right", border: [true, false, true, false] }
+                                                                ],
+                                                                [
+                                                                    { text: "", border: [true, false, true, true] },
+                                                                    { text: "Quantity Sold (Kg)", fontSize: 10, bold: false, border: [true, false, true, true] },
+                                                                    { text: `${oCal.quantitySold}`, fontSize: 10, alignment: "right", border: [true, false, true, true] }
+                                                                ]
+                                                            ]
+                                                        }
+                                                    },
+
+                                                    // { text: " ", margin: [0, 10, 0, 10] },
+                                                    {
+                                                        table: {
+                                                            widths: ["*"],
+                                                            body: [
+                                                                [{ text: "", alignment: "center", border: [true, false, true, false], margin: [0, 5, 0, 5] }]
+                                                            ]
+                                                        }
+                                                    },
+                                                    {
+                                                        table: {
+                                                            widths: ["*"],
+                                                            body: [
+                                                                [{ text: "Remarks / Note:", fontSize: 10, bold: true, border: [true, true, true, false] }],
+                                                                [{ text: "", border: [true, false, true, true], margin: [0, 20, 0, 20] }]
+                                                            ]
+                                                        }
+                                                    },
+
+                                                    // { text: " ", margin: [0, 10, 0, 10] },
+                                                    {
+                                                        table: {
+                                                            widths: ["*"],
+                                                            body: [
+                                                                [{ text: "For Bhayanagar Gas Limited", fontSize: 10, alignment: "right", border: [true, false, true, false] }],
+                                                                [{ text: "", margin: [0, 10, 0, 10], border: [true, false, true, false] }]
+                                                            ]
+                                                        }
+                                                    },
+                                                    // { text: "For Bhayanagar Gas Limited", fontSize: 8, alignment: "right", margin: [0, 20, 0, 0] },
+                                                    {
+                                                        table: {
+                                                            widths: ["*"],
+                                                            body: [
+                                                                [{ text: "System generated Invoice. Doesn't require signature.", fontSize: 10, italics: true, bold: true, alignment: "center", margin: [0, 0, 0, 0] }]
+                                                            ]
+                                                        }
+                                                    },
+                                                    // { text: "System generated Invoice. Doesn't require signature.", fontSize: 10, italics: true, bold: true, alignment: "center", margin: [0, 20, 0, 0] }
+                                                ],
+                                                border: [false, false, false, false] // OUTER BORDER
+                                            }
+                                        ]
                                     ]
-                                ]
+                                }
                             }
-                        }
-                    ]
-                    // images: {
-                    //     logo: 'https://www.bglgas.com/wp-content/uploads/2023/04/Ramadhan-Mubarak-5-e1682514739293.png'  // External URL for the image
-                    // }
-                };
+                        ]
+                        // images: {
+                        //     logo: 'https://www.bglgas.com/wp-content/uploads/2023/04/Ramadhan-Mubarak-5-e1682514739293.png'  // External URL for the image
+                        // }
+                    };
 
-                // pdfMake.createPdf(docDefinition).download(`${functionalLocation}-BGLReport.pdf`);
-                // Generate PDF and show preview in PDFViewer
+                    // pdfMake.createPdf(docDefinition).download(`${functionalLocation}-BGLReport.pdf`);
+                    // Generate PDF and show preview in PDFViewer
 
-                // pdfMake.createPdf(docDefinition).getBlob((blob) => {
+                    // pdfMake.createPdf(docDefinition).getBlob((blob) => {
 
-                //     var pdfUrl = URL.createObjectURL(blob);
-                //     var pdfTitle = `${data[0].Location}_${data[0].FunctionalLocation}`;
+                    //     var pdfUrl = URL.createObjectURL(blob);
+                    //     var pdfTitle = `${data[0].Location}_${data[0].FunctionalLocation}`;
 
-                //     // window.open(pdfUrl, "_blank");
+                    //     // window.open(pdfUrl, "_blank");
 
-                //     // var newWindow = window.open("", "_blank");
-                //     // newWindow.document.write(`
-                //     //         <html>
-                //     //             <head>
-                //     //                 <title>${pdfTitle}</title>
-                //     //             </head>
-                //     //             <body style="margin:0;">
-                //     //                 <iframe src="${pdfUrl}" width="100%" height="100%" style="border:none;"></iframe>
-                //     //             </body>
-                //     //         </html>
-                //     //     `);
+                    //     // var newWindow = window.open("", "_blank");
+                    //     // newWindow.document.write(`
+                    //     //         <html>
+                    //     //             <head>
+                    //     //                 <title>${pdfTitle}</title>
+                    //     //             </head>
+                    //     //             <body style="margin:0;">
+                    //     //                 <iframe src="${pdfUrl}" width="100%" height="100%" style="border:none;"></iframe>
+                    //     //             </body>
+                    //     //         </html>
+                    //     //     `);
 
-                //     // var oPdfViewer = new sap.m.PDFViewer({
-                //     //     source: pdfUrl,
-                //     //     title: pdfTitle,
-                //     //     showDownloadButton: true
-                //     // });
+                    //     // var oPdfViewer = new sap.m.PDFViewer({
+                    //     //     source: pdfUrl,
+                    //     //     title: pdfTitle,
+                    //     //     showDownloadButton: true
+                    //     // });
 
-                //     // that.getView().addDependent(oPdfViewer);
-                //     // oPdfViewer.setTitle(pdfTitle);
-                //     // oPdfViewer.open();
+                    //     // that.getView().addDependent(oPdfViewer);
+                    //     // oPdfViewer.setTitle(pdfTitle);
+                    //     // oPdfViewer.open();
 
-                // });
+                    // });
 
-                pdfMake.createPdf(docDefinition).getBlob((blob) => {
-                    var pdfTitle = `${data[0].Location}_${data[0].FunctionalLocation}`;
-                    var pdfUrl = URL.createObjectURL(blob);
-                    that.generatedPdfUrls.push({
-                        pdfTitle: pdfTitle,
-                        pdfUrl: pdfUrl
-                    });
+                    // pdfMake.createPdf(docDefinition).getBlob((blob) => {
+                    //     var pdfTitle = `${data[0].Location}_${data[0].FunctionalLocation}`;
+                    //     var pdfUrl = URL.createObjectURL(blob);
+                    //     that.generatedPdfUrls.push({
+                    //         pdfTitle: pdfTitle,
+                    //         pdfUrl: pdfUrl
+                    //     });
 
-                    if (callback) callback();
+                    //     if (callback) callback();
+                    // });
+
+                    resolve(docDefinition);
+
                 });
-
-
-                // sap.m.MessageToast.show("PDF downloaded successfully!");
-
             });
 
+        },
+        mergeAndPreviewPdfs: function () {
+            var that = this;
+
+            if (!this.generatedPdfDocs.length) {
+                sap.m.MessageToast.show("No PDFs generated.");
+                return;
+            }
+
+            // Combine all PDFs into a single document
+            var mergedDocDefinition = {
+                pageSize: "A4",
+                content: []
+            };
+
+            this.generatedPdfDocs.forEach((doc, index) => {
+                mergedDocDefinition.content.push(...doc.content);
+                // mergedDocDefinition.content.push({ text: "", pageBreak: "after" }); // Add a page break after each PDF
+                if (index < this.generatedPdfDocs.length - 1) {
+                    mergedDocDefinition.content.push({ text: "", pageBreak: "after" }); // Add a page break after each PDF and Remove Blank Page At Last
+                }
+            });
+
+            // Generate merged PDF
+            pdfMake.createPdf(mergedDocDefinition).getBlob((blob) => {
+                var pdfUrl = URL.createObjectURL(blob);
+
+                // Open merged PDF in a single preview tab with a Download button
+                var newWindow = window.open("", "_blank");
+                newWindow.document.write(`
+                    <html>
+                        <head>
+                            <title>Joint Ticket Form Reports</title>
+                        </head>
+                        <body style="margin:0; text-align:center;">
+                            <iframe id="pdfFrame" src="${pdfUrl}" width="100%" height="100%" style="border:none;"></iframe>
+                        </body>
+                    </html>
+                `);
+            });
         },
 
         onOpenFunctionalLocationDialog: function () {

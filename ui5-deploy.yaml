@@ -21,6 +21,6 @@ builder:
           name: ZJOINTTICKET01
           description: Form forn Joint Ticket
           package: ZFIORI
-          transport: KUNK900338
+          transport: KUNK900382
         exclude:
           - /test/
