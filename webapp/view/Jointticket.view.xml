@@ -465,6 +465,15 @@
         afterClose=".onCloseDialog"
     >
         <content>
+            <Toolbar>
+                <SearchField
+                    id="idFunctionalLocationSearchField"
+                    placeholder="Search..."
+                    liveChange=".onSearchFunctionalLocation"
+                />
+                <ToolbarSpacer />
+                <CheckBox id="selectAllCheckBoxFunctionalLocation" text="Select All" select=".onSelectAllChange"/>
+            </Toolbar>
             <List
                 id="idFunctionalLocationList"
                 mode="MultiSelect"
