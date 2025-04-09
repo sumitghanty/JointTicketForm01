@@ -217,6 +217,8 @@
 					}"
                 fixedLayout="true"
                 width="100%"
+                growing="true"
+                growingThreshold="1000"
             >
                 <headerToolbar>
                     <OverflowToolbar>
@@ -472,11 +474,17 @@
                     liveChange=".onSearchFunctionalLocation"
                 />
                 <ToolbarSpacer />
-                <CheckBox id="selectAllCheckBoxFunctionalLocation" text="Select All" select=".onSelectAllChange"/>
+                <CheckBox
+                    id="selectAllCheckBoxFunctionalLocation"
+                    text="Select All"
+                    select=".onSelectAllChange"
+                />
             </Toolbar>
             <List
                 id="idFunctionalLocationList"
                 mode="MultiSelect"
+                growing="true"
+                growingThreshold="10000"
                 items="{
                 path: '/ZI_FunctionalLocationStdVH'
             }"

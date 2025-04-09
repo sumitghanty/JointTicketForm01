@@ -15,11 +15,11 @@ sap.ui.define([
     "sap/m/BusyIndicator",
     "sap/m/VBox",
     "sap/m/Text"
-], (Controller, JSONModel, Label, Filter, FilterOperator, PersonalizableInfo, MessageBox, exportLibrary, Spreadsheet, MessageToast, CustModels, PDFViewer,Dialog,BusyIndicator, VBox, Text) => {
+], (Controller, JSONModel, Label, Filter, FilterOperator, PersonalizableInfo, MessageBox, exportLibrary, Spreadsheet, MessageToast, CustModels, PDFViewer, Dialog, BusyIndicator, VBox, Text) => {
     "use strict";
     const EdmType = exportLibrary.EdmType;
     return Controller.extend("com.bgl.app.jointticketform.controller.Jointticket", {
-        _pdfViewer: null,  
+        _pdfViewer: null,
         onInit() {
             //var sPath = jQuery.sap.getModulePath("com.bgl.app.jointticketform", "../model/model.json");
             //this.oModel.loadData(sap.ui.require.toUrl("model.json"), null, false);
@@ -338,6 +338,16 @@ sap.ui.define([
                 }
             }
         },
+        hasData: function (value) {
+            if (!value) return false;
+            if (typeof value === "string" || Array.isArray(value)) {
+                return value.length > 0;
+            }
+            if (typeof value === "object") {
+                return Object.keys(value).length > 0;
+            }
+            return false;
+        },
         getDataFromBackend2: function () {
             if (!this._validateInputFields()) {
                 // Validation failed, return without fetching data
@@ -351,46 +361,100 @@ sap.ui.define([
             var aFunctionalLocationIDArray = oGlobalModelData.selectedFunctionalLocationsID || [];
 
             // Convert Array to OData filter format
-            var sFilterQuery = "";
-            if (aFunctionalLocationIDArray.length > 0) {
-                sFilterQuery = aFunctionalLocationIDArray
-                    .map(function (sLoc) {
-                        return "FunctionalLocation eq '" + sLoc + "'";
-                    })
-                    .join(" or "); // Join conditions with 'or'
+            // var sFilterQuery = "";
+            // if (aFunctionalLocationIDArray.length > 0) {
+            //     sFilterQuery = aFunctionalLocationIDArray
+            //         .map(function (sLoc) {
+            //             return "FunctionalLocation eq '" + sLoc + "'";
+            //         })
+            //         .join(" or "); // Join conditions with 'or'
+            // }
+
+            // var pUrl = "/ZC_JOINT_METER_READING(pa_date_from=datetime'" + oGlobalModelData.fromDate + "T00:00:00',pa_date_to=datetime'" + oGlobalModelData.toDate + "T23:59:59')/Set";
+
+            // sap.ui.core.BusyIndicator.show();
+            // oNewModel.read(pUrl, {
+            //     // urlParameters: {
+            //     //     // "sap-client": "100",
+            //     //     "$filter": sFilterQuery
+            //     // },
+            //     filters: aFilters,
+            //     success: function (response) {
+            //         var oData = response.results;
+            //         console.log(oData);
+
+            //         // Set Table Data
+            //         var oTableDataModel = that.getView().getModel("TableDataModel");
+            //         oTableDataModel.setData(oData);
+
+            //         // Set Data For Pdf Button Function
+            //         var oPdfDataModel = that.getView().getModel("PdfDataModel");
+            //         oPdfDataModel.setData(oData);
+
+            //         sap.ui.core.BusyIndicator.hide();
+            //     },
+            //     error: function (error) {
+            //         sap.ui.core.BusyIndicator.hide();
+            //         console.log(error);
+
+            //         var errorObject = JSON.parse(error.responseText);
+            //         sap.m.MessageBox.warning(errorObject.error.message.value);
+
+            //     }
+            // });
+
+            var maxBatchSize = 100; // Adjust this based on backend limit
+            var aFilteredBatches = [];
+            var aAllFetchedData = []; // Array to store all results
+            var iCompletedRequests = 0; // Track completed requests
+            var iTotalRequests = Math.ceil(aFunctionalLocationIDArray.length / maxBatchSize); // Total batches
+
+            for (let i = 0; i < aFunctionalLocationIDArray.length; i += maxBatchSize) {
+                aFilteredBatches.push(aFunctionalLocationIDArray.slice(i, i + maxBatchSize));
             }
 
-            var pUrl = "/ZC_JOINT_METER_READING(pa_date_from=datetime'" + oGlobalModelData.fromDate + "T00:00:00',pa_date_to=datetime'" + oGlobalModelData.toDate + "T23:59:59')/Set";
-
             sap.ui.core.BusyIndicator.show();
-            oNewModel.read(pUrl, {
-                urlParameters: {
-                    "sap-client": "100",
-                    "$filter": sFilterQuery
-                },
-                success: function (response) {
-                    var oData = response.results;
-                    console.log(oData);
 
-                    // Set Table Data
-                    var oTableDataModel = that.getView().getModel("TableDataModel");
-                    oTableDataModel.setData(oData);
+            aFilteredBatches.forEach(batch => {
+                let aFuncLocFilters = batch.map(loc =>
+                    new sap.ui.model.Filter("FunctionalLocation", sap.ui.model.FilterOperator.EQ, loc)
+                );
 
-                    // Set Data For Pdf Button Function
-                    var oPdfDataModel = that.getView().getModel("PdfDataModel");
-                    oPdfDataModel.setData(oData);
+                let pUrl = "/ZC_JOINT_METER_READING(pa_date_from=datetime'" + oGlobalModelData.fromDate + "T00:00:00',pa_date_to=datetime'" + oGlobalModelData.toDate + "T23:59:59')/Set";
 
-                    sap.ui.core.BusyIndicator.hide();
-                },
-                error: function (error) {
-                    sap.ui.core.BusyIndicator.hide();
-                    console.log(error);
+                oNewModel.read(pUrl, {
+                    filters: [new sap.ui.model.Filter({ filters: aFuncLocFilters, and: false })],
+                    success: function (response) {
+                        aAllFetchedData = aAllFetchedData.concat(response.results); // Merge data
 
-                    var errorObject = JSON.parse(error.responseText);
-                    sap.m.MessageBox.warning(errorObject.error.message.value);
+                        iCompletedRequests++; // Increment completed requests count
 
-                }
+                        console.log("Data: ",aAllFetchedData)
+                        if (iCompletedRequests === iTotalRequests) { // Check if all requests are done
+
+                            aAllFetchedData.sort((a, b) => a.FunctionalLocation.localeCompare(b.FunctionalLocation));
+
+                            var oTableDataModel = that.getView().getModel("TableDataModel");
+                            oTableDataModel.setData(aAllFetchedData);
+                            oTableDataModel.refresh(true);
+
+                            var oPdfDataModel = that.getView().getModel("PdfDataModel");
+                            oPdfDataModel.setData(aAllFetchedData);
+                            oPdfDataModel.refresh(true);
+
+                            sap.ui.core.BusyIndicator.hide();
+                        }
+                    },
+                    error: function (error) {
+                        sap.ui.core.BusyIndicator.hide();
+                        console.log(error);
+
+                        var errorObject = JSON.parse(error.responseText);
+                        sap.m.MessageBox.warning(errorObject.error.message.value);
+                    }
+                });
             });
+
         },
         getDataFromBackend: function (oUrl) {
             // var oModel2 = this.getOwnerComponent().getModel();
@@ -494,7 +558,7 @@ sap.ui.define([
                                     //     // Show a selection dialog
                                     //     that.showSelectionDialog(data);
                                     // }
-                                    sap.ui.core.BusyIndicator.show(0); 
+                                    sap.ui.core.BusyIndicator.show(0);
                                     that._busyDialog.open();
                                     var locations = Object.keys(data);
                                     var count = 0;
@@ -926,35 +990,35 @@ sap.ui.define([
             // });
             // sap.ui.core.BusyIndicator.hide();
 
-                var mergedDocDefinition = {
-                    pageSize: "A4",
-                    content: []
-                };
-        
-                this.generatedPdfDocs.forEach((doc, index) => {
-                    mergedDocDefinition.content.push(...doc.content);
-                    if (index < this.generatedPdfDocs.length - 1) {
-                        mergedDocDefinition.content.push({ text: "", pageBreak: "after" });
-                    }
-                });
+            var mergedDocDefinition = {
+                pageSize: "A4",
+                content: []
+            };
 
-                // this._busyDialog.open();
-        
-                setTimeout(() => {
-                    pdfMake.createPdf(mergedDocDefinition).getBlob((blob) => {
-                        var pdfUrl = URL.createObjectURL(blob);
-    
-                        var newWindow = window.open("", "_blank");
-    
-                        // **Close Busy Dialog immediately after new tab opens**
-                        this._busyDialog.close();
-    
-                        if (!newWindow) {
-                            MessageToast.show("Please allow pop-ups to view the PDF.");
-                            return;
-                        }
-    
-                        newWindow.document.write(`
+            this.generatedPdfDocs.forEach((doc, index) => {
+                mergedDocDefinition.content.push(...doc.content);
+                if (index < this.generatedPdfDocs.length - 1) {
+                    mergedDocDefinition.content.push({ text: "", pageBreak: "after" });
+                }
+            });
+
+            // this._busyDialog.open();
+
+            setTimeout(() => {
+                pdfMake.createPdf(mergedDocDefinition).getBlob((blob) => {
+                    var pdfUrl = URL.createObjectURL(blob);
+
+                    var newWindow = window.open("", "_blank");
+
+                    // **Close Busy Dialog immediately after new tab opens**
+                    this._busyDialog.close();
+
+                    if (!newWindow) {
+                        MessageToast.show("Please allow pop-ups to view the PDF.");
+                        return;
+                    }
+
+                    newWindow.document.write(`
                             <html>
                                 <head>
                                     <title>Joint Ticket Form Reports</title>
@@ -964,8 +1028,8 @@ sap.ui.define([
                                 </body>
                             </html>
                         `);
-                    });
-                }, 100);
+                });
+            }, 100);
         },
 
         onOpenFunctionalLocationDialog: function () {
