@@ -429,7 +429,7 @@ sap.ui.define([
 
                         iCompletedRequests++; // Increment completed requests count
 
-                        console.log("Data: ",aAllFetchedData)
+                        console.log("Data: ", aAllFetchedData)
                         if (iCompletedRequests === iTotalRequests) { // Check if all requests are done
 
                             aAllFetchedData.sort((a, b) => a.FunctionalLocation.localeCompare(b.FunctionalLocation));
@@ -707,6 +707,16 @@ sap.ui.define([
             };
             var gstin = data[0].GSTINNo;
             var panNo = gstin.slice(0, 10);
+            var oAddress;
+            if (data[0].MaintenancePlanningPlant === "1000") {
+                oAddress = "2nd Floor, APIDC Building, Parishram Bhavan, PO Box - Basheerbagh, Hyderabad - 500004";
+            }
+            else if (data[0].MaintenancePlanningPlant === "2000") {
+                oAddress = "Vidyadharapuram, Near Y. V. Rao Estate,R.S. No. 70, Kottur-Tadepally Road, Vijayawada - 520012";
+            }
+            else if (data[0].MaintenancePlanningPlant === "3000") {
+                oAddress = "Vakalapudi Industrial Park, Kakinada, Plot No. 24-B, Survey No. 249/1, Kakinada - 533005";
+            }
 
             // Function to format date as dd/mm/yyyy
             var formattedFromDate = this.formatDate(this.fromDate);
@@ -748,9 +758,9 @@ sap.ui.define([
                                                                         stack: [
                                                                             { text: "BHAGYANAGAR GAS LIMITED", fontSize: 14, bold: true, color: "green", alignment: "center" },
                                                                             { text: "(A joint venture of GAIL & HPCL)", fontSize: 8, bold: true, alignment: "center", margin: [0, 4, 0, 4] },
-                                                                            { text: `Address: Parishram Bhavan, 2nd Floor, APIDC Building, Basheerbagh, Hyderabad, Telangana - 500004 `, fontSize: 8, bold: true, alignment: "center", margin: [0, 0, 0, 0] },
+                                                                            { text: `Address:   ${oAddress} `, fontSize: 8, bold: true, alignment: "center", margin: [0, 0, 0, 0] },
                                                                             { text: `CIN No : U40200TG2003PLC041566     PAN No:  ${panNo}`, fontSize: 8, bold: true, alignment: "center", margin: [0, 4, 0, 4] },
-                                                                            { text: "Email Id: invoice@bgsgas.com,    Website: www.bglgas.com", fontSize: 8, bold: true, alignment: "center", margin: [0, 0, 0, 0] }
+                                                                            { text: "Email Id: invoice@bglgas.com,    Website: www.bglgas.com", fontSize: 8, bold: true, alignment: "center", margin: [0, 0, 0, 0] }
                                                                         ],
                                                                         border: [false, true, true, true],
                                                                         margin: [0, 10, 0, 10]
@@ -775,7 +785,7 @@ sap.ui.define([
                                                             widths: ["*", "*", "*", "*"],
                                                             body: [
                                                                 [{ text: "", border: [true, false, false, false] }, { text: "", border: [false, false, false, false] }, { text: "", border: [false, false, false, false] }, { text: "Date: " + formattedCurrentDate, fontSize: 8, color: "red", alignment: "right", margin: [0, 0, 0, 10], border: [false, false, true, false] }],
-                                                                [{ text: "Period:", fontSize: 10, bold: false, border: [true, false, false, false] }, { text: "", border: [false, false, false, false] }, { text: "From: " + formattedFromDate, fontSize: 10, bold: false, border: [false, false, false, false] }, { text: "To: " + formattedToDate, fontSize: 10, bold: false, border: [false, false, true, false] }],
+                                                                [{ text: "Period:", fontSize: 10, bold: false, border: [true, false, false, false] }, { text: "From: " + formattedFromDate, fontSize: 10, bold: false, border: [false, false, false, false] }, { text: "To: " + formattedToDate, fontSize: 10, bold: false, border: [false, false, false, false] }, { text: "", border: [false, false, true, false] }],
                                                                 [
                                                                     { text: "Location:", fontSize: 10, bold: false, border: [true, false, false, false] },
                                                                     { text: `${data[0].Location}`, fontSize: 10, colSpan: 3, border: [false, false, true, false] }, "", ""
@@ -866,12 +876,12 @@ sap.ui.define([
                                                         table: {
                                                             widths: ["*"],
                                                             body: [
-                                                                [{ text: "For Bhayanagar Gas Limited", fontSize: 10, alignment: "right", border: [true, false, true, false] }],
+                                                                [{ text: "For Bhagyanagar Gas Limited", fontSize: 10, alignment: "right", border: [true, false, true, false] }],
                                                                 [{ text: "", margin: [0, 10, 0, 10], border: [true, false, true, false] }]
                                                             ]
                                                         }
                                                     },
-                                                    // { text: "For Bhayanagar Gas Limited", fontSize: 8, alignment: "right", margin: [0, 20, 0, 0] },
+                                                    // { text: "For Bhagyanagar Gas Limited", fontSize: 8, alignment: "right", margin: [0, 20, 0, 0] },
                                                     {
                                                         table: {
                                                             widths: ["*"],
