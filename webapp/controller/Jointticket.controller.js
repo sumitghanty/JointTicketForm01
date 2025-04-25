@@ -759,7 +759,7 @@ sap.ui.define([
                                                                             { text: "BHAGYANAGAR GAS LIMITED", fontSize: 14, bold: true, color: "green", alignment: "center" },
                                                                             { text: "(A joint venture of GAIL & HPCL)", fontSize: 8, bold: true, alignment: "center", margin: [0, 4, 0, 4] },
                                                                             { text: `Address:   ${oAddress} `, fontSize: 8, bold: true, alignment: "center", margin: [0, 0, 0, 0] },
-                                                                            { text: `CIN No : U40200TG2003PLC041566     PAN No:  ${panNo}`, fontSize: 8, bold: true, alignment: "center", margin: [0, 4, 0, 4] },
+                                                                            { text: `CIN No : U40200TG2003PLCO41566     PAN No:  ${panNo}`, fontSize: 8, bold: true, alignment: "center", margin: [0, 4, 0, 4] },
                                                                             { text: "Email Id: invoice@bglgas.com,    Website: www.bglgas.com", fontSize: 8, bold: true, alignment: "center", margin: [0, 0, 0, 0] }
                                                                         ],
                                                                         border: [false, true, true, true],
